@@ -1,45 +1,48 @@
-CLASS zcl_abappgp_big_integer DEFINITION
-  PUBLIC
-  CREATE PUBLIC.
+class ZCL_ABAPPGP_BIG_INTEGER definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS add
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_big_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
-    METHODS constructor
-      IMPORTING
-        !iv_integer TYPE string.
-    METHODS divide
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_big_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
-    METHODS get
-      RETURNING
-        VALUE(rv_integer) TYPE string.
-    METHODS mod
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_big_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
-    METHODS multiply
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_big_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
-    METHODS power
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_big_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
-    METHODS subtract
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_big_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+  methods IS_ZERO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods ADD
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+  methods CONSTRUCTOR
+    importing
+      !IV_INTEGER type STRING .
+  methods DIVIDE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+  methods GET
+    returning
+      value(RV_INTEGER) type STRING .
+  methods MOD
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+  methods MULTIPLY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+  methods POWER
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+  methods SUBTRACT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
 protected section.
 
   types:
@@ -49,13 +52,19 @@ protected section.
   data MT_SPLIT type TY_SPLIT_TT .
   constants C_LENGTH type I value 4 ##NO_TEXT.
 
+  methods APPEND_ZEROS
+    importing
+      !IV_INT type I
+      !IV_ZEROS type I
+    returning
+      value(RV_STR) type STRING .
   methods REMOVE_LEADING_ZEROS .
   class-methods SPLIT
     importing
       !IV_INTEGER type STRING
     returning
       value(RT_SPLIT) type TY_SPLIT_TT .
-  PRIVATE SECTION.
+private section.
 ENDCLASS.
 
 
@@ -86,7 +95,7 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
       lv_op1 = lv_op1 + lv_op2 + lv_carry.
 
-      lv_carry = lv_op1 / c_max.
+      lv_carry = lv_op1 DIV c_max.
       lv_op1 = lv_op1 - lv_carry * c_max.
 
       MODIFY mt_split INDEX lv_index FROM lv_op1.
@@ -104,6 +113,23 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
     ENDIF.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD append_zeros.
+
+    rv_str = iv_int.
+
+    rv_str = condense( rv_str ).
+
+    IF rv_str = '0'.
+      RETURN.
+    ENDIF.
+
+    DO iv_zeros TIMES.
+      CONCATENATE rv_str '0' INTO rv_str.
+    ENDDO.
 
   ENDMETHOD.
 
@@ -138,7 +164,19 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
       CONCATENATE lv_int rv_integer INTO rv_integer.
     ENDLOOP.
 
-    CONDENSE rv_integer.
+    rv_integer = condense( rv_integer ).
+
+  ENDMETHOD.
+
+
+  METHOD is_zero.
+
+    DATA: lv_str TYPE string.
+
+
+    lv_str = get( ).
+
+    rv_bool = boolc( lv_str = '0' ).
 
   ENDMETHOD.
 
@@ -154,7 +192,39 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD multiply.
 
-* todo
+    DATA: lv_index1 TYPE i,
+          lv_index2 TYPE i,
+          lv_op1    TYPE i,
+          lv_op2    TYPE i,
+          lv_str    TYPE string,
+          lo_res    TYPE REF TO zcl_abappgp_big_integer,
+          lo_tmp    TYPE REF TO zcl_abappgp_big_integer.
+
+
+    CREATE OBJECT lo_res
+      EXPORTING
+        iv_integer = '0'.
+
+    LOOP AT mt_split INTO lv_op1.
+      lv_index1 = sy-tabix.
+      LOOP AT io_integer->mt_split INTO lv_op2.
+        lv_index2 = sy-tabix.
+
+        lv_op1 = lv_op1 * lv_op2.
+
+        lv_str = append_zeros(
+          iv_int   = lv_op1
+          iv_zeros = ( lv_index1 + lv_index2 - 2 ) * c_length ).
+
+        CREATE OBJECT lo_tmp
+          EXPORTING
+            iv_integer = lv_str.
+
+        lo_res->add( lo_tmp ).
+      ENDLOOP.
+    ENDLOOP.
+
+    mt_split = lo_res->mt_split.
 
     ro_result = me.
 

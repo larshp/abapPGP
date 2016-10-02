@@ -1,4 +1,126 @@
 
+CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      multiply1 FOR TESTING,
+      multiply2 FOR TESTING,
+      multiply3 FOR TESTING,
+      multiply4 FOR TESTING,
+      multiply5 FOR TESTING,
+      multiply6 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1        TYPE string
+                     iv_op2        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_big_integer.
+
+ENDCLASS.
+
+CLASS ltcl_multiply IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+
+    CREATE OBJECT ro_int
+      EXPORTING
+        iv_integer = iv_op1.
+
+    CREATE OBJECT lo_var2
+      EXPORTING
+        iv_integer = iv_op2.
+
+    ro_int->multiply( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD multiply1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD multiply2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD multiply3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '0'
+                   iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD multiply4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '2'
+                   iv_op2 = '3' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '6' ).
+
+  ENDMETHOD.
+
+  METHOD multiply5.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1111'
+                   iv_op2 = '1111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1234321' ).
+
+  ENDMETHOD.
+
+  METHOD multiply6.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '9999'
+                   iv_op2 = '9999' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '99980001' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_subtract DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
@@ -115,7 +237,8 @@ CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       add3 FOR TESTING,
       add4 FOR TESTING,
       add5 FOR TESTING,
-      add6 FOR TESTING.
+      add6 FOR TESTING,
+      add7 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -223,6 +346,20 @@ CLASS ltcl_add IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->get( )
       exp = '10000' ).
+
+  ENDMETHOD.
+
+  METHOD add7.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '99980001'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '99980002' ).
 
   ENDMETHOD.
 
