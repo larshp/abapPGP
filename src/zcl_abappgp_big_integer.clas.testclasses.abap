@@ -1,4 +1,111 @@
 
+CLASS ltcl_subtract DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      subtract1 FOR TESTING,
+      subtract2 FOR TESTING,
+      subtract3 FOR TESTING,
+      subtract4 FOR TESTING,
+      subtract5 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1        TYPE string
+                     iv_op2        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_big_integer.
+
+ENDCLASS.
+
+CLASS ltcl_subtract IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+
+    CREATE OBJECT ro_int
+      EXPORTING
+        iv_integer = iv_op1.
+
+    CREATE OBJECT lo_var2
+      EXPORTING
+        iv_integer = iv_op2.
+
+    ro_int->subtract( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD subtract1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD subtract2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '0'
+                   iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD subtract3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '10'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '9' ).
+
+  ENDMETHOD.
+
+  METHOD subtract4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '10000'
+                   iv_op2 = '10000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD subtract5.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '10000'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '9999' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

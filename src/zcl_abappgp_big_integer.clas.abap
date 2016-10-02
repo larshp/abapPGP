@@ -49,6 +49,7 @@ protected section.
   data MT_SPLIT type TY_SPLIT_TT .
   constants C_LENGTH type I value 4 ##NO_TEXT.
 
+  methods REMOVE_LEADING_ZEROS .
   class-methods SPLIT
     importing
       !IV_INTEGER type STRING
@@ -169,6 +170,30 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD remove_leading_zeros.
+
+    DATA: lv_value TYPE i,
+          lv_lines TYPE i.
+
+
+    DO.
+      lv_lines = lines( mt_split ).
+
+      READ TABLE mt_split INTO lv_value INDEX lv_lines.
+      ASSERT sy-subrc = 0.
+
+      IF lv_value = 0 AND lv_lines <> 1.
+        DELETE mt_split INDEX lv_lines.
+        ASSERT sy-subrc = 0.
+      ELSE.
+        EXIT.
+      ENDIF.
+
+    ENDDO.
+
+  ENDMETHOD.
+
+
   METHOD split.
 
     DATA: lv_length TYPE i,
@@ -203,7 +228,40 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD subtract.
 
-* todo
+    DATA: lv_max   TYPE i,
+          lv_carry TYPE i,
+          lv_op1   TYPE i,
+          lv_op2   TYPE i,
+          lv_index TYPE i.
+
+
+    lv_max = nmax( val1 = lines( io_integer->mt_split )
+                   val2 = lines( mt_split ) ).
+
+    DO lv_max TIMES.
+      lv_index = sy-index.
+
+      CLEAR: lv_op1,
+             lv_op2.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.     "#EC CI_SUBRC
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2. "#EC CI_SUBRC
+
+      lv_op1 = lv_op1 - lv_op2 - lv_carry.
+      lv_carry = 0.
+
+      IF lv_op1 < 0.
+        lv_op1 = lv_op1 + c_max.
+        lv_carry = 1.
+      ENDIF.
+
+      MODIFY mt_split INDEX lv_index FROM lv_op1.
+      ASSERT sy-subrc = 0.
+    ENDDO.
+
+    ASSERT lv_carry = 0.
+
+    remove_leading_zeros( ).
 
     ro_result = me.
 
