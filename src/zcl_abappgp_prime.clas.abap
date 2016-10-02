@@ -11,9 +11,17 @@ public section.
       value(RV_BOOL) type ABAP_BOOL .
 protected section.
 
+  types:
+    ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
+
   class-methods LOW_PRIMES
     returning
-      value(RT_LOW) type STRING_TABLE .
+      value(RT_LOW) type TY_INTEGER_TT .
+  class-methods RABIN_MILLER
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
 private section.
 ENDCLASS.
 
@@ -24,17 +32,43 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
   METHOD check.
 
+    DATA: lt_low     TYPE TABLE OF REF TO zcl_abappgp_integer,
+          lo_integer TYPE REF TO zcl_abappgp_integer,
+          lo_copy    TYPE REF TO zcl_abappgp_integer.
 
+
+    lt_low = low_primes( ).
+
+    LOOP AT lt_low INTO lo_integer.
+      IF lo_integer->eq( io_integer ) = abap_true.
+        rv_bool = abap_true.
+        RETURN.
+      ENDIF.
+      lo_copy = io_integer->copy( ).
+      lo_copy->mod( lo_integer ).
+      IF lo_copy->is_zero( ) = abap_true.
+        rv_bool = abap_false.
+        RETURN.
+      ENDIF.
+    ENDLOOP.
+
+    rv_bool = rabin_miller( io_integer ).
 
   ENDMETHOD.
 
 
   METHOD low_primes.
 
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+
     DEFINE _add.
-      APPEND &1 TO rt_low.
+      CREATE OBJECT lo_integer
+        EXPORTING
+          iv_integer = &1.
+       APPEND lo_integer TO rt_low.
     END-OF-DEFINITION.
 
+    _add '2'.
     _add '3'.
     _add '5'.
     _add '7'.
@@ -202,6 +236,15 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
     _add '983'.
     _add '991'.
     _add '997'.
+
+  ENDMETHOD.
+
+
+  METHOD RABIN_MILLER.
+
+* todo
+
+    rv_bool = abap_false.
 
   ENDMETHOD.
 ENDCLASS.

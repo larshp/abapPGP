@@ -1,87 +1,80 @@
 CLASS zcl_abappgp_integer DEFINITION
   PUBLIC
-  CREATE PUBLIC .
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
 
-    CLASS-METHODS copy
-      IMPORTING
-        !io_integer       TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
     METHODS add
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS constructor
       IMPORTING
-        !iv_integer TYPE string .
+        !iv_integer TYPE string.
+    METHODS copy
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
     METHODS divide
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS eq
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS ge
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS get
       RETURNING
-        VALUE(rv_integer) TYPE string .
+        VALUE(rv_integer) TYPE string.
     METHODS gt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS is_zero
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS lt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS mod
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS multiply
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS power
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS subtract
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
   PROTECTED SECTION.
 
     TYPES:
       ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
 
     CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
-    DATA mt_split TYPE ty_split_tt .
+    DATA mt_split TYPE ty_split_tt.
     CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
 
-    CLASS-METHODS split
-      IMPORTING
-        !iv_integer     TYPE string
-      RETURNING
-        VALUE(rt_split) TYPE ty_split_tt.
     METHODS append_zeros
       IMPORTING
         !iv_int       TYPE i
@@ -89,6 +82,11 @@ CLASS zcl_abappgp_integer DEFINITION
       RETURNING
         VALUE(rv_str) TYPE string.
     METHODS remove_leading_zeros.
+    METHODS split
+      IMPORTING
+        !iv_integer     TYPE string
+      RETURNING
+        VALUE(rt_split) TYPE ty_split_tt.
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -97,7 +95,7 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
 
-  METHOD ADD.
+  METHOD add.
 
     DATA: lv_max   TYPE i,
           lv_carry TYPE i,
@@ -142,7 +140,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD APPEND_ZEROS.
+  METHOD append_zeros.
 
     rv_str = iv_int.
 
@@ -159,7 +157,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD CONSTRUCTOR.
+  METHOD constructor.
 
     ASSERT iv_integer CO '1234567890'.
 
@@ -168,16 +166,16 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD COPY.
+  METHOD copy.
 
     CREATE OBJECT ro_integer
       EXPORTING
-        iv_integer = io_integer->get( ).
+        iv_integer = get( ).
 
   ENDMETHOD.
 
 
-  METHOD DIVIDE.
+  METHOD divide.
 
 * todo, this is a naive approach, probably too slow
 
@@ -191,7 +189,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       EXPORTING
         iv_integer = '1'.
 
-    lo_tmp = copy( me ).
+    lo_tmp = copy( ).
     mt_split = split( '0' ).
 
     WHILE lo_tmp->ge( io_integer ).
@@ -204,7 +202,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD EQ.
+  METHOD eq.
 
 * compare strings
     rv_bool = boolc( get( ) = io_integer->get( ) ).
@@ -212,14 +210,14 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD GE.
+  METHOD ge.
 
     rv_bool = boolc( gt( io_integer ) = abap_true OR eq( io_integer ) = abap_true ).
 
   ENDMETHOD.
 
 
-  METHOD GET.
+  METHOD get.
 
     DATA: lv_int TYPE c LENGTH c_length.
 
@@ -236,7 +234,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD GT.
+  METHOD gt.
 
     DATA: lv_index TYPE i,
           lv_op1   TYPE i,
@@ -252,7 +250,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     DO lines( mt_split ) TIMES.
-      lv_index = sy-tabix.
+      lv_index = sy-index.
 
       READ TABLE mt_split INDEX lv_index INTO lv_op1.
       ASSERT sy-subrc = 0.
@@ -273,26 +271,26 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD IS_ZERO.
+  METHOD is_zero.
 
     rv_bool = boolc( get( ) = '0' ).
 
   ENDMETHOD.
 
 
-  METHOD LT.
+  METHOD lt.
 
     rv_bool = boolc( gt( io_integer ) = abap_false ).
 
   ENDMETHOD.
 
 
-  METHOD MOD.
+  METHOD mod.
 
     DATA: lo_tmp TYPE REF TO zcl_abappgp_integer.
 
 
-    lo_tmp = copy( me ).
+    lo_tmp = copy( ).
 
     lo_tmp->divide( io_integer ).
 
@@ -305,7 +303,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD MULTIPLY.
+  METHOD multiply.
 
     DATA: lv_index1 TYPE i,
           lv_index2 TYPE i,
@@ -346,7 +344,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD POWER.
+  METHOD power.
 
     DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
           lo_one      TYPE REF TO zcl_abappgp_integer,
@@ -362,8 +360,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       EXPORTING
         iv_integer = '1'.
 
-    lo_original = copy( me ).
-    lo_count = copy( io_integer ).
+    lo_original = copy( ).
+    lo_count = io_integer->copy( ).
     lo_count->subtract( lo_one ).
 
     WHILE NOT lo_count->is_zero( ).
@@ -377,7 +375,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD REMOVE_LEADING_ZEROS.
+  METHOD remove_leading_zeros.
 
     DATA: lv_value TYPE i,
           lv_lines TYPE i.
@@ -401,7 +399,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD SPLIT.
+  METHOD split.
 
     DATA: lv_length TYPE i,
           lv_offset TYPE i.
@@ -433,7 +431,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD SUBTRACT.
+  METHOD subtract.
 
     DATA: lv_max   TYPE i,
           lv_carry TYPE i,
