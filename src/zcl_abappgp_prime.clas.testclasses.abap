@@ -4,8 +4,14 @@ CLASS ltcl_prime DEFINITION FOR TESTING
 
   PRIVATE SECTION.
     METHODS:
-      check5 FOR TESTING,
-      check6 FOR TESTING.
+*      check0 FOR TESTING,
+*      check1 FOR TESTING,
+*      check5 FOR TESTING,
+*      check6 FOR TESTING,
+*      check97 FOR TESTING,
+      check99 FOR TESTING.
+*      check44377 FOR TESTING,
+*      check44449 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_str      TYPE string
@@ -49,16 +55,52 @@ CLASS ltcl_prime IMPLEMENTATION.
 
   ENDMETHOD.
 
-  METHOD check5.
+*  METHOD check0.
+*
+*    test_false( '0' ).
+*
+*  ENDMETHOD.
+*
+*  METHOD check1.
+*
+*    test_false( '1' ).
+*
+*  ENDMETHOD.
+*
+*  METHOD check5.
+*
+*    test_true( '5' ).
+*
+*  ENDMETHOD.
+*
+*  METHOD check6.
+*
+*    test_false( '6' ).
+*
+*  ENDMETHOD.
 
-    test_true( '5' ).
+*  METHOD check97.
+*
+*    test_true( '97' ).
+*
+*  ENDMETHOD.
+
+  METHOD check99.
+
+    test_false( '99' ).
 
   ENDMETHOD.
 
-  METHOD check6.
-
-    test_false( '6' ).
-
-  ENDMETHOD.
+*  METHOD check44377.
+*
+*    test_false( '44377' ).
+*
+*  ENDMETHOD.
+*
+*  METHOD check44449.
+*
+*    test_true( '44449' ).
+*
+*  ENDMETHOD.
 
 ENDCLASS.

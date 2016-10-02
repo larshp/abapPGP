@@ -19,7 +19,7 @@ protected section.
       value(RT_LOW) type TY_INTEGER_TT .
   class-methods RABIN_MILLER
     importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+      !IO_N type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RV_BOOL) type ABAP_BOOL .
 private section.
@@ -37,20 +37,25 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
           lo_copy    TYPE REF TO zcl_abappgp_integer.
 
 
-    lt_low = low_primes( ).
+    IF io_integer->get( ) = '0' OR io_integer->get( ) = '1'.
+      rv_bool = abap_false.
+      RETURN.
+    ENDIF.
 
-    LOOP AT lt_low INTO lo_integer.
-      IF lo_integer->eq( io_integer ) = abap_true.
-        rv_bool = abap_true.
-        RETURN.
-      ENDIF.
-      lo_copy = io_integer->copy( ).
-      lo_copy->mod( lo_integer ).
-      IF lo_copy->is_zero( ) = abap_true.
-        rv_bool = abap_false.
-        RETURN.
-      ENDIF.
-    ENDLOOP.
+*    lt_low = low_primes( ).
+*
+*    LOOP AT lt_low INTO lo_integer.
+*      IF lo_integer->eq( io_integer ) = abap_true.
+*        rv_bool = abap_true.
+*        RETURN.
+*      ENDIF.
+*      lo_copy = io_integer->copy( ).
+*      lo_copy->mod( lo_integer ).
+*      IF lo_copy->is_zero( ) = abap_true.
+*        rv_bool = abap_false.
+*        RETURN.
+*      ENDIF.
+*    ENDLOOP.
 
     rv_bool = rabin_miller( io_integer ).
 
@@ -240,11 +245,82 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD RABIN_MILLER.
+  METHOD rabin_miller.
 
-* todo
+    CONSTANTS: lc_k TYPE i VALUE 10.
 
-    rv_bool = abap_false.
+    DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
+          lo_two      TYPE REF TO zcl_abappgp_integer,
+          lo_tmp      TYPE REF TO zcl_abappgp_integer,
+          lv_s        TYPE i,
+          lo_d        TYPE REF TO zcl_abappgp_integer,
+          lo_a        TYPE REF TO zcl_abappgp_integer,
+          lo_v        TYPE REF TO zcl_abappgp_integer,
+          lo_x        TYPE REF TO zcl_abappgp_integer,
+          lv_continue TYPE abap_bool,
+          lo_random   TYPE REF TO zcl_abappgp_random.
+
+
+    CREATE OBJECT lo_one
+      EXPORTING
+        iv_integer = '1'.
+
+    CREATE OBJECT lo_two
+      EXPORTING
+        iv_integer = '2'.
+
+    CREATE OBJECT lo_d
+      EXPORTING
+        iv_integer = io_n->get( ).
+    lo_d->subtract( lo_one ).
+
+    DO.
+      lo_tmp = lo_d->copy( ).
+      lo_tmp->mod( lo_two ).
+      IF lo_tmp->is_zero( ) = abap_false.
+        EXIT.
+      ENDIF.
+      lo_d->divide( lo_two ).
+      lv_s = lv_s + 1.
+    ENDDO.
+
+    lo_tmp = io_n->copy( )->subtract( lo_one ).
+    CREATE OBJECT lo_random
+      EXPORTING
+        io_low  = lo_two
+        io_high = lo_tmp.
+
+    DO lc_k TIMES.
+      lo_a = lo_random->random( ).
+
+      lo_x = lo_a->power( lo_d )->mod( io_n ).
+
+      IF lo_x->get( ) = '1' OR lo_x->eq( lo_tmp ) = abap_true.
+        CONTINUE.
+      ENDIF.
+
+      lv_continue = abap_false.
+      DO lv_s - 1 TIMES.
+        lo_x->multiply( lo_x->copy( ) )->mod( io_n ).
+
+        IF lo_x->get( ) = '1'.
+          rv_bool = abap_false.
+          RETURN.
+        ENDIF.
+
+        IF lo_x->eq( lo_tmp ) = abap_true.
+          lv_continue = abap_true.
+          EXIT. " current loop
+        ENDIF.
+      ENDDO.
+
+      IF lv_continue = abap_false.
+        rv_bool = abap_false.
+        RETURN.
+      ENDIF.
+    ENDDO.
+
+    rv_bool = abap_true.
 
   ENDMETHOD.
 ENDCLASS.

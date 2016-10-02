@@ -1,32 +1,33 @@
-CLASS zcl_abappgp_random DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+class ZCL_ABAPPGP_RANDOM definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS constructor
-      IMPORTING
-        !iv_bits TYPE string .
-    METHODS random
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
+  class-methods BITS_TO_LOW_HIGH
+    importing
+      !IV_BITS type STRING
+    exporting
+      !EO_LOW type ref to ZCL_ABAPPGP_INTEGER
+      !EO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
+  methods CONSTRUCTOR
+    importing
+      !IO_LOW type ref to ZCL_ABAPPGP_INTEGER
+      !IO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
+  methods RANDOM
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
 
   data MV_LOW type STRING .
   data MV_HIGH type STRING .
 
-  methods BITS_TO_LOW_HIGH
-    importing
-      !IV_BITS type STRING
-    exporting
-      !EV_LOW type STRING
-      !EV_HIGH type STRING .
   methods RANDOM_DIGITS
     importing
       !IV_DIGITS type I
     returning
       value(RV_RANDOM) type STRING .
-private section.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -37,8 +38,6 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
   METHOD bits_to_low_high.
 
     DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
-          lo_low      TYPE REF TO zcl_abappgp_integer,
-          lo_high     TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_integer.
 
 
@@ -50,57 +49,58 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
       EXPORTING
         iv_integer = iv_bits.
 
-    CREATE OBJECT lo_high
+    CREATE OBJECT eo_high
       EXPORTING
         iv_integer = '2'.
-    lo_high->power( lo_exponent ).
+    eo_high->power( lo_exponent ).
 
     lo_exponent->subtract( lo_one ).
-    CREATE OBJECT lo_low
+    CREATE OBJECT eo_low
       EXPORTING
         iv_integer = '2'.
-    lo_low->power( lo_exponent ).
-
-    ev_low = lo_low->get( ).
-    ev_high = lo_high->get( ).
+    eo_low->power( lo_exponent ).
 
   ENDMETHOD.
 
 
   METHOD constructor.
 
-    bits_to_low_high(
-      EXPORTING
-        iv_bits = iv_bits
-      IMPORTING
-        ev_low  = mv_low
-        ev_high = mv_high ).
+    mv_low = io_low->get( ).
+    mv_high = io_high->get( ).
 
   ENDMETHOD.
 
 
   METHOD random.
 
-    DATA: lv_length TYPE i,
-          lv_rlow   TYPE i,
+    DATA: lv_rlow   TYPE i,
           lv_rhigh  TYPE i,
-          lv_part1  TYPE string,
-          lv_part2  TYPE string,
-          lv_str    TYPE string.
+          lv_str    TYPE string,
+          lv_digits TYPE i,
+          lv_front  TYPE c LENGTH 1,
+          lo_random TYPE REF TO cl_abap_random.
 
 
-    lv_length = strlen( mv_low ) - 1.
-    lv_part2 = random_digits( lv_length ).
+    lo_random = cl_abap_random=>create( cl_abap_random=>seed( ) ).
 
-    lv_rlow  = mv_low(1).
-    lv_length = strlen( mv_high ) - lv_length.
-    lv_rhigh = mv_high(lv_length).
-    lv_part1 = cl_abap_random=>create(
-      cl_abap_random=>seed( ) )->intinrange( low  = lv_rlow
-                                             high = lv_rhigh ).
-    CONDENSE lv_part1.
+* this approach makes the random numbers non uniform
+* at both ends of the interval, but typically the interval
+* is very large, so it should not matter in the big picture?
+    lv_digits = lo_random->intinrange( low  = strlen( mv_low )
+                                       high = strlen( mv_high ) ).
+    lv_str = random_digits( lv_digits ).
 
-    CONCATENATE lv_part1 lv_part2 INTO lv_str.
+    lv_rlow = 1.
+    lv_rhigh = 9.
+    IF lv_digits = strlen( mv_low ).
+      lv_rlow = mv_low(1).
+    ENDIF.
+    IF lv_digits = strlen( mv_high ).
+      lv_rhigh = mv_high(1).
+    ENDIF.
+    lv_front = lo_random->intinrange( low  = lv_rlow
+                                      high = lv_rhigh ).
+    CONCATENATE lv_front lv_str+1 INTO lv_str.
 
     CREATE OBJECT ro_integer
       EXPORTING
