@@ -13,7 +13,7 @@ CLASS ltcl_random IMPLEMENTATION.
 * just test that it does not dump
 
     DATA: lo_random TYPE REF TO zcl_abappgp_random,
-          lo_result TYPE REF TO zcl_abappgp_big_integer.
+          lo_result TYPE REF TO zcl_abappgp_integer.
 
 
     CREATE OBJECT lo_random

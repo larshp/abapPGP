@@ -1,15 +1,15 @@
-class ZCL_ABAPPGP_RANDOM definition
-  public
-  create public .
+CLASS zcl_abappgp_random DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods CONSTRUCTOR
-    importing
-      !IV_BITS type STRING .
-  methods RANDOM
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+    METHODS constructor
+      IMPORTING
+        !iv_bits TYPE string .
+    METHODS random
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
 protected section.
 
   data MV_LOW type STRING .
@@ -36,10 +36,10 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
   METHOD bits_to_low_high.
 
-    DATA: lo_one      TYPE REF TO zcl_abappgp_big_integer,
-          lo_low      TYPE REF TO zcl_abappgp_big_integer,
-          lo_high     TYPE REF TO zcl_abappgp_big_integer,
-          lo_exponent TYPE REF TO zcl_abappgp_big_integer.
+    DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
+          lo_low      TYPE REF TO zcl_abappgp_integer,
+          lo_high     TYPE REF TO zcl_abappgp_integer,
+          lo_exponent TYPE REF TO zcl_abappgp_integer.
 
 
     CREATE OBJECT lo_one
