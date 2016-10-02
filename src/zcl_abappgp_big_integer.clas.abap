@@ -1,95 +1,95 @@
-class ZCL_ABAPPGP_BIG_INTEGER definition
-  public
-  create public .
+CLASS zcl_abappgp_big_integer DEFINITION
+  PUBLIC
+  CREATE PUBLIC.
 
-public section.
+  PUBLIC SECTION.
 
-  methods EQ
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods GE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods GT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods LT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  class-methods COPY
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-  methods ADD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-  methods CONSTRUCTOR
-    importing
-      !IV_INTEGER type STRING .
-  methods DIVIDE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-  methods GET
-    returning
-      value(RV_INTEGER) type STRING .
-  methods MOD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-  methods MULTIPLY
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-  methods POWER
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-  methods SUBTRACT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BIG_INTEGER .
-protected section.
+    CLASS-METHODS copy
+      IMPORTING
+        !io_integer       TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_big_integer.
+    METHODS add
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+    METHODS constructor
+      IMPORTING
+        !iv_integer TYPE string .
+    METHODS divide
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+    METHODS eq
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS ge
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS get
+      RETURNING
+        VALUE(rv_integer) TYPE string.
+    METHODS gt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS is_zero
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS lt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS mod
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+    METHODS multiply
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+    METHODS power
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+    METHODS subtract
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_big_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
+  PROTECTED SECTION.
 
-  types:
-    ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
+    TYPES:
+      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
 
-  constants C_MAX type I value 10000 ##NO_TEXT.
-  data MT_SPLIT type TY_SPLIT_TT .
-  constants C_LENGTH type I value 4 ##NO_TEXT.
+    CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
+    DATA mt_split TYPE ty_split_tt .
+    CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
 
-  methods APPEND_ZEROS
-    importing
-      !IV_INT type I
-      !IV_ZEROS type I
-    returning
-      value(RV_STR) type STRING .
-  methods REMOVE_LEADING_ZEROS .
-  class-methods SPLIT
-    importing
-      !IV_INTEGER type STRING
-    returning
-      value(RT_SPLIT) type TY_SPLIT_TT .
-private section.
+    CLASS-METHODS split
+      IMPORTING
+        !iv_integer     TYPE string
+      RETURNING
+        VALUE(rt_split) TYPE ty_split_tt.
+    METHODS append_zeros
+      IMPORTING
+        !iv_int       TYPE i
+        !iv_zeros     TYPE i
+      RETURNING
+        VALUE(rv_str) TYPE string.
+    METHODS remove_leading_zeros.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
