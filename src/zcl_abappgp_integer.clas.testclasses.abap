@@ -1,3 +1,91 @@
+CLASS ltcl_modular_pow DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      modular_pow1 FOR TESTING,
+      modular_pow2 FOR TESTING,
+      modular_pow3 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_base       TYPE string
+                     iv_exp        TYPE string
+                     iv_mod        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
+
+ENDCLASS.
+
+CLASS ltcl_modular_pow IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_mod TYPE REF TO zcl_abappgp_integer,
+          lo_exp TYPE REF TO zcl_abappgp_integer.
+
+    CREATE OBJECT ro_int
+      EXPORTING
+        iv_integer = iv_base.
+
+    CREATE OBJECT lo_exp
+      EXPORTING
+        iv_integer = iv_exp.
+
+    CREATE OBJECT lo_mod
+      EXPORTING
+        iv_integer = iv_mod.
+
+    ro_int->modular_pow(
+      io_exponent = lo_exp
+      io_modulus  = lo_mod ).
+
+  ENDMETHOD.
+
+  METHOD modular_pow1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_base = '1'
+                   iv_exp = '1'
+                   iv_mod = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD modular_pow2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_base = '4'
+                   iv_exp = '13'
+                   iv_mod = '497' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '445' ).
+
+  ENDMETHOD.
+
+  METHOD modular_pow3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_base = '3'
+                   iv_exp = '7'
+                   iv_mod = '4' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '3' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_mod DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

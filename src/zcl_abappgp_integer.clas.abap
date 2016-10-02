@@ -1,71 +1,77 @@
-CLASS zcl_abappgp_integer DEFINITION
-  PUBLIC
-  CREATE PUBLIC.
+class ZCL_ABAPPGP_INTEGER definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS add
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS constructor
-      IMPORTING
-        !iv_integer TYPE string.
-    METHODS copy
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
-    METHODS divide
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS eq
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS ge
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS get
-      RETURNING
-        VALUE(rv_integer) TYPE string.
-    METHODS gt
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS is_zero
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS lt
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS mod
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS multiply
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS power
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS subtract
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+  methods ADD
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods CONSTRUCTOR
+    importing
+      !IV_INTEGER type STRING .
+  methods COPY
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods DIVIDE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods EQ
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods GE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods GET
+    returning
+      value(RV_INTEGER) type STRING .
+  methods GT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_ZERO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods LT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods MOD
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MULTIPLY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MODULAR_POW
+    importing
+      !IO_EXPONENT type ref to ZCL_ABAPPGP_INTEGER
+      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods POWER
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods SUBTRACT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   PROTECTED SECTION.
 
     TYPES:
@@ -297,6 +303,46 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_tmp->multiply( io_integer ).
 
     subtract( lo_tmp ).
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD modular_pow.
+
+* Modular exponentiation
+* https://en.wikipedia.org/wiki/Modular_exponentiation
+
+    DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
+          lo_one      TYPE REF TO zcl_abappgp_integer,
+          lo_original TYPE REF TO zcl_abappgp_integer.
+
+
+    IF io_modulus->get( ) = '1'.
+      mt_split = split( '0' ).
+      RETURN.
+    ENDIF.
+
+    lo_original = copy( ).
+    mt_split = split( '1' ).
+
+    IF io_exponent->is_zero( ).
+      RETURN.
+    ENDIF.
+
+    CREATE OBJECT lo_one
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_count = io_exponent->copy( ).
+*    lo_count->subtract( lo_one ).
+
+    WHILE NOT lo_count->is_zero( ).
+      multiply( lo_original ).
+      mod( io_modulus ).
+      lo_count->subtract( lo_one ).
+    ENDWHILE.
 
     ro_result = me.
 

@@ -252,6 +252,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
     DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_two      TYPE REF TO zcl_abappgp_integer,
           lo_tmp      TYPE REF TO zcl_abappgp_integer,
+* todo, perhaps it is wrong to define lv_s as i?
           lv_s        TYPE i,
           lo_d        TYPE REF TO zcl_abappgp_integer,
           lo_a        TYPE REF TO zcl_abappgp_integer,
