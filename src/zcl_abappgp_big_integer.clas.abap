@@ -4,6 +4,11 @@ class ZCL_ABAPPGP_BIG_INTEGER definition
 
 public section.
 
+  class-methods COPY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_BIG_INTEGER .
   methods IS_ZERO
     returning
       value(RV_BOOL) type ABAP_BOOL .
@@ -143,6 +148,15 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD copy.
+
+    CREATE OBJECT ro_integer
+      EXPORTING
+        iv_integer = io_integer->get( ).
+
+  ENDMETHOD.
+
+
   METHOD divide.
 
 * todo
@@ -183,7 +197,18 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD mod.
 
-* todo
+* todo, add tests
+
+    DATA: lo_tmp TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_tmp = copy( io_integer ).
+
+    lo_tmp->divide( io_integer ).
+
+    lo_tmp->multiply( copy( lo_tmp ) ).
+
+    subtract( lo_tmp ).
 
     ro_result = me.
 
@@ -233,7 +258,29 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD power.
 
-* todo
+    DATA: lo_count    TYPE REF TO zcl_abappgp_big_integer,
+          lo_one      TYPE REF TO zcl_abappgp_big_integer,
+          lo_original TYPE REF TO zcl_abappgp_big_integer.
+
+
+    IF io_integer->is_zero( ).
+      mt_split = split( '1' ).
+      RETURN.
+    ENDIF.
+
+    CREATE OBJECT lo_one
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_original = copy( me ).
+    lo_count = copy( io_integer ).
+    lo_count->subtract( lo_one ).
+
+    WHILE NOT lo_count->is_zero( ).
+      multiply( lo_original ).
+
+      lo_count->subtract( lo_one ).
+    ENDWHILE.
 
     ro_result = me.
 
