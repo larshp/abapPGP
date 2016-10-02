@@ -40,19 +40,20 @@ CLASS zcl_abappgp_big_integer DEFINITION
         !io_integer      TYPE REF TO zcl_abappgp_big_integer
       RETURNING
         VALUE(ro_result) TYPE REF TO zcl_abappgp_big_integer.
-  PROTECTED SECTION.
+protected section.
 
-    TYPES:
-      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
+  types:
+    ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
 
-    DATA mt_split TYPE ty_split_tt.
-    CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
+  constants C_MAX type I value 10000 ##NO_TEXT.
+  data MT_SPLIT type TY_SPLIT_TT .
+  constants C_LENGTH type I value 4 ##NO_TEXT.
 
-    CLASS-METHODS split
-      IMPORTING
-        !iv_integer     TYPE string
-      RETURNING
-        VALUE(rt_split) TYPE ty_split_tt.
+  class-methods SPLIT
+    importing
+      !IV_INTEGER type STRING
+    returning
+      value(RT_SPLIT) type TY_SPLIT_TT .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -63,7 +64,43 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD add.
 
-* todo
+    DATA: lv_max   TYPE i,
+          lv_carry TYPE i,
+          lv_op1   TYPE i,
+          lv_op2   TYPE i,
+          lv_index TYPE i.
+
+
+    lv_max = nmax( val1 = lines( io_integer->mt_split )
+                   val2 = lines( mt_split ) ).
+
+    DO lv_max TIMES.
+      lv_index = sy-index.
+
+      CLEAR: lv_op1,
+             lv_op2.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.     "#EC CI_SUBRC
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2. "#EC CI_SUBRC
+
+      lv_op1 = lv_op1 + lv_op2 + lv_carry.
+
+      lv_carry = lv_op1 / c_max.
+      lv_op1 = lv_op1 - lv_carry * c_max.
+
+      MODIFY mt_split INDEX lv_index FROM lv_op1.
+      IF sy-subrc <> 0.
+        APPEND lv_op1 TO mt_split.
+      ENDIF.
+    ENDDO.
+
+    IF lv_carry <> 0.
+      lv_index = lv_max + 1.
+      MODIFY mt_split INDEX lv_index FROM lv_carry.
+      IF sy-subrc <> 0.
+        APPEND lv_carry TO mt_split.
+      ENDIF.
+    ENDIF.
 
     ro_result = me.
 

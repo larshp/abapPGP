@@ -4,51 +4,118 @@ CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
   PRIVATE SECTION.
     METHODS:
       add1 FOR TESTING,
-      add2 FOR TESTING.
+      add2 FOR TESTING,
+      add3 FOR TESTING,
+      add4 FOR TESTING,
+      add5 FOR TESTING,
+      add6 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1        TYPE string
+                     iv_op2        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_big_integer.
 
 ENDCLASS.       "ltcl_Add
 
 CLASS ltcl_add IMPLEMENTATION.
 
-  METHOD add1.
+  METHOD test.
 
-    DATA: lo_var1 TYPE REF TO zcl_abappgp_big_integer,
-          lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+    DATA: lo_var2 TYPE REF TO zcl_abappgp_big_integer.
 
-    CREATE OBJECT lo_var1
+    CREATE OBJECT ro_int
       EXPORTING
-        iv_integer = '1'.
+        iv_integer = iv_op1.
 
     CREATE OBJECT lo_var2
       EXPORTING
-        iv_integer = '1'.
+        iv_integer = iv_op2.
 
-    lo_var1 = lo_var1->add( lo_var2 ).
+    ro_int->add( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD add1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_var1->get( )
+      act = lo_res->get( )
       exp = '2' ).
 
   ENDMETHOD.
 
   METHOD add2.
 
-    DATA: lo_var1 TYPE REF TO zcl_abappgp_big_integer,
-          lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
 
-    CREATE OBJECT lo_var1
-      EXPORTING
-        iv_integer = '1'.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = '0'.
-
-    lo_var1 = lo_var1->add( lo_var2 ).
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_var1->get( )
+      act = lo_res->get( )
       exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD add3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1111'
+                   iv_op2 = '1111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '2222' ).
+
+  ENDMETHOD.
+
+  METHOD add4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '111111'
+                   iv_op2 = '1111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '112222' ).
+
+  ENDMETHOD.
+
+  METHOD add5.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1111'
+                   iv_op2 = '111111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '112222' ).
+
+  ENDMETHOD.
+
+  METHOD add6.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '9999' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '10000' ).
 
   ENDMETHOD.
 
