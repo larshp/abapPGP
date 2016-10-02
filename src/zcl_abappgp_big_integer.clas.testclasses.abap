@@ -1,3 +1,202 @@
+CLASS ltcl_mod DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      mod1 FOR TESTING,
+      mod2 FOR TESTING,
+      mod3 FOR TESTING,
+      mod4 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1        TYPE string
+                     iv_op2        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_big_integer.
+
+ENDCLASS.
+
+CLASS ltcl_mod IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+
+    CREATE OBJECT ro_int
+      EXPORTING
+        iv_integer = iv_op1.
+
+    CREATE OBJECT lo_var2
+      EXPORTING
+        iv_integer = iv_op2.
+
+    ro_int->mod( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD mod1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD mod2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '5'
+                   iv_op2 = '2' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD mod3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '9999'
+                   iv_op2 = '9999' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD mod4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '10009'
+                   iv_op2 = '10' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '9' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      divide1 FOR TESTING,
+      divide2 FOR TESTING,
+      divide3 FOR TESTING,
+      divide4 FOR TESTING,
+      divide5 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1        TYPE string
+                     iv_op2        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_big_integer.
+
+ENDCLASS.
+
+CLASS ltcl_divide IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+
+    CREATE OBJECT ro_int
+      EXPORTING
+        iv_integer = iv_op1.
+
+    CREATE OBJECT lo_var2
+      EXPORTING
+        iv_integer = iv_op2.
+
+    ro_int->divide( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD divide1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD divide2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '123456'
+                   iv_op2 = '123456' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD divide3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '5'
+                   iv_op2 = '2' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '2' ).
+
+  ENDMETHOD.
+
+  METHOD divide4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '555555'
+                   iv_op2 = '111111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '5' ).
+
+  ENDMETHOD.
+
+  METHOD divide5.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_big_integer.
+
+
+    lo_res = test( iv_op1 = '5'
+                   iv_op2 = '2' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '2' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

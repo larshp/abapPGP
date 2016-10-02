@@ -4,11 +4,16 @@ class ZCL_ABAPPGP_BIG_INTEGER definition
 
 public section.
 
-  class-methods COPY
+  methods EQ
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
     returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+      value(RV_BOOL) type ABAP_BOOL .
+  methods GE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   methods GT
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
@@ -17,6 +22,16 @@ public section.
   methods IS_ZERO
     returning
       value(RV_BOOL) type ABAP_BOOL .
+  methods LT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  class-methods COPY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_BIG_INTEGER .
   methods ADD
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
@@ -164,9 +179,42 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD divide.
 
-* todo
+* todo, this is a naive approach, probably too slow
+
+    DATA: lo_tmp TYPE REF TO zcl_abappgp_big_integer,
+          lo_one TYPE REF TO zcl_abappgp_big_integer.
+
+
+    ASSERT NOT io_integer->is_zero( ).
+
+    CREATE OBJECT lo_one
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_tmp = copy( me ).
+    mt_split = split( '0' ).
+
+    WHILE lo_tmp->ge( io_integer ).
+      lo_tmp->subtract( io_integer ).
+      add( lo_one ).
+    ENDWHILE.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD eq.
+
+* compare strings
+    rv_bool = boolc( get( ) = io_integer->get( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD ge.
+
+    rv_bool = boolc( gt( io_integer ) = abap_true OR eq( io_integer ) = abap_true ).
 
   ENDMETHOD.
 
@@ -227,28 +275,28 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
 
   METHOD is_zero.
 
-    DATA: lv_str TYPE string.
+    rv_bool = boolc( get( ) = '0' ).
+
+  ENDMETHOD.
 
 
-    lv_str = get( ).
+  METHOD lt.
 
-    rv_bool = boolc( lv_str = '0' ).
+    rv_bool = boolc( gt( io_integer ) = abap_false ).
 
   ENDMETHOD.
 
 
   METHOD mod.
 
-* todo, add tests
-
     DATA: lo_tmp TYPE REF TO zcl_abappgp_big_integer.
 
 
-    lo_tmp = copy( io_integer ).
+    lo_tmp = copy( me ).
 
     lo_tmp->divide( io_integer ).
 
-    lo_tmp->multiply( copy( lo_tmp ) ).
+    lo_tmp->multiply( io_integer ).
 
     subtract( lo_tmp ).
 
