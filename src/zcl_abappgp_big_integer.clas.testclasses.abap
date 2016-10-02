@@ -1,3 +1,96 @@
+CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      gt1 FOR TESTING,
+      gt2 FOR TESTING,
+      gt3 FOR TESTING,
+      gt4 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1         TYPE string
+                     iv_op2         TYPE string
+           RETURNING VALUE(rv_bool) TYPE abap_bool.
+
+ENDCLASS.
+
+CLASS ltcl_gt IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_big_integer,
+          lo_var2 TYPE REF TO zcl_abappgp_big_integer.
+
+    CREATE OBJECT lo_var1
+      EXPORTING
+        iv_integer = iv_op1.
+
+    CREATE OBJECT lo_var2
+      EXPORTING
+        iv_integer = iv_op2.
+
+    rv_bool = lo_var1->gt( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD gt1.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '0'
+                  iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_false ).
+
+  ENDMETHOD.
+
+  METHOD gt2.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '1'
+                  iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_true ).
+
+  ENDMETHOD.
+
+  METHOD gt3.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '10000'
+                  iv_op2 = '9999' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_true ).
+
+  ENDMETHOD.
+
+  METHOD gt4.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '10000'
+                  iv_op2 = '10000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_false ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_power DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

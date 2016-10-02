@@ -9,6 +9,11 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_BIG_INTEGER .
+  methods GT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_BIG_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   methods IS_ZERO
     returning
       value(RV_BOOL) type ABAP_BOOL .
@@ -179,6 +184,43 @@ CLASS ZCL_ABAPPGP_BIG_INTEGER IMPLEMENTATION.
     ENDLOOP.
 
     rv_integer = condense( rv_integer ).
+
+  ENDMETHOD.
+
+
+  METHOD gt.
+
+    DATA: lv_index TYPE i,
+          lv_op1   TYPE i,
+          lv_op2   TYPE i.
+
+
+    IF lines( mt_split ) > lines( io_integer->mt_split ).
+      rv_bool = abap_true.
+      RETURN.
+    ELSEIF lines( mt_split ) < lines( io_integer->mt_split ).
+      rv_bool = abap_false.
+      RETURN.
+    ENDIF.
+
+    DO lines( mt_split ) TIMES.
+      lv_index = sy-tabix.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.
+      ASSERT sy-subrc = 0.
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2.
+      ASSERT sy-subrc = 0.
+
+      IF lv_op1 > lv_op2.
+        rv_bool = abap_true.
+        RETURN.
+      ELSEIF lv_op1 < lv_op2.
+        rv_bool = abap_false.
+        RETURN.
+      ENDIF.
+    ENDDO.
+
+    rv_bool = abap_false. " equal
 
   ENDMETHOD.
 
