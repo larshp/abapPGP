@@ -93,7 +93,9 @@ CLASS ltcl_mod DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       mod1 FOR TESTING,
       mod2 FOR TESTING,
       mod3 FOR TESTING,
-      mod4 FOR TESTING.
+      mod4 FOR TESTING,
+      mod5 FOR TESTING,
+      mod6 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -176,6 +178,34 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD mod5.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '10'
+                   iv_op2 = '100000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '10' ).
+
+  ENDMETHOD.
+
+  METHOD mod6.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '30558784'
+                   iv_op2 = '44449' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '22321' ).
+
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
@@ -186,7 +216,9 @@ CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       divide2 FOR TESTING,
       divide3 FOR TESTING,
       divide4 FOR TESTING,
-      divide5 FOR TESTING.
+      divide5 FOR TESTING,
+      divide6 FOR TESTING,
+      divide7 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -283,6 +315,34 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD divide6.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '100' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD divide7.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '30558784'
+                   iv_op2 = '44449' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '687' ).
+
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
@@ -292,7 +352,8 @@ CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       gt1 FOR TESTING,
       gt2 FOR TESTING,
       gt3 FOR TESTING,
-      gt4 FOR TESTING.
+      gt4 FOR TESTING,
+      gt5 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1         TYPE string
@@ -373,6 +434,20 @@ CLASS ltcl_gt IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_gt
       exp = abap_false ).
+
+  ENDMETHOD.
+
+  METHOD gt5.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '30514335'
+                  iv_op2 = '44449' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_true ).
 
   ENDMETHOD.
 
@@ -509,7 +584,8 @@ CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       multiply3 FOR TESTING,
       multiply4 FOR TESTING,
       multiply5 FOR TESTING,
-      multiply6 FOR TESTING.
+      multiply6 FOR TESTING,
+      multiply7 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -617,6 +693,19 @@ CLASS ltcl_multiply IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->get( )
       exp = '99980001' ).
+
+  ENDMETHOD.
+
+  METHOD multiply7.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '500'
+                   iv_op2 = '50000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '25000000' ).
 
   ENDMETHOD.
 

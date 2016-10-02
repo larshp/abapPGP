@@ -1,77 +1,77 @@
-class ZCL_ABAPPGP_INTEGER definition
-  public
-  create public .
+CLASS zcl_abappgp_integer DEFINITION
+  PUBLIC
+  CREATE PUBLIC.
 
-public section.
+  PUBLIC SECTION.
 
-  methods ADD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods CONSTRUCTOR
-    importing
-      !IV_INTEGER type STRING .
-  methods COPY
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods DIVIDE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods EQ
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods GE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods GET
-    returning
-      value(RV_INTEGER) type STRING .
-  methods GT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods LT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods MOD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MULTIPLY
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MODULAR_POW
-    importing
-      !IO_EXPONENT type ref to ZCL_ABAPPGP_INTEGER
-      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods POWER
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods SUBTRACT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+    METHODS add
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS constructor
+      IMPORTING
+        !iv_integer TYPE string.
+    METHODS copy
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
+    METHODS divide
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS eq
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS ge
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS get
+      RETURNING
+        VALUE(rv_integer) TYPE string.
+    METHODS gt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS is_zero
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS lt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+    METHODS mod
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS multiply
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS modular_pow
+      IMPORTING
+        !io_exponent     TYPE REF TO zcl_abappgp_integer
+        !io_modulus      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS power
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS subtract
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
   PROTECTED SECTION.
 
     TYPES:
@@ -256,7 +256,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     DO lines( mt_split ) TIMES.
-      lv_index = sy-index.
+      lv_index = lines( mt_split ) - sy-index + 1.
 
       READ TABLE mt_split INDEX lv_index INTO lv_op1.
       ASSERT sy-subrc = 0.
@@ -293,16 +293,17 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD mod.
 
-    DATA: lo_tmp TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_div  TYPE REF TO zcl_abappgp_integer,
+          lo_mult TYPE REF TO zcl_abappgp_integer.
 
+*    DATA(org1) = copy( ).
+*    DATA(org2) = io_integer->copy( ).
 
-    lo_tmp = copy( ).
+    lo_div = copy( )->divide( io_integer ).
 
-    lo_tmp->divide( io_integer ).
+    lo_mult = lo_div->copy( )->multiply( io_integer ).
 
-    lo_tmp->multiply( io_integer ).
-
-    subtract( lo_tmp ).
+    subtract( lo_mult ).
 
     ro_result = me.
 
@@ -353,6 +354,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     DATA: lv_index1 TYPE i,
           lv_index2 TYPE i,
+          lv_op     TYPE i,
           lv_op1    TYPE i,
           lv_op2    TYPE i,
           lv_str    TYPE string,
@@ -369,10 +371,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       LOOP AT io_integer->mt_split INTO lv_op2.
         lv_index2 = sy-tabix.
 
-        lv_op1 = lv_op1 * lv_op2.
+        lv_op = lv_op1 * lv_op2.
 
         lv_str = append_zeros(
-          iv_int   = lv_op1
+          iv_int   = lv_op
           iv_zeros = ( lv_index1 + lv_index2 - 2 ) * c_length ).
 
         CREATE OBJECT lo_tmp
@@ -507,9 +509,15 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
       MODIFY mt_split INDEX lv_index FROM lv_op1.
+*      IF sy-subrc <> 0.
+*        BREAK-POINT.
+*      ENDIF.
       ASSERT sy-subrc = 0.
     ENDDO.
 
+*    IF lv_carry <> 0.
+*      BREAK-POINT.
+*    ENDIF.
     ASSERT lv_carry = 0.
 
     remove_leading_zeros( ).

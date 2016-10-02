@@ -1,28 +1,28 @@
-class ZCL_ABAPPGP_PRIME definition
-  public
-  create public .
+CLASS zcl_abappgp_prime DEFINITION
+  PUBLIC
+  CREATE PUBLIC.
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CHECK
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-protected section.
+    CLASS-METHODS check
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+  PROTECTED SECTION.
 
-  types:
-    ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
+    TYPES:
+      ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
 
-  class-methods LOW_PRIMES
-    returning
-      value(RT_LOW) type TY_INTEGER_TT .
-  class-methods RABIN_MILLER
-    importing
-      !IO_N type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-private section.
+    CLASS-METHODS low_primes
+      RETURNING
+        VALUE(rt_low) TYPE ty_integer_tt.
+    CLASS-METHODS rabin_miller
+      IMPORTING
+        !io_n          TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -294,7 +294,8 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
     DO lc_k TIMES.
       lo_a = lo_random->random( ).
 
-      lo_x = lo_a->power( lo_d )->mod( io_n ).
+      lo_x = lo_a->modular_pow( io_exponent = lo_d
+                                io_modulus  = io_n ).
 
       IF lo_x->get( ) = '1' OR lo_x->eq( lo_tmp ) = abap_true.
         CONTINUE.
