@@ -649,9 +649,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
       MODIFY mt_split INDEX lv_index FROM lv_op1.
-      IF sy-subrc <> 0.
-        BREAK-POINT.
-      ENDIF.
       ASSERT sy-subrc = 0.
     ENDDO.
 
