@@ -1,27 +1,29 @@
-CLASS zcl_abappgp_prime DEFINITION
-  PUBLIC
-  CREATE PUBLIC.
+class ZCL_ABAPPGP_PRIME definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS check
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-  PROTECTED SECTION.
+  class-methods CHECK
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+protected section.
 
-    TYPES:
-      ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
+  types:
+    ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
-    CLASS-METHODS low_primes
-      RETURNING
-        VALUE(rt_low) TYPE ty_integer_tt.
-    CLASS-METHODS rabin_miller
-      IMPORTING
-        !io_n          TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+  class-methods LOW_PRIMES
+    returning
+      value(RT_LOW) type TY_INTEGER_TT .
+  class-methods RABIN_MILLER
+    importing
+      !IO_N type ref to ZCL_ABAPPGP_INTEGER
+      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -57,7 +59,9 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 *      ENDIF.
 *    ENDLOOP.
 
-    rv_bool = rabin_miller( io_integer ).
+    rv_bool = rabin_miller(
+      io_n             = io_integer
+      iv_show_progress = iv_show_progress ).
 
   ENDMETHOD.
 
@@ -260,12 +264,11 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
           lo_v        TYPE REF TO zcl_abappgp_integer,
           lo_x        TYPE REF TO zcl_abappgp_integer,
           lv_continue TYPE abap_bool,
+          lv_index    TYPE i,
           lo_random   TYPE REF TO zcl_abappgp_random.
 
 
-    CREATE OBJECT lo_one
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_one.
 
     CREATE OBJECT lo_two
       EXPORTING
@@ -276,21 +279,16 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
         iv_integer = io_n->get( ).
     lo_d->subtract( lo_one ).
 
-    CREATE OBJECT lo_tmp
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_tmp2
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_tmp.
+    CREATE OBJECT lo_tmp2.
 
     DO.
       lo_tmp->copy( lo_d ).
-      lo_tmp->mod( lo_two ).
+      lo_tmp->mod( lo_two ).  " todo, optimize via 'divide_by_2'?
       IF lo_tmp->is_zero( ) = abap_false.
         EXIT.
       ENDIF.
-      lo_d->divide( lo_two ).
+      lo_d->divide_by_2( ).
       lv_s = lv_s + 1.
     ENDDO.
 
@@ -301,6 +299,13 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
         io_high = lo_tmp.
 
     DO lc_k TIMES.
+      lv_index = sy-index.
+      cl_progress_indicator=>progress_indicate(
+        i_text               = |Running { lv_index }/{ lc_k }|
+        i_processed          = lv_index
+        i_total              = lc_k
+        i_output_immediately = abap_true ).
+
       lo_a = lo_random->random( ).
 
       lo_x = lo_a->modular_pow( io_exponent = lo_d
@@ -312,6 +317,12 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
       lv_continue = abap_false.
       DO lv_s - 1 TIMES.
+*        cl_progress_indicator=>progress_indicate(
+*          i_text               = |{ sy-index }/{ lv_s - 1 }, runs { lv_index }/{ lc_k }|
+*          i_processed          = sy-index
+*          i_total              = lv_s - 1
+*          i_output_immediately = abap_true ).
+
         lo_tmp2->copy( lo_x ).
         lo_x->multiply( lo_tmp2 )->mod( io_n ).
 

@@ -200,7 +200,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD divide.
 
-    DATA: lo_tmp        TYPE REF TO zcl_abappgp_integer,
+    DATA: lv_iterations TYPE i,
+          lo_tmp        TYPE REF TO zcl_abappgp_integer,
           lo_middle     TYPE REF TO zcl_abappgp_integer,
           lo_guess      TYPE REF TO zcl_abappgp_integer,
           lo_low_guess  TYPE REF TO zcl_abappgp_integer,
@@ -235,6 +236,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_high_guess->copy( me ).
 
     DO.
+      lv_iterations = lv_iterations + 1.
+
       lo_middle->copy( lo_high_guess )->subtract( lo_low_guess )->divide_by_2( ).
 *      WRITE: / 'middle', lo_middle->get( ).
 
@@ -246,6 +249,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           mt_split = lo_low_guess->mt_split.
         ENDIF.
         RETURN.
+      ENDIF.
+
+      IF lv_iterations >= 9999.
+        BREAK-POINT.
       ENDIF.
 
 * try moving high down
