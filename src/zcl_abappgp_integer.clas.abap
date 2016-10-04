@@ -1,6 +1,6 @@
 CLASS zcl_abappgp_integer DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+    PUBLIC
+    CREATE PUBLIC.
 
   PUBLIC SECTION.
 
@@ -8,90 +8,93 @@ CLASS zcl_abappgp_integer DEFINITION
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS constructor
       IMPORTING
-        !iv_integer TYPE string DEFAULT '1' .
+        !iv_integer TYPE string DEFAULT '1'.
     METHODS copy
       IMPORTING
         !io_integer       TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
     METHODS divide
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS divide_by_2
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS eq
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS ge
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS get
       RETURNING
-        VALUE(rv_integer) TYPE string .
+        VALUE(rv_integer) TYPE string.
     METHODS gt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS is_one
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS is_zero
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS le
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS lt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS mod
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS modular_pow
       IMPORTING
         !io_exponent     TYPE REF TO zcl_abappgp_integer
         !io_modulus      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS mod_2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS multiply
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS power
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS subtract
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
   PROTECTED SECTION.
 
     TYPES:
-      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
+      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
 
     CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
-    DATA mt_split TYPE ty_split_tt .
+    DATA mt_split TYPE ty_split_tt.
     CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
 
     METHODS append_zeros
@@ -99,13 +102,13 @@ CLASS zcl_abappgp_integer DEFINITION
         !iv_int       TYPE i
         !iv_zeros     TYPE i
       RETURNING
-        VALUE(rv_str) TYPE string .
-    METHODS remove_leading_zeros .
+        VALUE(rv_str) TYPE string.
+    METHODS remove_leading_zeros.
     METHODS split
       IMPORTING
         !iv_integer     TYPE string
       RETURNING
-        VALUE(rt_split) TYPE ty_split_tt .
+        VALUE(rt_split) TYPE ty_split_tt.
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -294,7 +297,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       <lv_value> = <lv_value> + lv_carry * c_max.
       lv_carry   = <lv_value> MOD 2.
       <lv_value> = <lv_value> DIV 2.
-
     ENDDO.
 
     remove_leading_zeros( ).
@@ -474,6 +476,30 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       mod( io_modulus ).
       lo_count->subtract( lo_one ).
     ENDWHILE.
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD mod_2.
+
+    DATA: lo_two  TYPE REF TO zcl_abappgp_integer,
+          lo_div  TYPE REF TO zcl_abappgp_integer,
+          lo_mult TYPE REF TO zcl_abappgp_integer.
+
+
+    CREATE OBJECT lo_div.
+    CREATE OBJECT lo_mult.
+    CREATE OBJECT lo_two
+      EXPORTING
+        iv_integer = '2'.
+
+    lo_div->copy( me )->divide_by_2( ).
+
+    lo_mult->copy( lo_div )->multiply( lo_two ).
+
+    subtract( lo_mult ).
 
     ro_result = me.
 
