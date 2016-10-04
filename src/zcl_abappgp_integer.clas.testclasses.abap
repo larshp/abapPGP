@@ -218,7 +218,8 @@ CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       divide4 FOR TESTING,
       divide5 FOR TESTING,
       divide6 FOR TESTING,
-      divide7 FOR TESTING.
+      divide7 FOR TESTING,
+      divide8 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -340,6 +341,20 @@ CLASS ltcl_divide IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->get( )
       exp = '687' ).
+
+  ENDMETHOD.
+
+  METHOD divide8.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '30558784'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '30558784' ).
 
   ENDMETHOD.
 

@@ -191,6 +191,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT NOT io_integer->is_zero( ).
 
+    ro_result = me.
+
+    IF io_integer->get( ) = '1'.
+      RETURN.
+    ENDIF.
+
     CREATE OBJECT lo_one
       EXPORTING
         iv_integer = '1'.
@@ -202,8 +208,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_tmp->subtract( io_integer ).
       add( lo_one ).
     ENDWHILE.
-
-    ro_result = me.
 
   ENDMETHOD.
 
