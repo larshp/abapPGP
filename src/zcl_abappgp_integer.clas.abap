@@ -1,6 +1,6 @@
 CLASS zcl_abappgp_integer DEFINITION
   PUBLIC
-  CREATE PUBLIC.
+  CREATE PUBLIC .
 
   PUBLIC SECTION.
 
@@ -8,78 +8,80 @@ CLASS zcl_abappgp_integer DEFINITION
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS constructor
       IMPORTING
         !iv_integer TYPE string .
     METHODS copy
+      IMPORTING
+        !io_integer       TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
     METHODS divide
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS divide_by_2
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS eq
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+        VALUE(rv_bool) TYPE abap_bool .
     METHODS ge
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+        VALUE(rv_bool) TYPE abap_bool .
     METHODS get
       RETURNING
-        VALUE(rv_integer) TYPE string.
+        VALUE(rv_integer) TYPE string .
     METHODS gt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+        VALUE(rv_bool) TYPE abap_bool .
     METHODS is_zero
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+        VALUE(rv_bool) TYPE abap_bool .
     METHODS le
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+        VALUE(rv_bool) TYPE abap_bool .
     METHODS lt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
+        VALUE(rv_bool) TYPE abap_bool .
     METHODS mod
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS modular_pow
       IMPORTING
         !io_exponent     TYPE REF TO zcl_abappgp_integer
         !io_modulus      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS multiply
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS power
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS subtract
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
   PROTECTED SECTION.
 
     TYPES:
@@ -182,9 +184,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD copy.
 
-    CREATE OBJECT ro_integer
-      EXPORTING
-        iv_integer = get( ).
+    mt_split = io_integer->mt_split.
+
+*    CREATE OBJECT ro_integer
+*      EXPORTING
+*        iv_integer = get( ).
+
+    ro_integer = me.
 
   ENDMETHOD.
 
@@ -212,16 +218,33 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    CREATE OBJECT lo_tmp
+      EXPORTING
+        iv_integer = '0'.
+
+    CREATE OBJECT lo_guess
+      EXPORTING
+        iv_integer = '0'.
+
+    CREATE OBJECT lo_middle
+      EXPORTING
+        iv_integer = '1'.
+
     CREATE OBJECT lo_low_guess
       EXPORTING
         iv_integer = '1'.
-    lo_high_guess = copy( ).
+
+    CREATE OBJECT lo_high_guess
+      EXPORTING
+        iv_integer = '1'.
+    lo_high_guess->copy( me ).
 
     DO.
-      lo_middle = lo_high_guess->copy( )->subtract( lo_low_guess )->divide_by_2( ).
+      lo_middle->copy( lo_high_guess )->subtract( lo_low_guess )->divide_by_2( ).
+*      WRITE: / 'middle', lo_middle->get( ).
 
       IF lo_middle->is_zero( ).
-        lo_tmp = lo_high_guess->copy( )->multiply( io_integer ).
+        lo_tmp->copy( lo_high_guess )->multiply( io_integer ).
         IF lo_tmp->eq( me ) = abap_true.
           mt_split = lo_high_guess->mt_split.
         ELSE.
@@ -231,20 +254,20 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
 * try moving high down
-      lo_guess = lo_high_guess->copy( )->subtract( lo_middle ).
-      lo_tmp = lo_guess->copy( )->multiply( io_integer ).
+      lo_guess->copy( lo_high_guess )->subtract( lo_middle ).
+      lo_tmp->copy( lo_guess )->multiply( io_integer ).
       IF lo_tmp->ge( me ) = abap_true.
-*        WRITE: / 'move high', lo_guess->get( ).
-        lo_high_guess = lo_guess.
+*        WRITE: / 'move high to', lo_guess->get( ).
+        lo_high_guess->copy( lo_guess ).
         CONTINUE.
       ENDIF.
 
 * try moving low up
-      lo_guess = lo_low_guess->copy( )->add( lo_middle ).
-      lo_tmp = lo_guess->copy( )->multiply( io_integer ).
+      lo_guess->copy( lo_low_guess )->add( lo_middle ).
+      lo_tmp->copy( lo_guess )->multiply( io_integer ).
       IF lo_tmp->le( me ) = abap_true.
-*        WRITE: / 'move low', lo_guess->get( ).
-        lo_low_guess = lo_guess.
+*        WRITE: / 'move low to', lo_guess->get( ).
+        lo_low_guess->copy( lo_guess ).
       ENDIF.
 
     ENDDO.
@@ -375,9 +398,17 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_mult TYPE REF TO zcl_abappgp_integer.
 
 
-    lo_div = copy( )->divide( io_integer ).
+    CREATE OBJECT lo_div
+      EXPORTING
+        iv_integer = '1'.
 
-    lo_mult = lo_div->copy( )->multiply( io_integer ).
+    CREATE OBJECT lo_mult
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_div->copy( me )->divide( io_integer ).
+
+    lo_mult->copy( lo_div )->multiply( io_integer ).
 
     subtract( lo_mult ).
 
@@ -401,7 +432,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    lo_original = copy( ).
+    CREATE OBJECT lo_original
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_original->copy( me ).
     mt_split = split( '1' ).
 
     IF io_exponent->is_zero( ).
@@ -412,7 +447,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       EXPORTING
         iv_integer = '1'.
 
-    lo_count = io_exponent->copy( ).
+    CREATE OBJECT lo_count
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_count->copy( io_exponent ).
 
     WHILE NOT lo_count->is_zero( ).
       multiply( lo_original ).
@@ -483,8 +522,16 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       EXPORTING
         iv_integer = '1'.
 
-    lo_original = copy( ).
-    lo_count = io_integer->copy( ).
+    CREATE OBJECT lo_original
+      EXPORTING
+        iv_integer = '1'.
+
+    CREATE OBJECT lo_count
+      EXPORTING
+        iv_integer = '1'.
+
+    lo_original->copy( me ).
+    lo_count->copy( io_integer ).
     lo_count->subtract( lo_one ).
 
     WHILE NOT lo_count->is_zero( ).

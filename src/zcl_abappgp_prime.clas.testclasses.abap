@@ -11,7 +11,7 @@ CLASS ltcl_prime DEFINITION FOR TESTING
       check97 FOR TESTING,
       check99 FOR TESTING,
       check44377 FOR TESTING,
-      check44449. " FOR TESTING.
+      check44449 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_str      TYPE string

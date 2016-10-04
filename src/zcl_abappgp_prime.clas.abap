@@ -252,6 +252,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
     DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_two      TYPE REF TO zcl_abappgp_integer,
           lo_tmp      TYPE REF TO zcl_abappgp_integer,
+          lo_tmp2     TYPE REF TO zcl_abappgp_integer,
 * todo, perhaps it is wrong to define lv_s as i?
           lv_s        TYPE i,
           lo_d        TYPE REF TO zcl_abappgp_integer,
@@ -275,8 +276,16 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
         iv_integer = io_n->get( ).
     lo_d->subtract( lo_one ).
 
+    CREATE OBJECT lo_tmp
+      EXPORTING
+        iv_integer = '1'.
+
+    CREATE OBJECT lo_tmp2
+      EXPORTING
+        iv_integer = '1'.
+
     DO.
-      lo_tmp = lo_d->copy( ).
+      lo_tmp->copy( lo_d ).
       lo_tmp->mod( lo_two ).
       IF lo_tmp->is_zero( ) = abap_false.
         EXIT.
@@ -285,7 +294,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
       lv_s = lv_s + 1.
     ENDDO.
 
-    lo_tmp = io_n->copy( )->subtract( lo_one ).
+    lo_tmp->copy( io_n )->subtract( lo_one ).
     CREATE OBJECT lo_random
       EXPORTING
         io_low  = lo_two
@@ -303,7 +312,8 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
       lv_continue = abap_false.
       DO lv_s - 1 TIMES.
-        lo_x->multiply( lo_x->copy( ) )->mod( io_n ).
+        lo_tmp2->copy( lo_x ).
+        lo_x->multiply( lo_tmp2 )->mod( io_n ).
 
         IF lo_x->get( ) = '1'.
           rv_bool = abap_false.
