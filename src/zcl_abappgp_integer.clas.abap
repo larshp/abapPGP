@@ -11,13 +11,16 @@ CLASS zcl_abappgp_integer DEFINITION
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS constructor
       IMPORTING
-        !iv_integer TYPE string.
+        !iv_integer TYPE string .
     METHODS copy
       RETURNING
         VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
     METHODS divide
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS divide_by_2
       RETURNING
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS eq
@@ -41,6 +44,11 @@ CLASS zcl_abappgp_integer DEFINITION
     METHODS is_zero
       RETURNING
         VALUE(rv_bool) TYPE abap_bool.
+    METHODS le
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS lt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
@@ -51,15 +59,15 @@ CLASS zcl_abappgp_integer DEFINITION
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS multiply
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS modular_pow
       IMPORTING
         !io_exponent     TYPE REF TO zcl_abappgp_integer
         !io_modulus      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+    METHODS multiply
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
     METHODS power
@@ -78,7 +86,7 @@ CLASS zcl_abappgp_integer DEFINITION
       ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
 
     CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
-    DATA mt_split TYPE ty_split_tt.
+    DATA mt_split TYPE ty_split_tt .
     CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
 
     METHODS append_zeros
@@ -183,10 +191,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD divide.
 
-* todo, this is a naive approach, probably too slow
-
-    DATA: lo_tmp TYPE REF TO zcl_abappgp_integer,
-          lo_one TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_tmp        TYPE REF TO zcl_abappgp_integer,
+          lo_middle     TYPE REF TO zcl_abappgp_integer,
+          lo_guess      TYPE REF TO zcl_abappgp_integer,
+          lo_low_guess  TYPE REF TO zcl_abappgp_integer,
+          lo_high_guess TYPE REF TO zcl_abappgp_integer.
 
 
     ASSERT NOT io_integer->is_zero( ).
@@ -195,19 +204,77 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     IF io_integer->get( ) = '1'.
       RETURN.
+    ELSEIF io_integer->gt( me ).
+      mt_split = split( '0' ).
+      RETURN.
+    ELSEIF io_integer->eq( me ).
+      mt_split = split( '1' ).
+      RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_one
+    CREATE OBJECT lo_low_guess
       EXPORTING
         iv_integer = '1'.
+    lo_high_guess = copy( ).
 
-    lo_tmp = copy( ).
-    mt_split = split( '0' ).
+    DO.
+      lo_middle = lo_high_guess->copy( )->subtract( lo_low_guess )->divide_by_2( ).
 
-    WHILE lo_tmp->ge( io_integer ).
-      lo_tmp->subtract( io_integer ).
-      add( lo_one ).
-    ENDWHILE.
+      IF lo_middle->is_zero( ).
+        lo_tmp = lo_high_guess->copy( )->multiply( io_integer ).
+        IF lo_tmp->eq( me ) = abap_true.
+          mt_split = lo_high_guess->mt_split.
+        ELSE.
+          mt_split = lo_low_guess->mt_split.
+        ENDIF.
+        RETURN.
+      ENDIF.
+
+* try moving high down
+      lo_guess = lo_high_guess->copy( )->subtract( lo_middle ).
+      lo_tmp = lo_guess->copy( )->multiply( io_integer ).
+      IF lo_tmp->ge( me ) = abap_true.
+*        WRITE: / 'move high', lo_guess->get( ).
+        lo_high_guess = lo_guess.
+        CONTINUE.
+      ENDIF.
+
+* try moving low up
+      lo_guess = lo_low_guess->copy( )->add( lo_middle ).
+      lo_tmp = lo_guess->copy( )->multiply( io_integer ).
+      IF lo_tmp->le( me ) = abap_true.
+*        WRITE: / 'move low', lo_guess->get( ).
+        lo_low_guess = lo_guess.
+      ENDIF.
+
+    ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD divide_by_2.
+
+    DATA: lv_index TYPE i,
+          lv_carry TYPE i.
+
+    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
+
+
+    DO lines( mt_split ) TIMES.
+      lv_index = lines( mt_split ) - sy-index + 1.
+
+      READ TABLE mt_split INDEX lv_index ASSIGNING <lv_value>.
+      ASSERT sy-subrc = 0.
+
+      <lv_value> = <lv_value> + lv_carry * c_max.
+      lv_carry   = <lv_value> MOD 2.
+      <lv_value> = <lv_value> DIV 2.
+
+    ENDDO.
+
+    remove_leading_zeros( ).
+
+    ro_result = me.
 
   ENDMETHOD.
 
@@ -288,6 +355,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD le.
+
+    rv_bool = boolc( lt( io_integer ) = abap_true OR eq( io_integer ) = abap_true ).
+
+  ENDMETHOD.
+
+
   METHOD lt.
 
     rv_bool = boolc( gt( io_integer ) = abap_false ).
@@ -300,8 +374,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DATA: lo_div  TYPE REF TO zcl_abappgp_integer,
           lo_mult TYPE REF TO zcl_abappgp_integer.
 
-*    DATA(org1) = copy( ).
-*    DATA(org2) = io_integer->copy( ).
 
     lo_div = copy( )->divide( io_integer ).
 
@@ -341,7 +413,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
         iv_integer = '1'.
 
     lo_count = io_exponent->copy( ).
-*    lo_count->subtract( lo_one ).
 
     WHILE NOT lo_count->is_zero( ).
       multiply( lo_original ).
@@ -513,15 +584,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
       MODIFY mt_split INDEX lv_index FROM lv_op1.
-*      IF sy-subrc <> 0.
-*        BREAK-POINT.
-*      ENDIF.
       ASSERT sy-subrc = 0.
     ENDDO.
 
-*    IF lv_carry <> 0.
-*      BREAK-POINT.
-*    ENDIF.
     ASSERT lv_carry = 0.
 
     remove_leading_zeros( ).

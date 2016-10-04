@@ -1,3 +1,84 @@
+CLASS ltcl_divide_by_2 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      divide1 FOR TESTING,
+      divide2 FOR TESTING,
+      divide3 FOR TESTING,
+      divide4 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_value      TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
+
+ENDCLASS.
+
+CLASS ltcl_divide_by_2 IMPLEMENTATION.
+
+  METHOD test.
+
+    CREATE OBJECT ro_int
+      EXPORTING
+        iv_integer = iv_value.
+
+    ro_int->divide_by_2( ).
+
+  ENDMETHOD.
+
+  METHOD divide1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD divide2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( '2' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD divide3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( '22' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '11' ).
+
+  ENDMETHOD.
+
+  METHOD divide4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( '111222333' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '55611166' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_modular_pow DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
@@ -219,7 +300,8 @@ CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       divide5 FOR TESTING,
       divide6 FOR TESTING,
       divide7 FOR TESTING,
-      divide8 FOR TESTING.
+      divide8 FOR TESTING,
+      divide9 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -355,6 +437,20 @@ CLASS ltcl_divide IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->get( )
       exp = '30558784' ).
+
+  ENDMETHOD.
+
+  METHOD divide9.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '1000'
+                   iv_op2 = '7' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '142' ).
 
   ENDMETHOD.
 
