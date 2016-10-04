@@ -11,7 +11,7 @@ CLASS zcl_abappgp_integer DEFINITION
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS constructor
       IMPORTING
-        !iv_integer TYPE string .
+        !iv_integer TYPE string DEFAULT '1' .
     METHODS copy
       IMPORTING
         !io_integer       TYPE REF TO zcl_abappgp_integer
@@ -41,6 +41,9 @@ CLASS zcl_abappgp_integer DEFINITION
     METHODS gt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_one
       RETURNING
         VALUE(rv_bool) TYPE abap_bool .
     METHODS is_zero
@@ -85,7 +88,7 @@ CLASS zcl_abappgp_integer DEFINITION
   PROTECTED SECTION.
 
     TYPES:
-      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
+      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
 
     CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
     DATA mt_split TYPE ty_split_tt .
@@ -96,13 +99,13 @@ CLASS zcl_abappgp_integer DEFINITION
         !iv_int       TYPE i
         !iv_zeros     TYPE i
       RETURNING
-        VALUE(rv_str) TYPE string.
-    METHODS remove_leading_zeros.
+        VALUE(rv_str) TYPE string .
+    METHODS remove_leading_zeros .
     METHODS split
       IMPORTING
         !iv_integer     TYPE string
       RETURNING
-        VALUE(rt_split) TYPE ty_split_tt.
+        VALUE(rt_split) TYPE ty_split_tt .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -208,7 +211,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ro_result = me.
 
-    IF io_integer->get( ) = '1'.
+    IF io_integer->is_one( ) = abap_true.
       RETURN.
     ELSEIF io_integer->gt( me ).
       mt_split = split( '0' ).
@@ -226,17 +229,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       EXPORTING
         iv_integer = '0'.
 
-    CREATE OBJECT lo_middle
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_low_guess
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_high_guess
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_middle.
+    CREATE OBJECT lo_low_guess.
+    CREATE OBJECT lo_high_guess.
     lo_high_guess->copy( me ).
 
     DO.
@@ -371,9 +366,35 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD is_one.
+
+    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
+
+
+    IF lines( mt_split ) <> 1.
+      RETURN.
+    ENDIF.
+
+    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.
+
+    rv_bool = boolc( <lv_value> = 1 ).
+
+  ENDMETHOD.
+
+
   METHOD is_zero.
 
-    rv_bool = boolc( get( ) = '0' ).
+    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
+
+
+    IF lines( mt_split ) <> 1.
+      RETURN.
+    ENDIF.
+
+    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.
+    ASSERT sy-subrc = 0.
+
+    rv_bool = boolc( <lv_value> = 0 ).
 
   ENDMETHOD.
 
@@ -398,13 +419,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_mult TYPE REF TO zcl_abappgp_integer.
 
 
-    CREATE OBJECT lo_div
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_mult
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_div.
+    CREATE OBJECT lo_mult.
 
     lo_div->copy( me )->divide( io_integer ).
 
@@ -427,14 +443,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_original TYPE REF TO zcl_abappgp_integer.
 
 
-    IF io_modulus->get( ) = '1'.
+    IF io_modulus->is_one( ) = abap_true.
       mt_split = split( '0' ).
       RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_original
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_original.
 
     lo_original->copy( me ).
     mt_split = split( '1' ).
@@ -443,13 +457,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_one
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_count
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_one.
+    CREATE OBJECT lo_count.
 
     lo_count->copy( io_exponent ).
 
@@ -466,42 +475,59 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD multiply.
 
-    DATA: lv_index1 TYPE i,
-          lv_index2 TYPE i,
+    DATA: lv_index  TYPE i,
+          lv_index1 TYPE i,
           lv_op     TYPE i,
-          lv_op1    TYPE i,
-          lv_op2    TYPE i,
-          lv_str    TYPE string,
-          lo_res    TYPE REF TO zcl_abappgp_integer,
-          lo_tmp    TYPE REF TO zcl_abappgp_integer.
+          lv_add    TYPE i,
+          lv_carry  TYPE i,
+          lt_result LIKE mt_split.
+
+    FIELD-SYMBOLS: <lv_result> TYPE i,
+                   <lv_op1>    TYPE i,
+                   <lv_op2>    TYPE i.
 
 
-    CREATE OBJECT lo_res
-      EXPORTING
-        iv_integer = '0'.
+    ro_result = me.
 
-    LOOP AT mt_split INTO lv_op1.
+    IF is_zero( ) = abap_true OR io_integer->is_zero( ) = abap_true.
+      CLEAR mt_split.
+      APPEND 0 TO mt_split.
+      RETURN.
+    ENDIF.
+
+    LOOP AT mt_split ASSIGNING <lv_op1>.
       lv_index1 = sy-tabix.
-      LOOP AT io_integer->mt_split INTO lv_op2.
-        lv_index2 = sy-tabix.
+      LOOP AT io_integer->mt_split ASSIGNING <lv_op2>.
+        lv_index = lv_index1 + sy-tabix - 1.
 
-        lv_op = lv_op1 * lv_op2.
+        READ TABLE lt_result INDEX lv_index ASSIGNING <lv_result>.
+        IF sy-subrc <> 0.
+          APPEND INITIAL LINE TO lt_result ASSIGNING <lv_result>.
+        ENDIF.
 
-        lv_str = append_zeros(
-          iv_int   = lv_op
-          iv_zeros = ( lv_index1 + lv_index2 - 2 ) * c_length ).
+        lv_op = <lv_op1> * <lv_op2>.
+        lv_add = lv_op MOD c_max.
+        <lv_result> = <lv_result> + lv_add.
 
-        CREATE OBJECT lo_tmp
-          EXPORTING
-            iv_integer = lv_str.
+        lv_carry = <lv_result> DIV c_max + lv_op DIV c_max.
+        <lv_result> = <lv_result> MOD c_max.
 
-        lo_res->add( lo_tmp ).
+        WHILE lv_carry <> 0.
+          lv_index = lv_index + 1.
+          READ TABLE lt_result INDEX lv_index ASSIGNING <lv_result>.
+          IF sy-subrc <> 0.
+            APPEND INITIAL LINE TO lt_result ASSIGNING <lv_result>.
+          ENDIF.
+* carry might trigger the next carry
+          <lv_result> = <lv_result> + lv_carry.
+          lv_carry    = <lv_result> DIV c_max.
+          <lv_result> = <lv_result> MOD c_max.
+        ENDWHILE.
+
       ENDLOOP.
     ENDLOOP.
 
-    mt_split = lo_res->mt_split.
-
-    ro_result = me.
+    mt_split = lt_result.
 
   ENDMETHOD.
 
@@ -518,17 +544,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_one
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_original
-      EXPORTING
-        iv_integer = '1'.
-
-    CREATE OBJECT lo_count
-      EXPORTING
-        iv_integer = '1'.
+    CREATE OBJECT lo_one.
+    CREATE OBJECT lo_original.
+    CREATE OBJECT lo_count.
 
     lo_original->copy( me ).
     lo_count->copy( io_integer ).
@@ -631,6 +649,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
       MODIFY mt_split INDEX lv_index FROM lv_op1.
+      IF sy-subrc <> 0.
+        BREAK-POINT.
+      ENDIF.
       ASSERT sy-subrc = 0.
     ENDDO.
 

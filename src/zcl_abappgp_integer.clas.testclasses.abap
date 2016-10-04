@@ -696,7 +696,10 @@ CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       multiply4 FOR TESTING,
       multiply5 FOR TESTING,
       multiply6 FOR TESTING,
-      multiply7 FOR TESTING.
+      multiply7 FOR TESTING,
+      multiply8 FOR TESTING,
+      multiply9 FOR TESTING,
+      multiply10 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -817,6 +820,45 @@ CLASS ltcl_multiply IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->get( )
       exp = '25000000' ).
+
+  ENDMETHOD.
+
+  METHOD multiply8.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '30558784'
+                   iv_op2 = '44449' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '1358307390016' ).
+
+  ENDMETHOD.
+
+  METHOD multiply9.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '100000'
+                   iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD multiply10.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '7777777777'
+                   iv_op2 = '6666666666' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '51851851841481481482' ).
 
   ENDMETHOD.
 
