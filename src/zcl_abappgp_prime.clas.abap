@@ -39,7 +39,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
           lo_copy    TYPE REF TO zcl_abappgp_integer.
 
 
-    IF io_integer->get( ) = '0' OR io_integer->get( ) = '1'.
+    IF io_integer->is_zero( ) = abap_true OR io_integer->is_one( ) = abap_true.
       rv_bool = abap_false.
       RETURN.
     ENDIF.
@@ -274,10 +274,8 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
       EXPORTING
         iv_integer = '2'.
 
-    CREATE OBJECT lo_d
-      EXPORTING
-        iv_integer = io_n->get( ).
-    lo_d->subtract( lo_one ).
+    CREATE OBJECT lo_d.
+    lo_d->copy( io_n )->subtract( lo_one ).
 
     CREATE OBJECT lo_tmp.
     CREATE OBJECT lo_tmp2.
@@ -311,22 +309,16 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
       lo_x = lo_a->modular_pow( io_exponent = lo_d
                                 io_modulus  = io_n ).
 
-      IF lo_x->get( ) = '1' OR lo_x->eq( lo_tmp ) = abap_true.
+      IF lo_x->is_one( ) = abap_true OR lo_x->eq( lo_tmp ) = abap_true.
         CONTINUE.
       ENDIF.
 
       lv_continue = abap_false.
       DO lv_s - 1 TIMES.
-*        cl_progress_indicator=>progress_indicate(
-*          i_text               = |{ sy-index }/{ lv_s - 1 }, runs { lv_index }/{ lc_k }|
-*          i_processed          = sy-index
-*          i_total              = lv_s - 1
-*          i_output_immediately = abap_true ).
-
         lo_tmp2->copy( lo_x ).
         lo_x->multiply( lo_tmp2 )->mod( io_n ).
 
-        IF lo_x->get( ) = '1'.
+        IF lo_x->is_one( ) = abap_true.
           rv_bool = abap_false.
           RETURN.
         ENDIF.

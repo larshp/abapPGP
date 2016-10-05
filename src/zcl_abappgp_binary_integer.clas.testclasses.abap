@@ -47,7 +47,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 ENDCLASS.
 
 
-CLASS ltcl_shift DEFINITION FOR TESTING
+CLASS ltcl_shift_right DEFINITION FOR TESTING
     DURATION SHORT
     RISK LEVEL HARMLESS
     FINAL.
@@ -62,7 +62,7 @@ CLASS ltcl_shift DEFINITION FOR TESTING
 
 ENDCLASS.       "ltcl_Get
 
-CLASS ltcl_shift IMPLEMENTATION.
+CLASS ltcl_shift_right IMPLEMENTATION.
 
   METHOD test.
 
@@ -77,7 +77,7 @@ CLASS ltcl_shift IMPLEMENTATION.
       EXPORTING
         io_integer = lo_integer.
 
-    lo_binary->shift( ).
+    lo_binary->shift_right( ).
 
     lo_integer = lo_binary->to_integer( ).
 

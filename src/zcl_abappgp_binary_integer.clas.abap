@@ -1,25 +1,26 @@
-CLASS zcl_abappgp_binary_integer DEFINITION
-    PUBLIC
-    CREATE PUBLIC.
+class ZCL_ABAPPGP_BINARY_INTEGER definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS constructor
-      IMPORTING
-        !io_integer TYPE REF TO zcl_abappgp_integer.
-    METHODS get
-      RETURNING
-        VALUE(rv_binary) TYPE string.
-    METHODS is_zero
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS mod_2
-      RETURNING
-        VALUE(rv_result) TYPE i.
-    METHODS shift.
-    METHODS to_integer
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
+  methods CONSTRUCTOR
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER .
+  methods GET
+    returning
+      value(RV_BINARY) type STRING .
+  methods IS_ZERO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods MOD_2
+    returning
+      value(RV_RESULT) type I .
+  methods SHIFT_LEFT .
+  methods SHIFT_RIGHT .
+  methods TO_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   PROTECTED SECTION.
 
     DATA mv_data TYPE string.
@@ -79,7 +80,18 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD shift.
+  METHOD shift_left.
+
+    IF is_zero( ) = abap_true.
+      RETURN.
+    ENDIF.
+
+    CONCATENATE mv_data '0' INTO mv_data.
+
+  ENDMETHOD.
+
+
+  METHOD shift_right.
 
     DATA: lv_length TYPE i.
 

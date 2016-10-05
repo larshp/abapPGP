@@ -1,93 +1,102 @@
-CLASS zcl_abappgp_integer DEFINITION
-    PUBLIC
-    CREATE PUBLIC.
+class ZCL_ABAPPGP_INTEGER definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS add
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS constructor
-      IMPORTING
-        !iv_integer TYPE string DEFAULT '1'.
-    METHODS copy
-      IMPORTING
-        !io_integer       TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
-    METHODS divide
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS divide_by_2
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS eq
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS ge
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS get
-      RETURNING
-        VALUE(rv_integer) TYPE string.
-    METHODS gt
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS is_one
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS is_zero
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS le
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS lt
-      IMPORTING
-        !io_integer    TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(rv_bool) TYPE abap_bool.
-    METHODS mod
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS modular_pow
-      IMPORTING
-        !io_exponent     TYPE REF TO zcl_abappgp_integer
-        !io_modulus      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS mod_2
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS multiply
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS power
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-    METHODS subtract
-      IMPORTING
-        !io_integer      TYPE REF TO zcl_abappgp_integer
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+  methods ADD
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods CONSTRUCTOR
+    importing
+      !IV_INTEGER type STRING default '1' .
+  methods COPY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods DIVIDE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods DIVIDE_BY_2
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods EQ
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods GE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods GET
+    returning
+      value(RV_INTEGER) type STRING .
+  methods GT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_EVEN
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_ODD
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_ONE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_TWO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_ZERO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods LE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods LT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods MOD
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MODULAR_POW
+    importing
+      !IO_EXPONENT type ref to ZCL_ABAPPGP_INTEGER
+      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MOD_2
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MULTIPLY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods POWER
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods SUBTRACT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
 
   types:
@@ -306,8 +315,32 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD eq.
 
-* compare strings
-    rv_bool = boolc( get( ) = io_integer->get( ) ).
+    DATA: lv_index TYPE i.
+
+    FIELD-SYMBOLS: <lv_op1> LIKE LINE OF mt_split,
+                   <lv_op2> LIKE LINE OF mt_split.
+
+
+    IF lines( mt_split ) <> lines( io_integer->mt_split ).
+      rv_bool = abap_false.
+      RETURN.
+    ENDIF.
+
+    DO lines( mt_split ) TIMES.
+      lv_index = sy-index.
+
+      READ TABLE mt_split INDEX 1 ASSIGNING <lv_op1>.
+      ASSERT sy-subrc = 0.
+      READ TABLE io_integer->mt_split INDEX 1 ASSIGNING <lv_op2>.
+      ASSERT sy-subrc = 0.
+
+      IF <lv_op1> <> <lv_op2>.
+        rv_bool = abap_false.
+        RETURN.
+      ENDIF.
+    ENDDO.
+
+    rv_bool = abap_true.
 
   ENDMETHOD.
 
@@ -373,6 +406,29 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD is_even.
+
+    DATA: lv_char   TYPE c LENGTH 1,
+          lv_length TYPE i,
+          lv_str    TYPE string.
+
+
+    lv_str = get( ).
+    lv_length = strlen( lv_str ) - 1.
+    lv_char = lv_str+lv_length(1).
+
+    rv_bool = boolc( lv_char CO '02468' ).
+
+  ENDMETHOD.
+
+
+  METHOD is_odd.
+
+    rv_bool = boolc( is_even( ) = abap_false ).
+
+  ENDMETHOD.
+
+
   METHOD is_one.
 
     FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
@@ -385,6 +441,22 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.
 
     rv_bool = boolc( <lv_value> = 1 ).
+
+  ENDMETHOD.
+
+
+  METHOD is_two.
+
+    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
+
+
+    IF lines( mt_split ) <> 1.
+      RETURN.
+    ENDIF.
+
+    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.
+
+    rv_bool = boolc( <lv_value> = 2 ).
 
   ENDMETHOD.
 
@@ -415,7 +487,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD lt.
 
-    rv_bool = boolc( gt( io_integer ) = abap_false ).
+    rv_bool = boolc( ge( io_integer ) = abap_false ).
 
   ENDMETHOD.
 
@@ -477,7 +549,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       IF lo_exponent->mod_2( ) = 1.
         multiply( lo_base )->mod( io_modulus ).
       ENDIF.
-      lo_exponent->shift( ).
+      lo_exponent->shift_right( ).
 
       lo_tmp->copy( lo_base ).
       lo_base->multiply( lo_tmp )->mod( io_modulus ).
