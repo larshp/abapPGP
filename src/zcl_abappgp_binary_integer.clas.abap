@@ -4,15 +4,12 @@ CLASS zcl_abappgp_binary_integer DEFINITION
 
   PUBLIC SECTION.
 
-    METHODS get
-      RETURNING
-        VALUE(rv_binary) TYPE string.
-    METHODS to_integer
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
     METHODS constructor
       IMPORTING
         !io_integer TYPE REF TO zcl_abappgp_integer.
+    METHODS get
+      RETURNING
+        VALUE(rv_binary) TYPE string.
     METHODS is_zero
       RETURNING
         VALUE(rv_bool) TYPE abap_bool.
@@ -20,6 +17,9 @@ CLASS zcl_abappgp_binary_integer DEFINITION
       RETURNING
         VALUE(rv_result) TYPE i.
     METHODS shift.
+    METHODS to_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
   PROTECTED SECTION.
 
     DATA mv_data TYPE string.

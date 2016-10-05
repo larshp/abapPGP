@@ -88,27 +88,25 @@ CLASS zcl_abappgp_integer DEFINITION
         !io_integer      TYPE REF TO zcl_abappgp_integer
       RETURNING
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
-  PROTECTED SECTION.
+protected section.
 
-    TYPES:
-      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY.
+  types:
+    ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
 
-    CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
-    DATA mt_split TYPE ty_split_tt.
-    CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
+  constants C_MAX type I value 10000 ##NO_TEXT.
+  data MT_SPLIT type TY_SPLIT_TT .
+  constants C_LENGTH type I value 4 ##NO_TEXT.
 
-    METHODS append_zeros
-      IMPORTING
-        !iv_int       TYPE i
-        !iv_zeros     TYPE i
-      RETURNING
-        VALUE(rv_str) TYPE string.
-    METHODS remove_leading_zeros.
-    METHODS split
-      IMPORTING
-        !iv_integer     TYPE string
-      RETURNING
-        VALUE(rt_split) TYPE ty_split_tt.
+  methods APPEND_ZEROS
+    importing
+      !IV_INT type I
+      !IV_ZEROS type I
+    returning
+      value(RV_STR) type STRING .
+  methods REMOVE_LEADING_ZEROS .
+  methods SPLIT
+    importing
+      !IV_INTEGER type STRING .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -183,7 +181,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT iv_integer CO '1234567890'.
 
-    mt_split = split( iv_integer ).
+    split( iv_integer ).
 
   ENDMETHOD.
 
@@ -218,10 +216,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     IF io_integer->is_one( ) = abap_true.
       RETURN.
     ELSEIF io_integer->gt( me ).
-      mt_split = split( '0' ).
+      split( '0' ).
       RETURN.
     ELSEIF io_integer->eq( me ).
-      mt_split = split( '1' ).
+      split( '1' ).
       RETURN.
     ENDIF.
 
@@ -449,32 +447,40 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
           lo_one      TYPE REF TO zcl_abappgp_integer,
-          lo_original TYPE REF TO zcl_abappgp_integer.
+          lo_base     TYPE REF TO zcl_abappgp_integer,
+          lo_tmp      TYPE REF TO zcl_abappgp_integer,
+          lo_exponent TYPE REF TO zcl_abappgp_binary_integer.
 
 
     IF io_modulus->is_one( ) = abap_true.
-      mt_split = split( '0' ).
+      split( '0' ).
       RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_original.
+    CREATE OBJECT lo_tmp.
+    CREATE OBJECT lo_base.
+    lo_base->copy( me ).
 
-    lo_original->copy( me ).
-    mt_split = split( '1' ).
+    split( '1' ).
 
     IF io_exponent->is_zero( ).
       RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_one.
-    CREATE OBJECT lo_count.
+    CREATE OBJECT lo_exponent
+      EXPORTING
+        io_integer = io_exponent.
 
-    lo_count->copy( io_exponent ).
+    lo_base->mod( io_modulus ).
 
-    WHILE NOT lo_count->is_zero( ).
-      multiply( lo_original ).
-      mod( io_modulus ).
-      lo_count->subtract( lo_one ).
+    WHILE lo_exponent->is_zero( ) = abap_false.
+      IF lo_exponent->mod_2( ) = 1.
+        multiply( lo_base )->mod( io_modulus ).
+      ENDIF.
+      lo_exponent->shift( ).
+
+      lo_tmp->copy( lo_base ).
+      lo_base->multiply( lo_tmp )->mod( io_modulus ).
     ENDWHILE.
 
     ro_result = me.
@@ -573,7 +579,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
 
     IF io_integer->is_zero( ).
-      mt_split = split( '1' ).
+      split( '1' ).
       RETURN.
     ENDIF.
 
@@ -626,6 +632,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_offset TYPE i.
 
 
+    CLEAR mt_split.
+
     lv_offset = strlen( iv_integer ) - c_length.
 
     DO.
@@ -637,10 +645,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       IF lv_length > strlen( iv_integer ).
         lv_length = strlen( iv_integer ).
       ELSEIF lv_offset = 0.
-        lv_length = strlen( iv_integer ) - lines( rt_split ) * c_length.
+        lv_length = strlen( iv_integer ) - lines( mt_split ) * c_length.
       ENDIF.
 
-      APPEND iv_integer+lv_offset(lv_length) TO rt_split.
+      APPEND iv_integer+lv_offset(lv_length) TO mt_split.
 
       IF lv_offset = 0.
         EXIT. " current loop
