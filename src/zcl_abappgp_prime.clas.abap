@@ -307,7 +307,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
       lo_a = lo_random->random( ).
 
       lo_x = lo_a->modular_pow_montgomery( io_exponent = lo_d
-                                io_modulus  = io_n ).
+                                           io_modulus  = io_n ).
 
       IF lo_x->is_one( ) = abap_true OR lo_x->is_eq( lo_tmp ) = abap_true.
         CONTINUE.

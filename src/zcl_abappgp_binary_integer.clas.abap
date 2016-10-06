@@ -1,43 +1,46 @@
-class ZCL_ABAPPGP_BINARY_INTEGER definition
-  public
-  create public .
+CLASS zcl_abappgp_binary_integer DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods AND
-    importing
-      !IO_BINARY type ref to ZCL_ABAPPGP_BINARY_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
-  methods CONSTRUCTOR
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER .
-  methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods MOD_2
-    returning
-      value(RV_RESULT) type I .
-  methods SHIFT_LEFT
-    importing
-      !IV_TIMES type I default 1
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
-  methods SHIFT_RIGHT
-    importing
-      !IV_TIMES type I default 1
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
-  methods TO_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods TO_STRING
-    returning
-      value(RV_BINARY) type STRING .
+    METHODS and
+      IMPORTING
+        !io_binary       TYPE REF TO zcl_abappgp_binary_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer .
+    METHODS constructor
+      IMPORTING
+        !io_integer TYPE REF TO zcl_abappgp_integer .
+    METHODS is_zero
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS mod_2
+      RETURNING
+        VALUE(rv_result) TYPE i .
+    METHODS shift_left
+      IMPORTING
+        !iv_times        TYPE i DEFAULT 1
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer .
+    METHODS shift_right
+      IMPORTING
+        !iv_times        TYPE i DEFAULT 1
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer .
+    METHODS to_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS to_string
+      RETURNING
+        VALUE(rv_binary) TYPE string .
+    CLASS-METHODS class_constructor .
   PROTECTED SECTION.
 
-    DATA mv_data TYPE string.
-private section.
+    DATA mv_data TYPE string .
+    CLASS-DATA: go_two    TYPE REF TO zcl_abappgp_integer,
+                gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -80,6 +83,23 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
     mv_data = lv_result.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD class_constructor.
+
+    CREATE OBJECT go_two
+      EXPORTING
+        iv_integer = '1'.
+
+    APPEND go_two TO gt_powers.
+
+    CREATE OBJECT go_two
+      EXPORTING
+        iv_integer = '2'.
+
+    APPEND go_two TO gt_powers.
 
   ENDMETHOD.
 
@@ -139,7 +159,7 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
       CONCATENATE mv_data '0' INTO mv_data.
     ENDDO.
 
-ro_result = me.
+    ro_result = me.
 
   ENDMETHOD.
 
@@ -167,32 +187,37 @@ ro_result = me.
     DATA: lv_offset TYPE i,
           lv_bit    TYPE c LENGTH 1,
           lo_int    TYPE REF TO zcl_abappgp_integer,
-          lo_two    TYPE REF TO zcl_abappgp_integer.
+          lo_tmp    TYPE REF TO zcl_abappgp_integer.
 
 
     CREATE OBJECT ro_integer
       EXPORTING
         iv_integer = '0'.
-    CREATE OBJECT lo_two
-      EXPORTING
-        iv_integer = '2'.
-    CREATE OBJECT lo_int.
 
     lv_offset = strlen( mv_data ) - 1.
 
     WHILE lv_offset >= 0.
+      READ TABLE gt_powers INTO lo_int INDEX sy-index.
+      IF sy-subrc <> 0.
+        ASSERT lo_int IS BOUND.
+        CREATE OBJECT lo_tmp.
+        lo_tmp->copy( lo_int )->multiply( go_two ).
+        APPEND lo_tmp TO gt_powers.
+        lo_int = lo_tmp.
+      ENDIF.
+
       lv_bit = mv_data+lv_offset(1).
       IF lv_bit = '1'.
         ro_integer->add( lo_int ).
       ENDIF.
-      lo_int->multiply( lo_two ).
+
       lv_offset = lv_offset - 1.
     ENDWHILE.
 
   ENDMETHOD.
 
 
-  METHOD TO_STRING.
+  METHOD to_string.
 
     rv_binary = mv_data.
 
