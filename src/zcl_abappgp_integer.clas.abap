@@ -147,7 +147,7 @@ protected section.
   methods TOGGLE_NEGATIVE
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-private section.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -255,7 +255,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT iv_integer CO '-1234567890'.
 
-    split( iv_integer ).
+    IF iv_integer = '1'.
+      APPEND 1 TO mt_split.
+    ELSE.
+      split( iv_integer ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -376,7 +380,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD IS_EQ.
+  METHOD is_eq.
 
     DATA: lv_index TYPE i.
 
@@ -432,7 +436,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD IS_GT.
+  METHOD is_gt.
 
     DATA: lv_index TYPE i,
           lv_op1   TYPE i,
@@ -706,22 +710,18 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD mod_2.
 
-    DATA: lo_two  TYPE REF TO zcl_abappgp_integer,
-          lo_div  TYPE REF TO zcl_abappgp_integer,
-          lo_mult TYPE REF TO zcl_abappgp_integer.
+    DATA: lv_value TYPE i,
+          lv_str   TYPE string.
 
+* only the first digit is relevant for calculating MOD2
+    READ TABLE mt_split INDEX 1 INTO lv_value.
+    ASSERT sy-subrc = 0.
 
-    CREATE OBJECT lo_div.
-    CREATE OBJECT lo_mult.
-    CREATE OBJECT lo_two
-      EXPORTING
-        iv_integer = '2'.
+    lv_value = lv_value MOD 2.
+    lv_str = lv_value.
+    CONDENSE lv_str.
 
-    lo_div->copy( me )->divide_by_2( ).
-
-    lo_mult->copy( lo_div )->multiply( lo_two ).
-
-    subtract( lo_mult ).
+    split( lv_str ).
 
     ro_result = me.
 
@@ -907,8 +907,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD remove_leading_zeros.
 
-    DATA: lv_value TYPE i,
-          lv_lines TYPE i.
+    DATA: lv_lines TYPE i,
+          lv_value TYPE i.
 
 
     DO.
@@ -1053,7 +1053,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD TO_STRING.
+  METHOD to_string.
 
     DATA: lv_int TYPE c LENGTH c_length.
 

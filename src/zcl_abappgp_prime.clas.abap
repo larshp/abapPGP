@@ -306,10 +306,10 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
       lo_a = lo_random->random( ).
 
-      lo_x = lo_a->modular_pow( io_exponent = lo_d
+      lo_x = lo_a->modular_pow_montgomery( io_exponent = lo_d
                                 io_modulus  = io_n ).
 
-      IF lo_x->is_one( ) = abap_true OR lo_x->eq( lo_tmp ) = abap_true.
+      IF lo_x->is_one( ) = abap_true OR lo_x->is_eq( lo_tmp ) = abap_true.
         CONTINUE.
       ENDIF.
 
@@ -323,7 +323,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
           RETURN.
         ENDIF.
 
-        IF lo_x->eq( lo_tmp ) = abap_true.
+        IF lo_x->is_eq( lo_tmp ) = abap_true.
           lv_continue = abap_true.
           EXIT. " current loop
         ENDIF.

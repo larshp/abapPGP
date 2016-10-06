@@ -64,8 +64,8 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
   METHOD constructor.
 
-    mv_low = io_low->get( ).
-    mv_high = io_high->get( ).
+    mv_low = io_low->to_string( ).
+    mv_high = io_high->to_string( ).
 
   ENDMETHOD.
 
