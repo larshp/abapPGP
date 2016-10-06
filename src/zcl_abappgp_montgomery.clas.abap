@@ -82,7 +82,7 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
     CREATE OBJECT lo_binary
       EXPORTING
         io_integer = io_modulus.
-    mv_bits = ( strlen( lo_binary->get( ) ) DIV 8 + 1 ) * 8.
+    mv_bits = ( strlen( lo_binary->to_string( ) ) DIV 8 + 1 ) * 8.
 
     CREATE OBJECT lo_one.
     CREATE OBJECT lo_binary
@@ -109,23 +109,38 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
   METHOD multiply.
 
     DATA: lo_product TYPE REF TO zcl_abappgp_integer,
+          lo_reduced TYPE REF TO zcl_abappgp_integer,
           lo_tmp     TYPE REF TO zcl_abappgp_integer.
 
 
     CREATE OBJECT lo_product.
-    lo_product->copy( io_x->get( ) )->multiply( io_y->get( ) ).
+    lo_product->copy( io_x->get_integer( ) )->multiply( io_y->get_integer( ) ).
 
     CREATE OBJECT lo_tmp.
-* todo, optimize 'mod' to 'and'?
     lo_tmp->copy( lo_product )->and( mo_mask )->multiply( mo_factor )->and( mo_mask ).
-    BREAK-POINT.
+
+    lo_tmp->multiply( mo_modulus ).
+
+    CREATE OBJECT lo_reduced.
+    lo_reduced->copy( lo_product )->add( lo_tmp )->shift_right( mv_bits ).
+
+    IF lo_reduced->is_gt( mo_modulus ) = abap_true.
+      lo_reduced->subtract( mo_modulus ).
+    ENDIF.
+
+    CREATE OBJECT ro_result
+      EXPORTING
+        io_integer = lo_reduced.
 
   ENDMETHOD.
 
 
   METHOD unbuild.
 
-* todo
+    CREATE OBJECT ro_integer.
+    ro_integer->copy( io_montgomery->get_integer( ) ).
+
+    ro_integer->multiply( mo_reciprocal )->mod( mo_modulus ).
 
   ENDMETHOD.
 ENDCLASS.

@@ -47,10 +47,39 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
   METHOD and.
 
-*    lv_max = nmax( val1 = lines( io_integer->mt_split )
-*                   val2 = lines( mt_split ) ).
+    DATA: lv_min    TYPE i,
+          lv_offset TYPE i,
+          lv_index  TYPE i,
+          lv_char1  TYPE c LENGTH 1,
+          lv_char2  TYPE c LENGTH 1,
+          lv_result TYPE string.
 
-* todo
+
+    lv_min = nmin( val1 = strlen( mv_data )
+                   val2 = strlen( io_binary->mv_data ) ).
+
+    DO lv_min TIMES.
+      lv_index = sy-index.
+
+      lv_offset = strlen( mv_data ) - lv_index.
+      lv_char1 = mv_data+lv_offset(1).
+
+      lv_offset = strlen( io_binary->mv_data ) - lv_index.
+      lv_char2 = io_binary->mv_data+lv_offset(1).
+
+      IF lv_char1 = '1' AND lv_char2 = '1'.
+        CONCATENATE '1' lv_result INTO lv_result.
+      ELSE.
+        CONCATENATE '0' lv_result INTO lv_result.
+      ENDIF.
+
+    ENDDO.
+
+    SHIFT lv_result LEFT DELETING LEADING '0'.
+
+    mv_data = lv_result.
+
+    ro_result = me.
 
   ENDMETHOD.
 

@@ -87,6 +87,12 @@ public section.
       !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MODULAR_POW_MONTGOMERY
+    importing
+      !IO_EXPONENT type ref to ZCL_ABAPPGP_INTEGER
+      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods MOD_2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
@@ -103,6 +109,11 @@ public section.
   methods POWER
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods SHIFT_RIGHT
+    importing
+      !IV_TIMES type I
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods SUBTRACT
@@ -627,6 +638,72 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD modular_pow_montgomery.
+
+* Modular exponentiation
+* https://en.wikipedia.org/wiki/Modular_exponentiation
+
+    DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
+          lo_one      TYPE REF TO zcl_abappgp_integer,
+          lo_base     TYPE REF TO zcl_abappgp_integer,
+          lo_tmp      TYPE REF TO zcl_abappgp_integer,
+          lo_exponent TYPE REF TO zcl_abappgp_binary_integer,
+          lo_mont     TYPE REF TO zcl_abappgp_montgomery,
+          lo_me       TYPE REF TO zcl_abappgp_montgomery_integer,
+          lo_basem    TYPE REF TO zcl_abappgp_montgomery_integer.
+
+
+    ASSERT NOT io_modulus->mv_negative = abap_true.
+
+    IF io_modulus->is_one( ) = abap_true.
+      split( '0' ).
+      RETURN.
+    ENDIF.
+
+    CREATE OBJECT lo_tmp.
+    CREATE OBJECT lo_base.
+    lo_base->copy( me ).
+
+    split( '1' ).
+
+    IF io_exponent->is_zero( ).
+      RETURN.
+    ENDIF.
+
+    CREATE OBJECT lo_exponent
+      EXPORTING
+        io_integer = io_exponent.
+
+    lo_base->mod( io_modulus ).
+
+    CREATE OBJECT lo_mont
+      EXPORTING
+        io_modulus = io_modulus.
+    lo_me = lo_mont->build( me ).
+    lo_basem = lo_mont->build( lo_base ).
+
+    WHILE lo_exponent->is_zero( ) = abap_false.
+      IF lo_exponent->mod_2( ) = 1.
+        lo_me = lo_mont->multiply( io_x = lo_me
+                                   io_y = lo_basem ).
+*        multiply( lo_base )->mod( io_modulus ).
+      ENDIF.
+      lo_exponent->shift_right( ).
+
+      lo_basem = lo_mont->multiply( io_x = lo_basem
+                                    io_y = lo_basem ).
+
+*      lo_tmp->copy( lo_base ).
+*      lo_base->multiply( lo_tmp )->mod( io_modulus ).
+    ENDWHILE.
+
+    copy( lo_mont->unbuild( lo_me ) ).
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
   METHOD mod_2.
 
     DATA: lo_two  TYPE REF TO zcl_abappgp_integer,
@@ -848,6 +925,17 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
     ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD shift_right.
+
+    DO iv_times TIMES.
+      divide_by_2( ).
+    ENDDO.
+
+    ro_result = me.
 
   ENDMETHOD.
 

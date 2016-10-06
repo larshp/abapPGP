@@ -4,12 +4,16 @@ CLASS ltcl_multiply DEFINITION FOR TESTING
     RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS: test IMPORTING iv_x             TYPE string
-                            iv_y             TYPE string
-                            iv_mod           TYPE string
-                  RETURNING VALUE(rv_result) TYPE string.
+    METHODS:
+      test IMPORTING iv_x             TYPE string
+                     iv_y             TYPE string
+                     iv_mod           TYPE string
+           RETURNING VALUE(rv_result) TYPE string.
 
-    METHODS: multiply1 FOR TESTING.
+    METHODS:
+      multiply1 FOR TESTING,
+      multiply2 FOR TESTING,
+      multiply3 FOR TESTING.
 
 ENDCLASS.       "ltcl_Multiply
 
@@ -48,7 +52,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
     lo_mres = lo_mont->multiply( io_x = lo_mx
                                  io_y = lo_my ).
 
-    rv_result = lo_mont->unbuild( lo_mres )->get( ).
+    rv_result = lo_mont->unbuild( lo_mres )->to_string( ).
 
   ENDMETHOD.
 
@@ -63,6 +67,34 @@ CLASS ltcl_multiply IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
       exp = '12' ).
+
+  ENDMETHOD.
+
+  METHOD multiply2.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_x   = '1334'
+                      iv_y   = '1234'
+                      iv_mod = '25' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '6' ).
+
+  ENDMETHOD.
+
+  METHOD multiply3.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_x   = '45454545'
+                      iv_y   = '3232323'
+                      iv_mod = '125' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '35' ).
 
   ENDMETHOD.
 

@@ -161,7 +161,8 @@ CLASS ltcl_modular_pow DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
     METHODS:
       modular_pow1 FOR TESTING,
       modular_pow2 FOR TESTING,
-      modular_pow3 FOR TESTING.
+      modular_pow3 FOR TESTING,
+      modular_pow4 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_base       TYPE string
@@ -175,8 +176,10 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_mod TYPE REF TO zcl_abappgp_integer,
-          lo_exp TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_mod   TYPE REF TO zcl_abappgp_integer,
+          lo_check TYPE REF TO zcl_abappgp_integer,
+          lo_exp   TYPE REF TO zcl_abappgp_integer.
+
 
     CREATE OBJECT ro_int
       EXPORTING
@@ -193,6 +196,20 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
     ro_int->modular_pow(
       io_exponent = lo_exp
       io_modulus  = lo_mod ).
+
+    IF lo_mod->is_even( ) = abap_false.
+      CREATE OBJECT lo_check
+        EXPORTING
+          iv_integer = iv_base.
+
+      lo_check->modular_pow_montgomery(
+        io_exponent = lo_exp
+        io_modulus  = lo_mod ).
+
+      cl_abap_unit_assert=>assert_equals(
+        act = ro_int->to_string( )
+        exp = lo_check->to_string( ) ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -238,6 +255,21 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->to_string( )
       exp = '3' ).
+
+  ENDMETHOD.
+
+  METHOD modular_pow4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_base = '4578'
+                   iv_exp  = '100'
+                   iv_mod  = '25' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '1' ).
 
   ENDMETHOD.
 
