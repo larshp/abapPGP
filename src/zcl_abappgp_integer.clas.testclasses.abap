@@ -1,3 +1,51 @@
+CLASS ltcl_mod_inverse DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      mod_inverse1 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_value         TYPE string
+                     iv_mod           TYPE string
+           RETURNING VALUE(rv_result) TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_mod_inverse IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_value TYPE REF TO zcl_abappgp_integer,
+          lo_mod   TYPE REF TO zcl_abappgp_integer.
+
+
+    CREATE OBJECT lo_value
+      EXPORTING
+        iv_integer = iv_value.
+
+    CREATE OBJECT lo_mod
+      EXPORTING
+        iv_integer = iv_mod.
+
+    rv_result = lo_value->mod_inverse( lo_mod )->get( ).
+
+  ENDMETHOD.
+
+  METHOD mod_inverse1.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_value = '42'
+                      iv_mod   = '2017' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '1969' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_divide_by_2 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

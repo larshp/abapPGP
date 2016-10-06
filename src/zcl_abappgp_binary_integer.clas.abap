@@ -16,8 +16,12 @@ public section.
   methods MOD_2
     returning
       value(RV_RESULT) type I .
-  methods SHIFT_LEFT .
-  methods SHIFT_RIGHT .
+  methods SHIFT_LEFT
+    importing
+      !IV_TIMES type I default 1 .
+  methods SHIFT_RIGHT
+    importing
+      !IV_TIMES type I default 1 .
   methods TO_INTEGER
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
@@ -82,11 +86,15 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
   METHOD shift_left.
 
+    ASSERT iv_times >= 1.
+
     IF is_zero( ) = abap_true.
       RETURN.
     ENDIF.
 
-    CONCATENATE mv_data '0' INTO mv_data.
+    DO iv_times TIMES.
+      CONCATENATE mv_data '0' INTO mv_data.
+    ENDDO.
 
   ENDMETHOD.
 
@@ -95,11 +103,14 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
     DATA: lv_length TYPE i.
 
+    ASSERT iv_times >= 1.
 
-    lv_length = strlen( mv_data ) - 1.
-    ASSERT lv_length >= 0.
+    DO iv_times TIMES.
+      lv_length = strlen( mv_data ) - 1.
+      ASSERT lv_length >= 0.
 
-    mv_data = mv_data(lv_length).
+      mv_data = mv_data(lv_length).
+    ENDDO.
 
   ENDMETHOD.
 

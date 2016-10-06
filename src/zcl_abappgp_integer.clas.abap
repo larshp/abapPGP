@@ -4,6 +4,14 @@ class ZCL_ABAPPGP_INTEGER definition
 
 public section.
 
+  class-methods EXTENDED_GCD
+    importing
+      !IO_B type ref to ZCL_ABAPPGP_INTEGER
+      !IO_A type ref to ZCL_ABAPPGP_INTEGER
+    exporting
+      !EO_R type ref to ZCL_ABAPPGP_INTEGER
+      !EO_T type ref to ZCL_ABAPPGP_INTEGER
+      !EO_S type ref to ZCL_ABAPPGP_INTEGER .
   methods ADD
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -82,6 +90,11 @@ public section.
   methods MOD_2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MOD_INVERSE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods MULTIPLY
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -116,7 +129,7 @@ protected section.
   methods SPLIT
     importing
       !IV_INTEGER type STRING .
-  PRIVATE SECTION.
+private section.
 ENDCLASS.
 
 
@@ -341,6 +354,71 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDDO.
 
     rv_bool = abap_true.
+
+  ENDMETHOD.
+
+
+  METHOD extended_gcd.
+
+* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+* https://rosettacode.org/wiki/Greatest_common_divisor
+
+*    DATA: lo_old_s    TYPE REF TO zcl_abappgp_integer,
+*          lo_old_t    TYPE REF TO zcl_abappgp_integer,
+*          lo_old_r    TYPE REF TO zcl_abappgp_integer,
+*          lo_tmp      TYPE REF TO zcl_abappgp_integer,
+*          lo_prov     TYPE REF TO zcl_abappgp_integer,
+*          lo_quotient TYPE REF TO zcl_abappgp_integer.
+*
+*
+*    CREATE OBJECT eo_s
+*      EXPORTING
+*        iv_integer = '0'.
+*
+*    CREATE OBJECT lo_old_s
+*      EXPORTING
+*        iv_integer = '1'.
+*
+*    CREATE OBJECT eo_t
+*      EXPORTING
+*        iv_integer = '1'.
+*
+*    CREATE OBJECT lo_old_t
+*      EXPORTING
+*        iv_integer = '0'.
+*
+*    CREATE OBJECT eo_r.
+*    eo_r->copy( io_b ).
+*    CREATE OBJECT lo_old_r.
+*    lo_old_r->copy( io_a ).
+*
+*    CREATE OBJECT lo_quotient.
+*
+*    CREATE OBJECT lo_tmp.
+*    CREATE OBJECT lo_prov.
+*
+*    DEFINE _handle.
+*      lo_prov->copy( eo_&1 ).
+*      lo_tmp->copy( lo_quotient )->multiply( lo_prov ).
+*      eo_&1->copy( lo_old_&1 )->subtract( lo_tmp ).
+*      lo_old_&1->copy( lo_prov ).
+*    END-OF-DEFINITION.
+*
+*    WHILE eo_r->is_zero( ) = abap_false.
+*      lo_quotient->copy( lo_old_r )->mod( eo_r ).
+*
+*      _handle r.
+*      _handle s.
+*      _handle t.
+**      lo_old_r->copy( eo_r ).
+***        r := old_r - quotient * r
+**      lo_old_s->copy( eo_s ).
+***        s = old_s - quotient * s
+**      lo_old_t->copy( eo_t ).
+***        t = old_t - quotient * t
+*    ENDWHILE.
+*
+*    eo_r->copy( lo_old_r ).
 
   ENDMETHOD.
 
@@ -578,6 +656,18 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_mult->copy( lo_div )->multiply( lo_two ).
 
     subtract( lo_mult ).
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD mod_inverse.
+
+* https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
+* https://rosettacode.org/wiki/Modular_inverse
+
+
 
     ro_result = me.
 
