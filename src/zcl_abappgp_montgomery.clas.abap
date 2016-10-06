@@ -26,7 +26,10 @@ public section.
 protected section.
 private section.
 
+  data MO_FACTOR type ref to ZCL_ABAPPGP_INTEGER .
   data MO_MASK type ref to ZCL_ABAPPGP_BINARY_INTEGER .
+  data MO_RECIPROCAL type ref to ZCL_ABAPPGP_INTEGER .
+  data MO_MODULUS type ref to ZCL_ABAPPGP_INTEGER .
   data MO_REDUCER type ref to ZCL_ABAPPGP_INTEGER .
   data MV_BITS type I .
 ENDCLASS.
@@ -38,7 +41,21 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
 
   METHOD build.
 
-* todo
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
+          lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
+
+
+    CREATE OBJECT lo_binary
+      EXPORTING
+        io_integer = io_integer.
+
+* todo, optimize mod? it is a power of 2...
+    lo_integer = lo_binary->shift_left( mv_bits )->to_integer( )->mod( mo_modulus ).
+
+    CREATE OBJECT ro_montgomery
+      EXPORTING
+        io_integer = lo_integer.
+
 
   ENDMETHOD.
 
@@ -59,6 +76,9 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
     ASSERT NOT io_modulus->is_one( ).
     ASSERT NOT io_modulus->is_two( ).
 
+    CREATE OBJECT mo_modulus.
+    mo_modulus->copy( io_modulus ).
+
     CREATE OBJECT lo_binary
       EXPORTING
         io_integer = io_modulus.
@@ -77,16 +97,28 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
       EXPORTING
         io_integer = lo_tmp.
 
-    BREAK-POINT.
+    CREATE OBJECT mo_reciprocal.
+    mo_reciprocal->copy( mo_reducer )->mod_inverse( io_modulus ).
 
-* todo
+    CREATE OBJECT mo_factor.
+    mo_factor->copy( mo_reducer )->multiply( mo_reciprocal )->subtract( lo_one )->divide( io_modulus ).
 
   ENDMETHOD.
 
 
   METHOD multiply.
 
-* todo
+    DATA: lo_product TYPE REF TO zcl_abappgp_integer,
+          lo_tmp     TYPE REF TO zcl_abappgp_integer.
+
+
+    CREATE OBJECT lo_product.
+    lo_product->copy( io_x->get( ) )->multiply( io_y->get( ) ).
+
+    CREATE OBJECT lo_tmp.
+* todo, optimize 'mod' to 'and'?
+    lo_tmp->copy( lo_product )->and( mo_mask )->multiply( mo_factor )->and( mo_mask ).
+    BREAK-POINT.
 
   ENDMETHOD.
 

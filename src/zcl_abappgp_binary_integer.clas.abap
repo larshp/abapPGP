@@ -4,12 +4,14 @@ class ZCL_ABAPPGP_BINARY_INTEGER definition
 
 public section.
 
+  methods AND
+    importing
+      !IO_BINARY type ref to ZCL_ABAPPGP_BINARY_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
   methods CONSTRUCTOR
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET
-    returning
-      value(RV_BINARY) type STRING .
   methods IS_ZERO
     returning
       value(RV_BOOL) type ABAP_BOOL .
@@ -18,22 +20,39 @@ public section.
       value(RV_RESULT) type I .
   methods SHIFT_LEFT
     importing
-      !IV_TIMES type I default 1 .
+      !IV_TIMES type I default 1
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
   methods SHIFT_RIGHT
     importing
-      !IV_TIMES type I default 1 .
+      !IV_TIMES type I default 1
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
   methods TO_INTEGER
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods TO_STRING
+    returning
+      value(RV_BINARY) type STRING .
   PROTECTED SECTION.
 
     DATA mv_data TYPE string.
-  PRIVATE SECTION.
+private section.
 ENDCLASS.
 
 
 
 CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
+
+
+  METHOD and.
+
+*    lv_max = nmax( val1 = lines( io_integer->mt_split )
+*                   val2 = lines( mt_split ) ).
+
+* todo
+
+  ENDMETHOD.
 
 
   METHOD constructor.
@@ -57,13 +76,6 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
       ENDIF.
       lo_int->divide_by_2( ).
     ENDWHILE.
-
-  ENDMETHOD.
-
-
-  METHOD get.
-
-    rv_binary = mv_data.
 
   ENDMETHOD.
 
@@ -98,6 +110,8 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
       CONCATENATE mv_data '0' INTO mv_data.
     ENDDO.
 
+ro_result = me.
+
   ENDMETHOD.
 
 
@@ -113,6 +127,8 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
       mv_data = mv_data(lv_length).
     ENDDO.
+
+    ro_result = me.
 
   ENDMETHOD.
 
@@ -143,6 +159,13 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
       lo_int->multiply( lo_two ).
       lv_offset = lv_offset - 1.
     ENDWHILE.
+
+  ENDMETHOD.
+
+
+  METHOD TO_STRING.
+
+    rv_binary = mv_data.
 
   ENDMETHOD.
 ENDCLASS.

@@ -81,7 +81,7 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
     lo_integer = lo_binary->to_integer( ).
 
-    rv_str = lo_integer->get( ).
+    rv_str = lo_integer->to_string( ).
 
   ENDMETHOD.
 
@@ -128,7 +128,7 @@ CLASS ltcl_get IMPLEMENTATION.
       EXPORTING
         io_integer = lo_integer.
 
-    rv_binary = lo_binary->get( ).
+    rv_binary = lo_binary->to_string( ).
 
   ENDMETHOD.
 

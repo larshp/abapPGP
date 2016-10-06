@@ -3,7 +3,8 @@ CLASS ltcl_mod_inverse DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
   PRIVATE SECTION.
     METHODS:
       mod_inverse1 FOR TESTING,
-      mod_inverse2 FOR TESTING.
+      mod_inverse2 FOR TESTING,
+      mod_inverse3 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_value         TYPE string
@@ -28,7 +29,7 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
       EXPORTING
         iv_integer = iv_mod.
 
-    rv_result = lo_value->mod_inverse( lo_mod )->get( ).
+    rv_result = lo_value->mod_inverse( lo_mod )->to_string( ).
 
   ENDMETHOD.
 
@@ -55,6 +56,19 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
       exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD mod_inverse3.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_value = '256'
+                      iv_mod   = '25' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '21' ).
 
   ENDMETHOD.
 
@@ -95,7 +109,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
     lo_res = test( '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -108,7 +122,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
     lo_res = test( '2' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -121,7 +135,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
     lo_res = test( '22' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '11' ).
 
   ENDMETHOD.
@@ -134,7 +148,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
     lo_res = test( '111222333' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '55611166' ).
 
   ENDMETHOD.
@@ -192,7 +206,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
                    iv_mod = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -207,7 +221,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
                    iv_mod = '497' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '445' ).
 
   ENDMETHOD.
@@ -222,7 +236,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
                    iv_mod = '4' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '3' ).
 
   ENDMETHOD.
@@ -274,7 +288,7 @@ CLASS ltcl_mod IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -288,7 +302,7 @@ CLASS ltcl_mod IMPLEMENTATION.
                    iv_op2 = '2' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -302,7 +316,7 @@ CLASS ltcl_mod IMPLEMENTATION.
                    iv_op2 = '9999' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -316,7 +330,7 @@ CLASS ltcl_mod IMPLEMENTATION.
                    iv_op2 = '10' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '9' ).
 
   ENDMETHOD.
@@ -330,7 +344,7 @@ CLASS ltcl_mod IMPLEMENTATION.
                    iv_op2 = '100000' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '10' ).
 
   ENDMETHOD.
@@ -344,7 +358,7 @@ CLASS ltcl_mod IMPLEMENTATION.
                    iv_op2 = '44449' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '22321' ).
 
   ENDMETHOD.
@@ -399,7 +413,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -413,7 +427,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '123456' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -427,7 +441,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '2' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '2' ).
 
   ENDMETHOD.
@@ -441,7 +455,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '111111' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '5' ).
 
   ENDMETHOD.
@@ -455,7 +469,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '2' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '2' ).
 
   ENDMETHOD.
@@ -469,7 +483,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '100' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -483,7 +497,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '44449' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '687' ).
 
   ENDMETHOD.
@@ -497,7 +511,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '30558784' ).
 
   ENDMETHOD.
@@ -511,7 +525,7 @@ CLASS ltcl_divide IMPLEMENTATION.
                    iv_op2 = '7' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '142' ).
 
   ENDMETHOD.
@@ -553,7 +567,7 @@ CLASS ltcl_gt IMPLEMENTATION.
       EXPORTING
         iv_integer = iv_op2.
 
-    rv_bool = lo_var1->gt( lo_var2 ).
+    rv_bool = lo_var1->is_gt( lo_var2 ).
 
   ENDMETHOD.
 
@@ -716,7 +730,7 @@ CLASS ltcl_power IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -730,7 +744,7 @@ CLASS ltcl_power IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -744,7 +758,7 @@ CLASS ltcl_power IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '100' ).
 
   ENDMETHOD.
@@ -758,7 +772,7 @@ CLASS ltcl_power IMPLEMENTATION.
                    iv_op2 = '2' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '10000' ).
 
   ENDMETHOD.
@@ -772,7 +786,7 @@ CLASS ltcl_power IMPLEMENTATION.
                    iv_op2 = '3' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '970299' ).
 
   ENDMETHOD.
@@ -786,7 +800,7 @@ CLASS ltcl_power IMPLEMENTATION.
                    iv_op2 = '9' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '913517247483640899' ).
 
   ENDMETHOD.
@@ -845,7 +859,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -859,7 +873,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -873,7 +887,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -887,7 +901,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '3' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '6' ).
 
   ENDMETHOD.
@@ -901,7 +915,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '1111' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1234321' ).
 
   ENDMETHOD.
@@ -915,7 +929,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '9999' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '99980001' ).
 
   ENDMETHOD.
@@ -928,7 +942,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '50000' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '25000000' ).
 
   ENDMETHOD.
@@ -941,7 +955,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '44449' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1358307390016' ).
 
   ENDMETHOD.
@@ -954,7 +968,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -967,7 +981,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '6666666666' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '51851851841481481482' ).
 
   ENDMETHOD.
@@ -980,7 +994,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '66' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-5082' ).
 
   ENDMETHOD.
@@ -993,7 +1007,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '-66' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '5082' ).
 
   ENDMETHOD.
@@ -1006,7 +1020,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
                    iv_op2 = '-66' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-5082' ).
 
   ENDMETHOD.
@@ -1064,7 +1078,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -1078,7 +1092,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -1092,7 +1106,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '9' ).
 
   ENDMETHOD.
@@ -1106,7 +1120,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '10000' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '0' ).
 
   ENDMETHOD.
@@ -1120,7 +1134,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '9999' ).
 
   ENDMETHOD.
@@ -1134,7 +1148,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '10' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-5' ).
 
   ENDMETHOD.
@@ -1148,7 +1162,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '-10' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '5' ).
 
   ENDMETHOD.
@@ -1162,7 +1176,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '999999' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-999994' ).
 
   ENDMETHOD.
@@ -1176,7 +1190,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '5' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-10' ).
 
   ENDMETHOD.
@@ -1190,7 +1204,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '-5' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '10' ).
 
   ENDMETHOD.
@@ -1204,7 +1218,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '7' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-10' ).
 
   ENDMETHOD.
@@ -1218,7 +1232,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
                    iv_op2 = '-7' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '10' ).
 
   ENDMETHOD.
@@ -1274,7 +1288,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '2' ).
 
   ENDMETHOD.
@@ -1288,7 +1302,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '0' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '1' ).
 
   ENDMETHOD.
@@ -1302,7 +1316,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '1111' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '2222' ).
 
   ENDMETHOD.
@@ -1316,7 +1330,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '1111' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '112222' ).
 
   ENDMETHOD.
@@ -1330,7 +1344,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '111111' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '112222' ).
 
   ENDMETHOD.
@@ -1344,7 +1358,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '9999' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '10000' ).
 
   ENDMETHOD.
@@ -1358,7 +1372,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '1' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '99980002' ).
 
   ENDMETHOD.
@@ -1372,7 +1386,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '-5' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '-10' ).
 
   ENDMETHOD.
@@ -1386,7 +1400,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '10' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '5' ).
 
   ENDMETHOD.
@@ -1400,7 +1414,7 @@ CLASS ltcl_add IMPLEMENTATION.
                    iv_op2 = '-5' ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_res->get( )
+      act = lo_res->to_string( )
       exp = '5' ).
 
   ENDMETHOD.
@@ -1435,7 +1449,7 @@ CLASS ltcl_identity IMPLEMENTATION.
       EXPORTING
         iv_integer = iv_string.
 
-    lv_result = lo_var1->get( ).
+    lv_result = lo_var1->to_string( ).
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_result

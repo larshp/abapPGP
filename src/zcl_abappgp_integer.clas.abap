@@ -4,17 +4,14 @@ class ZCL_ABAPPGP_INTEGER definition
 
 public section.
 
-  class-methods EXTENDED_GCD
-    importing
-      !IO_B type ref to ZCL_ABAPPGP_INTEGER
-      !IO_A type ref to ZCL_ABAPPGP_INTEGER
-    exporting
-      !EO_R type ref to ZCL_ABAPPGP_INTEGER
-      !EO_T type ref to ZCL_ABAPPGP_INTEGER
-      !EO_S type ref to ZCL_ABAPPGP_INTEGER .
   methods ADD
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods AND
+    importing
+      !IO_BINARY type ref to ZCL_ABAPPGP_BINARY_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods CONSTRUCTOR
@@ -33,25 +30,32 @@ public section.
   methods DIVIDE_BY_2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods EQ
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods GE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods GET
-    returning
-      value(RV_INTEGER) type STRING .
-  methods GT
+  methods IS_EQ
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods IS_EVEN
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_GE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_GT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_LE
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_LT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods IS_NEGATIVE
@@ -70,16 +74,6 @@ public section.
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods LE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods LT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods MOD
@@ -116,6 +110,9 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods TO_STRING
+    returning
+      value(RV_INTEGER) type STRING .
 protected section.
 
   types:
@@ -208,6 +205,24 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD and.
+
+    DATA: lo_binary TYPE REF TO zcl_abappgp_binary_integer.
+
+
+    CREATE OBJECT lo_binary
+      EXPORTING
+        io_integer = me.
+
+    lo_binary->and( io_binary ).
+
+    copy( lo_binary->to_integer( ) ).
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
   METHOD append_zeros.
 
     rv_str = iv_int.
@@ -261,10 +276,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     IF io_integer->is_one( ) = abap_true.
       RETURN.
-    ELSEIF io_integer->gt( me ).
+    ELSEIF io_integer->is_gt( me ) = abap_true.
       split( '0' ).
       RETURN.
-    ELSEIF io_integer->eq( me ).
+    ELSEIF io_integer->is_eq( me ) = abap_true.
       split( '1' ).
       RETURN.
     ENDIF.
@@ -290,7 +305,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
       IF lo_middle->is_zero( ).
         lo_tmp->copy( lo_high_guess )->multiply( io_integer ).
-        IF lo_tmp->eq( me ) = abap_true.
+        IF lo_tmp->is_eq( me ) = abap_true.
           mt_split = lo_high_guess->mt_split.
         ELSE.
           mt_split = lo_low_guess->mt_split.
@@ -305,7 +320,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * try moving high down
       lo_guess->copy( lo_high_guess )->subtract( lo_middle ).
       lo_tmp->copy( lo_guess )->multiply( io_integer ).
-      IF lo_tmp->ge( me ) = abap_true.
+      IF lo_tmp->is_ge( me ) = abap_true.
 *        WRITE: / 'move high to', lo_guess->get( ).
         lo_high_guess->copy( lo_guess ).
         CONTINUE.
@@ -314,7 +329,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * try moving low up
       lo_guess->copy( lo_low_guess )->add( lo_middle ).
       lo_tmp->copy( lo_guess )->multiply( io_integer ).
-      IF lo_tmp->le( me ) = abap_true.
+      IF lo_tmp->is_le( me ) = abap_true.
 *        WRITE: / 'move low to', lo_guess->get( ).
         lo_low_guess->copy( lo_guess ).
       ENDIF.
@@ -350,7 +365,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD eq.
+  METHOD IS_EQ.
 
     DATA: lv_index TYPE i.
 
@@ -383,100 +398,30 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD extended_gcd.
+  METHOD is_even.
 
-* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
-* https://rosettacode.org/wiki/Greatest_common_divisor
+    DATA: lv_char   TYPE c LENGTH 1,
+          lv_length TYPE i,
+          lv_str    TYPE string.
 
-*    DATA: lo_old_s    TYPE REF TO zcl_abappgp_integer,
-*          lo_old_t    TYPE REF TO zcl_abappgp_integer,
-*          lo_old_r    TYPE REF TO zcl_abappgp_integer,
-*          lo_tmp      TYPE REF TO zcl_abappgp_integer,
-*          lo_prov     TYPE REF TO zcl_abappgp_integer,
-*          lo_quotient TYPE REF TO zcl_abappgp_integer.
-*
-*
-*    CREATE OBJECT eo_s
-*      EXPORTING
-*        iv_integer = '0'.
-*
-*    CREATE OBJECT lo_old_s
-*      EXPORTING
-*        iv_integer = '1'.
-*
-*    CREATE OBJECT eo_t
-*      EXPORTING
-*        iv_integer = '1'.
-*
-*    CREATE OBJECT lo_old_t
-*      EXPORTING
-*        iv_integer = '0'.
-*
-*    CREATE OBJECT eo_r.
-*    eo_r->copy( io_b ).
-*    CREATE OBJECT lo_old_r.
-*    lo_old_r->copy( io_a ).
-*
-*    CREATE OBJECT lo_quotient.
-*
-*    CREATE OBJECT lo_tmp.
-*    CREATE OBJECT lo_prov.
-*
-*    DEFINE _handle.
-*      lo_prov->copy( eo_&1 ).
-*      lo_tmp->copy( lo_quotient )->multiply( lo_prov ).
-*      eo_&1->copy( lo_old_&1 )->subtract( lo_tmp ).
-*      lo_old_&1->copy( lo_prov ).
-*    END-OF-DEFINITION.
-*
-*    WHILE eo_r->is_zero( ) = abap_false.
-*      lo_quotient->copy( lo_old_r )->mod( eo_r ).
-*
-*      _handle r.
-*      _handle s.
-*      _handle t.
-**      lo_old_r->copy( eo_r ).
-***        r := old_r - quotient * r
-**      lo_old_s->copy( eo_s ).
-***        s = old_s - quotient * s
-**      lo_old_t->copy( eo_t ).
-***        t = old_t - quotient * t
-*    ENDWHILE.
-*
-*    eo_r->copy( lo_old_r ).
+
+    lv_str = to_string( ).
+    lv_length = strlen( lv_str ) - 1.
+    lv_char = lv_str+lv_length(1).
+
+    rv_bool = boolc( lv_char CO '02468' ).
 
   ENDMETHOD.
 
 
-  METHOD ge.
+  METHOD is_ge.
 
-    rv_bool = boolc( gt( io_integer ) = abap_true OR eq( io_integer ) = abap_true ).
-
-  ENDMETHOD.
-
-
-  METHOD get.
-
-    DATA: lv_int TYPE c LENGTH c_length.
-
-    LOOP AT mt_split INTO lv_int.
-      IF sy-tabix <> lines( mt_split ).
-        SHIFT lv_int RIGHT DELETING TRAILING space.
-        OVERLAY lv_int WITH '0000'.
-      ENDIF.
-      CONCATENATE lv_int rv_integer INTO rv_integer.
-    ENDLOOP.
-
-    rv_integer = condense( rv_integer ).
-
-    IF mv_negative = abap_true.
-      CONCATENATE '-' rv_integer INTO rv_integer.
-    ENDIF.
+    rv_bool = boolc( is_gt( io_integer ) = abap_true OR is_eq( io_integer ) = abap_true ).
 
   ENDMETHOD.
 
 
-  METHOD gt.
+  METHOD IS_GT.
 
     DATA: lv_index TYPE i,
           lv_op1   TYPE i,
@@ -524,18 +469,16 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD is_even.
+  METHOD is_le.
 
-    DATA: lv_char   TYPE c LENGTH 1,
-          lv_length TYPE i,
-          lv_str    TYPE string.
+    rv_bool = boolc( is_lt( io_integer ) = abap_true OR is_eq( io_integer ) = abap_true ).
+
+  ENDMETHOD.
 
 
-    lv_str = get( ).
-    lv_length = strlen( lv_str ) - 1.
-    lv_char = lv_str+lv_length(1).
+  METHOD is_lt.
 
-    rv_bool = boolc( lv_char CO '02468' ).
+    rv_bool = boolc( is_ge( io_integer ) = abap_false ).
 
   ENDMETHOD.
 
@@ -608,20 +551,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ASSERT sy-subrc = 0.
 
     rv_bool = boolc( <lv_value> = 0 ).
-
-  ENDMETHOD.
-
-
-  METHOD le.
-
-    rv_bool = boolc( lt( io_integer ) = abap_true OR eq( io_integer ) = abap_true ).
-
-  ENDMETHOD.
-
-
-  METHOD lt.
-
-    rv_bool = boolc( ge( io_integer ) = abap_false ).
 
   ENDMETHOD.
 
@@ -786,7 +715,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_r->copy( lo_tmp ).
     ENDWHILE.
 
-    IF lo_r->gt( lo_one ) = abap_true.
+    IF lo_r->is_gt( lo_one ) = abap_true.
 * No inverse
       BREAK-POINT.
     ENDIF.
@@ -983,8 +912,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       add( io_integer ).
       toggle_negative( ).
       RETURN.
-    ELSEIF ( lt( io_integer ) = abap_true AND mv_negative = abap_false )
-        OR ( gt( io_integer ) = abap_true AND mv_negative = abap_true ).
+    ELSEIF ( is_lt( io_integer ) = abap_true AND mv_negative = abap_false )
+        OR ( is_gt( io_integer ) = abap_true AND mv_negative = abap_true ).
       CREATE OBJECT lo_tmp.
       lo_tmp->copy( io_integer )->subtract( me ).
       copy( lo_tmp ).
@@ -1032,6 +961,27 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD TO_STRING.
+
+    DATA: lv_int TYPE c LENGTH c_length.
+
+    LOOP AT mt_split INTO lv_int.
+      IF sy-tabix <> lines( mt_split ).
+        SHIFT lv_int RIGHT DELETING TRAILING space.
+        OVERLAY lv_int WITH '0000'.
+      ENDIF.
+      CONCATENATE lv_int rv_integer INTO rv_integer.
+    ENDLOOP.
+
+    rv_integer = condense( rv_integer ).
+
+    IF mv_negative = abap_true.
+      CONCATENATE '-' rv_integer INTO rv_integer.
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.
