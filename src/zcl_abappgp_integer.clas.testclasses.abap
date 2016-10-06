@@ -512,7 +512,10 @@ CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       gt2 FOR TESTING,
       gt3 FOR TESTING,
       gt4 FOR TESTING,
-      gt5 FOR TESTING.
+      gt5 FOR TESTING,
+      gt6 FOR TESTING,
+      gt7 FOR TESTING,
+      gt8 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1         TYPE string
@@ -607,6 +610,48 @@ CLASS ltcl_gt IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_gt
       exp = abap_true ).
+
+  ENDMETHOD.
+
+  METHOD gt6.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '-30514335'
+                  iv_op2 = '44449' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_false ).
+
+  ENDMETHOD.
+
+  METHOD gt7.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '-44449'
+                  iv_op2 = '-30514335' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_true ).
+
+  ENDMETHOD.
+
+  METHOD gt8.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '-30514335'
+                  iv_op2 = '-44449' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_false ).
 
   ENDMETHOD.
 
@@ -747,7 +792,10 @@ CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       multiply7 FOR TESTING,
       multiply8 FOR TESTING,
       multiply9 FOR TESTING,
-      multiply10 FOR TESTING.
+      multiply10 FOR TESTING,
+      multiply11 FOR TESTING,
+      multiply12 FOR TESTING,
+      multiply13 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -910,6 +958,45 @@ CLASS ltcl_multiply IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD multiply11.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '-77'
+                   iv_op2 = '66' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-5082' ).
+
+  ENDMETHOD.
+
+  METHOD multiply12.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '-77'
+                   iv_op2 = '-66' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '5082' ).
+
+  ENDMETHOD.
+
+  METHOD multiply13.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+    lo_res = test( iv_op1 = '77'
+                   iv_op2 = '-66' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-5082' ).
+
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS ltcl_subtract DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
@@ -920,7 +1007,14 @@ CLASS ltcl_subtract DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       subtract2 FOR TESTING,
       subtract3 FOR TESTING,
       subtract4 FOR TESTING,
-      subtract5 FOR TESTING.
+      subtract5 FOR TESTING,
+      subtract6 FOR TESTING,
+      subtract7 FOR TESTING,
+      subtract8 FOR TESTING,
+      subtract9 FOR TESTING,
+      subtract10 FOR TESTING,
+      subtract11 FOR TESTING,
+      subtract12 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -1017,6 +1111,104 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD subtract6.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '5'
+                   iv_op2 = '10' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-5' ).
+
+  ENDMETHOD.
+
+  METHOD subtract7.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '-5'
+                   iv_op2 = '-10' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '5' ).
+
+  ENDMETHOD.
+
+  METHOD subtract8.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '5'
+                   iv_op2 = '999999' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-999994' ).
+
+  ENDMETHOD.
+
+  METHOD subtract9.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '-5'
+                   iv_op2 = '5' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-10' ).
+
+  ENDMETHOD.
+
+  METHOD subtract10.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '5'
+                   iv_op2 = '-5' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '10' ).
+
+  ENDMETHOD.
+
+  METHOD subtract11.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '-3'
+                   iv_op2 = '7' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-10' ).
+
+  ENDMETHOD.
+
+  METHOD subtract12.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '3'
+                   iv_op2 = '-7' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '10' ).
+
+  ENDMETHOD.
+
 ENDCLASS.
 
 CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
@@ -1029,7 +1221,10 @@ CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       add4 FOR TESTING,
       add5 FOR TESTING,
       add6 FOR TESTING,
-      add7 FOR TESTING.
+      add7 FOR TESTING,
+      add8 FOR TESTING,
+      add9 FOR TESTING,
+      add10 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -1154,6 +1349,48 @@ CLASS ltcl_add IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD add8.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '-5'
+                   iv_op2 = '-5' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '-10' ).
+
+  ENDMETHOD.
+
+  METHOD add9.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '-5'
+                   iv_op2 = '10' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '5' ).
+
+  ENDMETHOD.
+
+  METHOD add10.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '10'
+                   iv_op2 = '-5' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->get( )
+      exp = '5' ).
+
+  ENDMETHOD.
+
 ENDCLASS.
 
 
@@ -1166,7 +1403,8 @@ CLASS ltcl_identity DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       id3 FOR TESTING,
       id4 FOR TESTING,
       id5 FOR TESTING,
-      id6 FOR TESTING.
+      id6 FOR TESTING,
+      id7 FOR TESTING.
 
     METHODS: test IMPORTING iv_string TYPE string.
 
@@ -1224,6 +1462,12 @@ CLASS ltcl_identity IMPLEMENTATION.
   METHOD id6.
 
     test( '12345678' ).
+
+  ENDMETHOD.
+
+  METHOD id7.
+
+    test( '-100' ).
 
   ENDMETHOD.
 

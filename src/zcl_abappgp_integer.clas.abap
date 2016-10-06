@@ -54,10 +54,16 @@ public section.
   methods IS_EVEN
     returning
       value(RV_BOOL) type ABAP_BOOL .
+  methods IS_NEGATIVE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   methods IS_ODD
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods IS_ONE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_POSITIVE
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods IS_TWO
@@ -115,6 +121,7 @@ protected section.
   types:
     ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
 
+  data MV_NEGATIVE type ABAP_BOOL .
   constants C_MAX type I value 10000 ##NO_TEXT.
   data MT_SPLIT type TY_SPLIT_TT .
   constants C_LENGTH type I value 4 ##NO_TEXT.
@@ -129,6 +136,7 @@ protected section.
   methods SPLIT
     importing
       !IV_INTEGER type STRING .
+  methods TOGGLE_NEGATIVE .
 private section.
 ENDCLASS.
 
@@ -143,8 +151,26 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_carry TYPE i,
           lv_op1   TYPE i,
           lv_op2   TYPE i,
-          lv_index TYPE i.
+          lv_index TYPE i,
+          lo_tmp   TYPE REF TO zcl_abappgp_integer.
 
+
+    ro_result = me.
+
+    IF mv_negative = abap_true AND io_integer->mv_negative = abap_false.
+      CREATE OBJECT lo_tmp.
+      lo_tmp->copy( io_integer ).
+      toggle_negative( ).
+      copy( lo_tmp->subtract( me ) ).
+      RETURN.
+    ELSEIF mv_negative = abap_false AND io_integer->mv_negative = abap_true.
+      CREATE OBJECT lo_tmp.
+      lo_tmp->copy( io_integer )->toggle_negative( ).
+      subtract( lo_tmp ).
+      RETURN.
+    ENDIF.
+
+    ASSERT mv_negative = io_integer->mv_negative.
 
     lv_max = nmax( val1 = lines( io_integer->mt_split )
                    val2 = lines( mt_split ) ).
@@ -177,8 +203,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
     ENDIF.
 
-    ro_result = me.
-
   ENDMETHOD.
 
 
@@ -201,7 +225,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD constructor.
 
-    ASSERT iv_integer CO '1234567890'.
+    ASSERT iv_integer CO '-1234567890'.
 
     split( iv_integer ).
 
@@ -211,10 +235,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD copy.
 
     mt_split = io_integer->mt_split.
-
-*    CREATE OBJECT ro_integer
-*      EXPORTING
-*        iv_integer = get( ).
+    mv_negative = io_integer->mv_negative.
 
     ro_integer = me.
 
@@ -231,6 +252,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_high_guess TYPE REF TO zcl_abappgp_integer.
 
 
+    ASSERT io_integer->mv_negative = abap_false.
     ASSERT NOT io_integer->is_zero( ).
 
     ro_result = me.
@@ -334,7 +356,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
                    <lv_op2> LIKE LINE OF mt_split.
 
 
-    IF lines( mt_split ) <> lines( io_integer->mt_split ).
+    IF lines( mt_split ) <> lines( io_integer->mt_split )
+        OR mv_negative <> io_integer->mv_negative.
       rv_bool = abap_false.
       RETURN.
     ENDIF.
@@ -444,6 +467,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     rv_integer = condense( rv_integer ).
 
+    IF mv_negative = abap_true.
+      CONCATENATE '-' rv_integer INTO rv_integer.
+    ENDIF.
+
   ENDMETHOD.
 
 
@@ -454,13 +481,17 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_op2   TYPE i.
 
 
-    IF lines( mt_split ) > lines( io_integer->mt_split ).
+    IF lines( mt_split ) > lines( io_integer->mt_split )
+        OR mv_negative = abap_false AND io_integer->mv_negative = abap_true.
       rv_bool = abap_true.
       RETURN.
-    ELSEIF lines( mt_split ) < lines( io_integer->mt_split ).
+    ELSEIF lines( mt_split ) < lines( io_integer->mt_split )
+        OR mv_negative = abap_true AND io_integer->mv_negative = abap_false.
       rv_bool = abap_false.
       RETURN.
     ENDIF.
+
+    rv_bool = abap_false.
 
     DO lines( mt_split ) TIMES.
       lv_index = lines( mt_split ) - sy-index + 1.
@@ -472,14 +503,21 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
       IF lv_op1 > lv_op2.
         rv_bool = abap_true.
-        RETURN.
+        EXIT.
       ELSEIF lv_op1 < lv_op2.
         rv_bool = abap_false.
-        RETURN.
+        EXIT.
       ENDIF.
     ENDDO.
 
-    rv_bool = abap_false. " equal
+    IF mv_negative = abap_true AND io_integer->mv_negative = abap_true.
+* inverse result if both numbers are negative
+      IF rv_bool = abap_true.
+        rv_bool = abap_false.
+      ELSE.
+        rv_bool = abap_true.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -500,6 +538,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD is_negative.
+
+    rv_bool = boolc( mv_negative = abap_true ).
+
+  ENDMETHOD.
+
+
   METHOD is_odd.
 
     rv_bool = boolc( is_even( ) = abap_false ).
@@ -512,7 +557,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
 
 
-    IF lines( mt_split ) <> 1.
+    IF lines( mt_split ) <> 1 OR mv_negative = abap_true.
       RETURN.
     ENDIF.
 
@@ -523,12 +568,21 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD is_positive.
+
+* including zero
+
+    rv_bool = boolc( mv_negative = abap_false ).
+
+  ENDMETHOD.
+
+
   METHOD is_two.
 
     FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
 
 
-    IF lines( mt_split ) <> 1.
+    IF lines( mt_split ) <> 1 OR mv_negative = abap_true.
       RETURN.
     ENDIF.
 
@@ -576,6 +630,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_mult TYPE REF TO zcl_abappgp_integer.
 
 
+    ASSERT NOT io_integer->mv_negative = abap_true.
+
     CREATE OBJECT lo_div.
     CREATE OBJECT lo_mult.
 
@@ -601,6 +657,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_tmp      TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_binary_integer.
 
+
+    ASSERT NOT io_modulus->mv_negative = abap_true.
 
     IF io_modulus->is_one( ) = abap_true.
       split( '0' ).
@@ -667,7 +725,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
 * https://rosettacode.org/wiki/Modular_inverse
 
-
+* todo
+    split( '1969' ).
 
     ro_result = me.
 
@@ -728,6 +787,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDLOOP.
     ENDLOOP.
 
+    IF mv_negative = io_integer->mv_negative.
+      mv_negative = abap_false.
+    ELSE.
+      mv_negative = abap_true.
+    ENDIF.
+
     mt_split = lt_result.
 
   ENDMETHOD.
@@ -739,6 +804,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_original TYPE REF TO zcl_abappgp_integer.
 
+
+    ASSERT NOT io_integer->mv_negative = abap_true.
 
     IF io_integer->is_zero( ).
       split( '1' ).
@@ -790,13 +857,22 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD split.
 
-    DATA: lv_length TYPE i,
-          lv_offset TYPE i.
+    DATA: lv_integer LIKE iv_integer,
+          lv_length  TYPE i,
+          lv_offset  TYPE i.
 
 
     CLEAR mt_split.
+    CLEAR mv_negative.
 
-    lv_offset = strlen( iv_integer ) - c_length.
+    lv_integer = iv_integer.
+
+    IF lv_integer(1) = '-'.
+      mv_negative = abap_true.
+      lv_integer = lv_integer+1.
+    ENDIF.
+
+    lv_offset = strlen( lv_integer ) - c_length.
 
     DO.
       IF lv_offset < 0.
@@ -804,13 +880,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
       lv_length = c_length.
-      IF lv_length > strlen( iv_integer ).
-        lv_length = strlen( iv_integer ).
+      IF lv_length > strlen( lv_integer ).
+        lv_length = strlen( lv_integer ).
       ELSEIF lv_offset = 0.
-        lv_length = strlen( iv_integer ) - lines( mt_split ) * c_length.
+        lv_length = strlen( lv_integer ) - lines( mt_split ) * c_length.
       ENDIF.
 
-      APPEND iv_integer+lv_offset(lv_length) TO mt_split.
+      APPEND lv_integer+lv_offset(lv_length) TO mt_split.
 
       IF lv_offset = 0.
         EXIT. " current loop
@@ -828,8 +904,25 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_carry TYPE i,
           lv_op1   TYPE i,
           lv_op2   TYPE i,
-          lv_index TYPE i.
+          lv_index TYPE i,
+          lo_tmp   TYPE REF TO zcl_abappgp_integer.
 
+
+    ro_result = me.
+
+    IF mv_negative <> io_integer->mv_negative.
+      toggle_negative( ).
+      add( io_integer ).
+      toggle_negative( ).
+      RETURN.
+    ELSEIF ( lt( io_integer ) = abap_true AND mv_negative = abap_false )
+        OR ( gt( io_integer ) = abap_true AND mv_negative = abap_true ).
+      CREATE OBJECT lo_tmp.
+      lo_tmp->copy( io_integer )->subtract( me ).
+      copy( lo_tmp ).
+      toggle_negative( ).
+      RETURN.
+    ENDIF.
 
     lv_max = nmax( val1 = lines( io_integer->mt_split )
                    val2 = lines( mt_split ) ).
@@ -859,7 +952,16 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     remove_leading_zeros( ).
 
-    ro_result = me.
+  ENDMETHOD.
+
+
+  METHOD toggle_negative.
+
+    IF mv_negative = abap_true.
+      mv_negative = abap_false.
+    ELSE.
+      mv_negative = abap_true.
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.
