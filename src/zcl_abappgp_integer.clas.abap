@@ -136,7 +136,9 @@ protected section.
   methods SPLIT
     importing
       !IV_INTEGER type STRING .
-  methods TOGGLE_NEGATIVE .
+  methods TOGGLE_NEGATIVE
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
 private section.
 ENDCLASS.
 
@@ -725,9 +727,75 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * https://en.wikipedia.org/wiki/Modular_multiplicative_inverse
 * https://rosettacode.org/wiki/Modular_inverse
 
-* todo
-    split( '1969' ).
+    DATA: lo_a   TYPE REF TO zcl_abappgp_integer,
+          lo_b   TYPE REF TO zcl_abappgp_integer,
+          lo_t   TYPE REF TO zcl_abappgp_integer,
+          lo_nt  TYPE REF TO zcl_abappgp_integer,
+          lo_r   TYPE REF TO zcl_abappgp_integer,
+          lo_nr  TYPE REF TO zcl_abappgp_integer,
+          lo_q   TYPE REF TO zcl_abappgp_integer,
+          lo_tmp TYPE REF TO zcl_abappgp_integer,
+          lo_foo TYPE REF TO zcl_abappgp_integer,
+          lo_one TYPE REF TO zcl_abappgp_integer.
 
+
+    CREATE OBJECT lo_one.
+
+    CREATE OBJECT lo_a.
+    lo_a->copy( me ).
+
+    CREATE OBJECT lo_b.
+    lo_b->copy( io_integer ).
+
+    CREATE OBJECT lo_t
+      EXPORTING
+        iv_integer = '0'.
+
+    CREATE OBJECT lo_nt
+      EXPORTING
+        iv_integer = '1'.
+
+    CREATE OBJECT lo_r.
+    lo_r->copy( lo_b ).
+
+    CREATE OBJECT lo_nr.
+    lo_nr->copy( lo_a )->mod( lo_b ).
+
+    CREATE OBJECT lo_q.
+    CREATE OBJECT lo_tmp.
+    CREATE OBJECT lo_foo.
+
+    IF lo_b->is_negative( ) = abap_true.
+      lo_b->toggle_negative( ).
+    ENDIF.
+
+    IF lo_a->is_negative( ) = abap_true.
+      lo_tmp->copy( lo_a )->toggle_negative( )->mod( lo_b ).
+      lo_a->copy( lo_b )->subtract( lo_tmp ).
+    ENDIF.
+
+    WHILE lo_nr->is_zero( ) = abap_false.
+      lo_q->copy( lo_r )->divide( lo_nr ).
+      lo_tmp->copy( lo_nt ).
+      lo_foo->copy( lo_q )->multiply( lo_nt ).
+      lo_nt->copy( lo_t )->subtract( lo_foo ).
+      lo_t->copy( lo_tmp ).
+      lo_tmp->copy( lo_nr ).
+      lo_foo->copy( lo_q )->multiply( lo_nr ).
+      lo_nr->copy( lo_r )->subtract( lo_foo ).
+      lo_r->copy( lo_tmp ).
+    ENDWHILE.
+
+    IF lo_r->gt( lo_one ) = abap_true.
+* No inverse
+      BREAK-POINT.
+    ENDIF.
+
+    IF lo_t->is_negative( ) = abap_true.
+      lo_t->add( lo_b ).
+    ENDIF.
+
+    copy( lo_t ).
     ro_result = me.
 
   ENDMETHOD.
@@ -962,6 +1030,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ELSE.
       mv_negative = abap_true.
     ENDIF.
+
+    ro_result = me.
 
   ENDMETHOD.
 ENDCLASS.

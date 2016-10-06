@@ -42,6 +42,8 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
           lo_mod TYPE REF TO zcl_abappgp_integer.
 
 
+    ASSERT io_integer->is_positive( ) = abap_true.
+
     CREATE OBJECT lo_mod.
     CREATE OBJECT lo_int.
     lo_int->copy( io_integer ).

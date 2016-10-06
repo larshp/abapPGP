@@ -2,7 +2,8 @@ CLASS ltcl_mod_inverse DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
 
   PRIVATE SECTION.
     METHODS:
-      mod_inverse1 FOR TESTING.
+      mod_inverse1 FOR TESTING,
+      mod_inverse2 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_value         TYPE string
@@ -41,6 +42,19 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
       exp = '1969' ).
+
+  ENDMETHOD.
+
+  METHOD mod_inverse2.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_value = '40'
+                      iv_mod   = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '0' ).
 
   ENDMETHOD.
 
