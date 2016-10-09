@@ -285,7 +285,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
 
     ASSERT io_integer->mv_negative = abap_false.
-    ASSERT NOT io_integer->is_zero( ).
+    ASSERT io_integer->is_zero( ) = abap_false.
 
     ro_result = me.
 
@@ -318,7 +318,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_middle->copy( lo_high_guess )->subtract( lo_low_guess )->divide_by_2( ).
 *      WRITE: / 'middle', lo_middle->get( ).
 
-      IF lo_middle->is_zero( ).
+      IF lo_middle->is_zero( ) = abap_true.
         lo_tmp->copy( lo_high_guess )->multiply( io_integer ).
         IF lo_tmp->is_eq( me ) = abap_true.
           mt_split = lo_high_guess->mt_split.
@@ -617,7 +617,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     split( '1' ).
 
-    IF io_exponent->is_zero( ).
+    IF io_exponent->is_zero( ) = abap_true.
       RETURN.
     ENDIF.
 
@@ -672,7 +672,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     split( '1' ).
 
-    IF io_exponent->is_zero( ).
+    IF io_exponent->is_zero( ) = abap_true.
       RETURN.
     ENDIF.
 
@@ -878,7 +878,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT NOT io_integer->mv_negative = abap_true.
 
-    IF io_integer->is_zero( ).
+    IF io_integer->is_zero( ) = abap_true.
       split( '1' ).
       RETURN.
     ENDIF.
@@ -891,7 +891,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_count->copy( io_integer ).
     lo_count->subtract( lo_one ).
 
-    WHILE NOT lo_count->is_zero( ).
+    WHILE lo_count->is_zero( ) = abap_false.
       multiply( lo_original ).
 
       lo_count->subtract( lo_one ).

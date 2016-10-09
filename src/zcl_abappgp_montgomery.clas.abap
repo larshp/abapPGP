@@ -71,10 +71,10 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
           lo_one    TYPE REF TO zcl_abappgp_integer.
 
 
-    ASSERT NOT io_modulus->is_even( ).
-    ASSERT NOT io_modulus->is_zero( ).
-    ASSERT NOT io_modulus->is_one( ).
-    ASSERT NOT io_modulus->is_two( ).
+    ASSERT io_modulus->is_even( ) = abap_false.
+    ASSERT io_modulus->is_zero( ) = abap_false.
+    ASSERT io_modulus->is_one( ) = abap_false.
+    ASSERT io_modulus->is_two( ) = abap_false.
 
     CREATE OBJECT mo_modulus.
     mo_modulus->copy( io_modulus ).

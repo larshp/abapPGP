@@ -74,7 +74,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
       CREATE OBJECT lo_integer
         EXPORTING
           iv_integer = &1.
-       APPEND lo_integer TO rt_low.
+      APPEND lo_integer TO rt_low.
     END-OF-DEFINITION.
 
     _add '2'.
