@@ -117,8 +117,7 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
     lo_int->copy( io_integer ).
 
     WHILE lo_int->is_zero( ) = abap_false.
-      lo_mod->copy( lo_int )->mod_2( ).
-      IF lo_mod->is_zero( ) = abap_true.
+      IF lo_int->mod_2( ) = 0.
         CONCATENATE '0' mv_data INTO mv_data.
       ELSE.
         CONCATENATE '1' mv_data INTO mv_data.

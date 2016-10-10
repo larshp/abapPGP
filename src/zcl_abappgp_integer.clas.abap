@@ -1,6 +1,8 @@
 CLASS zcl_abappgp_integer DEFINITION
   PUBLIC
-  CREATE PUBLIC .
+  CREATE PUBLIC
+
+  GLOBAL FRIENDS zcl_abappgp_binary_integer .
 
   PUBLIC SECTION.
 
@@ -95,7 +97,7 @@ CLASS zcl_abappgp_integer DEFINITION
         VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
     METHODS mod_2
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+        VALUE(rv_result) TYPE i .
     METHODS mod_inverse
       IMPORTING
         !io_integer      TYPE REF TO zcl_abappgp_integer
@@ -357,23 +359,31 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD divide_by_2.
 
     DATA: lv_index TYPE i,
+          lv_value TYPE i,
           lv_carry TYPE i.
 
     FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
 
 
+    lv_index = lines( mt_split ) + 1.
+
     DO lines( mt_split ) TIMES.
-      lv_index = lines( mt_split ) - sy-index + 1.
+      lv_index = lv_index - 1.
 
-      READ TABLE mt_split INDEX lv_index ASSIGNING <lv_value>.
-      ASSERT sy-subrc = 0.
+      READ TABLE mt_split INDEX lv_index INTO lv_value.
 
-      <lv_value> = <lv_value> + lv_carry * c_max.
-      lv_carry   = <lv_value> MOD 2.
-      <lv_value> = <lv_value> DIV 2.
+      lv_value = lv_value + lv_carry * c_max.
+      lv_carry = lv_value MOD 2.
+      lv_value = lv_value DIV 2.
+
+      MODIFY mt_split INDEX lv_index FROM lv_value.
     ENDDO.
 
-    remove_leading_zeros( ).
+* remove leading zero, note: there can only be one when dividing with 2
+    READ TABLE mt_split INTO lv_value INDEX lines( mt_split ).
+    IF lv_value = 0 AND lines( mt_split ) > 1.
+      DELETE mt_split INDEX lines( mt_split ).
+    ENDIF.
 
     ro_result = me.
 
@@ -708,19 +718,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD mod_2.
 
-    DATA: lv_value TYPE i,
-          lv_str   TYPE string.
+    DATA: lv_value TYPE i.
 
 * only the first digit is relevant for calculating MOD2
     READ TABLE mt_split INDEX 1 INTO lv_value.
-    ASSERT sy-subrc = 0.
 
-    lv_value = lv_value MOD 2.
-
-    CLEAR mt_split.
-    APPEND lv_value TO mt_split.
-
-    ro_result = me.
+    rv_result = lv_value MOD 2.
 
   ENDMETHOD.
 
@@ -908,11 +911,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_value TYPE i.
 
 
+    lv_lines = lines( mt_split ) + 1.
+
     DO.
-      lv_lines = lines( mt_split ).
+      lv_lines = lv_lines - 1.
 
       READ TABLE mt_split INTO lv_value INDEX lv_lines.
-      ASSERT sy-subrc = 0.
 
       IF lv_value = 0 AND lv_lines <> 1.
         DELETE mt_split INDEX lv_lines.
@@ -920,7 +924,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ELSE.
         EXIT.
       ENDIF.
-
     ENDDO.
 
   ENDMETHOD.

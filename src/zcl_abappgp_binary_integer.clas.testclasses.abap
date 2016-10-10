@@ -189,14 +189,77 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltcl_identity DEFINITION FOR TESTING
+    DURATION SHORT
+    RISK LEVEL HARMLESS
+    FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      identity1 FOR TESTING,
+      identity2 FOR TESTING,
+      identity3 FOR TESTING,
+      identity4 FOR TESTING.
+
+    METHODS: test IMPORTING iv_input TYPE string.
+
+ENDCLASS.       "ltcl_Get
+
+CLASS ltcl_identity IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
+          lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
+
+
+    CREATE OBJECT lo_integer
+      EXPORTING
+        iv_integer = iv_input.
+
+    CREATE OBJECT lo_binary
+      EXPORTING
+        io_integer = lo_integer.
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_binary->to_integer( )->to_string( )
+      exp = iv_input ).
+
+  ENDMETHOD.
+
+  METHOD identity1.
+    test( '16' ).
+  ENDMETHOD.
+
+  METHOD identity2.
+    test( '8191' ).
+  ENDMETHOD.
+
+  METHOD identity3.
+    test( '8192' ).
+  ENDMETHOD.
+
+  METHOD identity4.
+    test( '123456789' ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_to_string DEFINITION FOR TESTING
     DURATION SHORT
     RISK LEVEL HARMLESS
     FINAL.
 
   PRIVATE SECTION.
-    METHODS: get1 FOR TESTING,
-      get2 FOR TESTING.
+    METHODS:
+      get1 FOR TESTING,
+      get2 FOR TESTING,
+      get3 FOR TESTING,
+      get4 FOR TESTING,
+      get5 FOR TESTING,
+      get6 FOR TESTING,
+      get7 FOR TESTING,
+      get8 FOR TESTING.
 
     METHODS: test IMPORTING iv_str           TYPE string
                   RETURNING VALUE(rv_binary) TYPE string.
@@ -243,6 +306,78 @@ CLASS ltcl_to_string IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_binary
       exp = '10011010010' ).
+
+  ENDMETHOD.
+
+  METHOD get3.
+
+    DATA: lv_binary TYPE string.
+
+    lv_binary = test( '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_binary
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD get4.
+
+    DATA: lv_binary TYPE string.
+
+    lv_binary = test( '8191' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_binary
+      exp = '1111111111111' ).
+
+  ENDMETHOD.
+
+  METHOD get5.
+
+    DATA: lv_binary TYPE string.
+
+    lv_binary = test( '8192' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_binary
+      exp = '10000000000000' ).
+
+  ENDMETHOD.
+
+  METHOD get6.
+
+    DATA: lv_binary TYPE string.
+
+    lv_binary = test( '8193' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_binary
+      exp = '10000000000001' ).
+
+  ENDMETHOD.
+
+  METHOD get7.
+
+    DATA: lv_binary TYPE string.
+
+    lv_binary = test( '9000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_binary
+      exp = '10001100101000' ).
+
+  ENDMETHOD.
+
+  METHOD get8.
+
+    DATA: lv_binary TYPE string.
+
+    lv_binary = test( '10000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_binary
+      exp = '10011100010000' ).
 
   ENDMETHOD.
 
