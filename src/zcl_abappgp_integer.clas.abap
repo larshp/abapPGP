@@ -378,8 +378,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_value TYPE ty_split,
           lv_carry TYPE ty_split.
 
-    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
-
 
     lv_index = lines( mt_split ) + 1.
 
@@ -589,7 +587,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     READ TABLE mt_split INDEX 1 INTO lv_value.
-    ASSERT sy-subrc = 0.
 
     rv_bool = boolc( lv_value = 0 ).
 
