@@ -130,7 +130,7 @@ CLASS zcl_abappgp_integer DEFINITION
   PROTECTED SECTION.
 
     TYPES:
-      ty_split TYPE p LENGTH 16 DECIMALS 0.
+      ty_split TYPE i.
     TYPES:
       ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY.
 
@@ -258,8 +258,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD class_constructor.
 
+* TY_SPLIT = i
     gv_max = 10000.
     gv_length = 4.
+
+* TY_SPLIT = p LENGTH 16 DECIMALS 0
+*    gv_max = 1000000000000000.
+*    gv_length = 15.
 
   ENDMETHOD.
 
