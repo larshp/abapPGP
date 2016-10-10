@@ -126,29 +126,30 @@ CLASS zcl_abappgp_integer DEFINITION
     METHODS to_string
       RETURNING
         VALUE(rv_integer) TYPE string .
-  PROTECTED SECTION.
+protected section.
 
-    TYPES:
-      ty_split_tt TYPE STANDARD TABLE OF int4 WITH DEFAULT KEY .
+  types TY_SPLIT type INT4 .
+  types:
+    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
-    DATA mv_negative TYPE abap_bool .
-    CONSTANTS c_max TYPE i VALUE 10000 ##NO_TEXT.
-    DATA mt_split TYPE ty_split_tt .
-    CONSTANTS c_length TYPE i VALUE 4 ##NO_TEXT.
+  data MV_NEGATIVE type ABAP_BOOL .
+  constants C_MAX type TY_SPLIT value 10000 ##NO_TEXT.
+  data MT_SPLIT type TY_SPLIT_TT .
+  constants C_LENGTH type I value 4 ##NO_TEXT.
 
-    METHODS append_zeros
-      IMPORTING
-        !iv_int       TYPE i
-        !iv_zeros     TYPE i
-      RETURNING
-        VALUE(rv_str) TYPE string .
-    METHODS remove_leading_zeros .
-    METHODS split
-      IMPORTING
-        !iv_integer TYPE string .
-    METHODS toggle_negative
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+  methods APPEND_ZEROS
+    importing
+      !IV_INT type I
+      !IV_ZEROS type I
+    returning
+      value(RV_STR) type STRING .
+  methods REMOVE_LEADING_ZEROS .
+  methods SPLIT
+    importing
+      !IV_INTEGER type STRING .
+  methods TOGGLE_NEGATIVE
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -160,9 +161,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD add.
 
     DATA: lv_max   TYPE i,
-          lv_carry TYPE i,
-          lv_op1   TYPE i,
-          lv_op2   TYPE i,
+          lv_carry TYPE ty_split,
+          lv_op1   TYPE ty_split,
+          lv_op2   TYPE ty_split,
           lv_index TYPE i,
           lo_tmp   TYPE REF TO zcl_abappgp_integer.
 
@@ -359,8 +360,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD divide_by_2.
 
     DATA: lv_index TYPE i,
-          lv_value TYPE i,
-          lv_carry TYPE i.
+          lv_value TYPE ty_split,
+          lv_carry TYPE ty_split.
 
     FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
 
@@ -449,8 +450,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD is_gt.
 
     DATA: lv_index TYPE i,
-          lv_op1   TYPE i,
-          lv_op2   TYPE i.
+          lv_op1   TYPE ty_split,
+          lv_op2   TYPE ty_split.
 
 
     IF lines( mt_split ) > lines( io_integer->mt_split )
@@ -565,7 +566,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_zero.
 
-    DATA: lv_value TYPE i.
+    DATA: lv_value TYPE ty_split.
 
 
     IF lines( mt_split ) <> 1.
@@ -718,7 +719,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD mod_2.
 
-    DATA: lv_value TYPE i.
+    DATA: lv_value TYPE ty_split.
 
 * only the first digit is relevant for calculating MOD2
     READ TABLE mt_split INDEX 1 INTO lv_value.
@@ -811,9 +812,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     DATA: lv_index  TYPE i,
           lv_index1 TYPE i,
-          lv_op     TYPE i,
-          lv_add    TYPE i,
-          lv_carry  TYPE i,
+          lv_op     TYPE ty_split,
+          lv_add    TYPE ty_split,
+          lv_carry  TYPE ty_split,
           lt_result LIKE mt_split.
 
     FIELD-SYMBOLS: <lv_result> TYPE i,
