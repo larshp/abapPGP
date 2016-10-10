@@ -1,43 +1,43 @@
 CLASS zcl_abappgp_binary_integer DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+    PUBLIC
+    CREATE PUBLIC.
 
   PUBLIC SECTION.
 
+    CLASS-METHODS class_constructor.
     METHODS and
       IMPORTING
         !io_binary       TYPE REF TO zcl_abappgp_binary_integer
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer.
     METHODS constructor
       IMPORTING
-        !io_integer TYPE REF TO zcl_abappgp_integer .
+        !io_integer TYPE REF TO zcl_abappgp_integer.
     METHODS is_zero
       RETURNING
-        VALUE(rv_bool) TYPE abap_bool .
+        VALUE(rv_bool) TYPE abap_bool.
     METHODS mod_2
       RETURNING
-        VALUE(rv_result) TYPE i .
+        VALUE(rv_result) TYPE i.
     METHODS shift_left
       IMPORTING
         !iv_times        TYPE i DEFAULT 1
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer.
     METHODS shift_right
       IMPORTING
         !iv_times        TYPE i DEFAULT 1
       RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer .
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_binary_integer.
     METHODS to_integer
       RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
     METHODS to_string
       RETURNING
-        VALUE(rv_binary) TYPE string .
-    CLASS-METHODS class_constructor .
-  PROTECTED SECTION.
+        VALUE(rv_binary) TYPE string.
 
-    DATA mv_data TYPE string .
+  PROTECTED SECTION.
+    DATA mv_data TYPE string.
     CLASS-DATA: go_two    TYPE REF TO zcl_abappgp_integer,
                 gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
   PRIVATE SECTION.
