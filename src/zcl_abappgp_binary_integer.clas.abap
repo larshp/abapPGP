@@ -91,13 +91,13 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
     CREATE OBJECT go_two
       EXPORTING
-        iv_integer = '1'.
+        iv_integer = 1.
 
     APPEND go_two TO gt_powers.
 
     CREATE OBJECT go_two
       EXPORTING
-        iv_integer = '2'.
+        iv_integer = 2.
 
     APPEND go_two TO gt_powers.
 
@@ -106,15 +106,12 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
   METHOD constructor.
 
-    DATA: lo_int TYPE REF TO zcl_abappgp_integer,
-          lo_mod TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_int TYPE REF TO zcl_abappgp_integer.
 
 
     ASSERT io_integer->is_positive( ) = abap_true.
 
-    CREATE OBJECT lo_mod.
-    CREATE OBJECT lo_int.
-    lo_int->copy( io_integer ).
+    lo_int = io_integer->clone( ).
 
     WHILE lo_int->is_zero( ) = abap_false.
       IF lo_int->mod_2( ) = 0.
@@ -191,7 +188,7 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
     CREATE OBJECT ro_integer
       EXPORTING
-        iv_integer = '0'.
+        iv_integer = 0.
 
     lv_offset = strlen( mv_data ) - 1.
 
@@ -199,8 +196,7 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
       READ TABLE gt_powers INTO lo_int INDEX sy-index.
       IF sy-subrc <> 0.
         ASSERT lo_int IS BOUND.
-        CREATE OBJECT lo_tmp.
-        lo_tmp->copy( lo_int )->multiply( go_two ).
+        lo_tmp = lo_int->clone( )->multiply( go_two ).
         APPEND lo_tmp TO gt_powers.
         lo_int = lo_tmp.
       ENDIF.

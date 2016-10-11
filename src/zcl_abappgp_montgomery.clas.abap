@@ -76,8 +76,7 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
     ASSERT io_modulus->is_one( ) = abap_false.
     ASSERT io_modulus->is_two( ) = abap_false.
 
-    CREATE OBJECT mo_modulus.
-    mo_modulus->copy( io_modulus ).
+    mo_modulus = io_modulus->clone( ).
 
     CREATE OBJECT lo_binary
       EXPORTING
@@ -91,17 +90,14 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
     lo_binary->shift_left( mv_bits ).
     mo_reducer = lo_binary->to_integer( ).
 
-    CREATE OBJECT lo_tmp.
-    lo_tmp->copy( mo_reducer )->subtract( lo_one ).
+    lo_tmp = mo_reducer->clone( )->subtract( lo_one ).
     CREATE OBJECT mo_mask
       EXPORTING
         io_integer = lo_tmp.
 
-    CREATE OBJECT mo_reciprocal.
-    mo_reciprocal->copy( mo_reducer )->mod_inverse( io_modulus ).
+    mo_reciprocal = mo_reducer->clone( )->mod_inverse( io_modulus ).
 
-    CREATE OBJECT mo_factor.
-    mo_factor->copy( mo_reducer )->multiply( mo_reciprocal )->subtract( lo_one )->divide( io_modulus ).
+    mo_factor = mo_reducer->clone( )->multiply( mo_reciprocal )->subtract( lo_one )->divide( io_modulus ).
 
   ENDMETHOD.
 
@@ -113,16 +109,13 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
           lo_tmp     TYPE REF TO zcl_abappgp_integer.
 
 
-    CREATE OBJECT lo_product.
-    lo_product->copy( io_x->get_integer( ) )->multiply( io_y->get_integer( ) ).
+    lo_product = io_x->get_integer( )->clone( )->multiply( io_y->get_integer( ) ).
 
-    CREATE OBJECT lo_tmp.
-    lo_tmp->copy( lo_product )->and( mo_mask )->multiply( mo_factor )->and( mo_mask ).
+    lo_tmp = lo_product->clone( )->and( mo_mask )->multiply( mo_factor )->and( mo_mask ).
 
     lo_tmp->multiply( mo_modulus ).
 
-    CREATE OBJECT lo_reduced.
-    lo_reduced->copy( lo_product )->add( lo_tmp )->shift_right( mv_bits ).
+    lo_reduced = lo_product->clone( )->add( lo_tmp )->shift_right( mv_bits ).
 
     IF lo_reduced->is_gt( mo_modulus ) = abap_true.
       lo_reduced->subtract( mo_modulus ).
@@ -137,9 +130,7 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
 
   METHOD unbuild.
 
-    CREATE OBJECT ro_integer.
-    ro_integer->copy( io_montgomery->get_integer( ) ).
-
+    ro_integer = io_montgomery->get_integer( )->clone( ).
     ro_integer->multiply( mo_reciprocal )->mod( mo_modulus ).
 
   ENDMETHOD.

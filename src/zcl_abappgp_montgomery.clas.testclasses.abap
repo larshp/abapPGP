@@ -30,17 +30,9 @@ CLASS ltcl_multiply IMPLEMENTATION.
           lo_mres TYPE REF TO zcl_abappgp_montgomery_integer.
 
 
-    CREATE OBJECT lo_x
-      EXPORTING
-        iv_integer = iv_x.
-
-    CREATE OBJECT lo_y
-      EXPORTING
-        iv_integer = iv_y.
-
-    CREATE OBJECT lo_mod
-      EXPORTING
-        iv_integer = iv_mod.
+    lo_x = zcl_abappgp_integer=>from_string( iv_x ).
+    lo_y = zcl_abappgp_integer=>from_string( iv_y ).
+    lo_mod = zcl_abappgp_integer=>from_string( iv_mod ).
 
     CREATE OBJECT lo_mont
       EXPORTING

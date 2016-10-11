@@ -26,13 +26,8 @@ CLASS ltcl_and IMPLEMENTATION.
           lo_binary2  TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    CREATE OBJECT lo_integer1
-      EXPORTING
-        iv_integer = iv_op1.
-
-    CREATE OBJECT lo_integer2
-      EXPORTING
-        iv_integer = iv_op2.
+    lo_integer1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_integer2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     CREATE OBJECT lo_binary1
       EXPORTING
@@ -110,9 +105,8 @@ CLASS ltcl_mod IMPLEMENTATION.
     DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
           lo_integer TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT lo_integer
-      EXPORTING
-        iv_integer = iv_str.
+
+    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
 
     CREATE OBJECT lo_binary
       EXPORTING
@@ -159,9 +153,8 @@ CLASS ltcl_shift_right IMPLEMENTATION.
     DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
           lo_integer TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT lo_integer
-      EXPORTING
-        iv_integer = iv_str.
+
+    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
 
     CREATE OBJECT lo_binary
       EXPORTING
@@ -213,9 +206,7 @@ CLASS ltcl_identity IMPLEMENTATION.
           lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    CREATE OBJECT lo_integer
-      EXPORTING
-        iv_integer = iv_input.
+    lo_integer = zcl_abappgp_integer=>from_string( iv_input ).
 
     CREATE OBJECT lo_binary
       EXPORTING
@@ -273,9 +264,8 @@ CLASS ltcl_to_string IMPLEMENTATION.
     DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
           lo_integer TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT lo_integer
-      EXPORTING
-        iv_integer = iv_str.
+
+    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
 
     CREATE OBJECT lo_binary
       EXPORTING

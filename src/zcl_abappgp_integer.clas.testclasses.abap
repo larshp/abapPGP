@@ -21,13 +21,8 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
           lo_mod   TYPE REF TO zcl_abappgp_integer.
 
 
-    CREATE OBJECT lo_value
-      EXPORTING
-        iv_integer = iv_value.
-
-    CREATE OBJECT lo_mod
-      EXPORTING
-        iv_integer = iv_mod.
+    lo_value = zcl_abappgp_integer=>from_string( iv_value ).
+    lo_mod = zcl_abappgp_integer=>from_string( iv_mod ).
 
     rv_result = lo_value->mod_inverse( lo_mod )->to_string( ).
 
@@ -93,10 +88,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
 
   METHOD test.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_value.
-
+    ro_int = zcl_abappgp_integer=>from_string( iv_value ).
     ro_int->divide_by_2( ).
 
   ENDMETHOD.
@@ -181,26 +173,16 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
           lo_exp   TYPE REF TO zcl_abappgp_integer.
 
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_base.
-
-    CREATE OBJECT lo_exp
-      EXPORTING
-        iv_integer = iv_exp.
-
-    CREATE OBJECT lo_mod
-      EXPORTING
-        iv_integer = iv_mod.
+    ro_int = zcl_abappgp_integer=>from_string( iv_base ).
+    lo_exp = zcl_abappgp_integer=>from_string( iv_exp ).
+    lo_mod = zcl_abappgp_integer=>from_string( iv_mod ).
 
     ro_int->modular_pow(
       io_exponent = lo_exp
       io_modulus  = lo_mod ).
 
     IF lo_mod->is_even( ) = abap_false.
-      CREATE OBJECT lo_check
-        EXPORTING
-          iv_integer = iv_base.
+      lo_check = zcl_abappgp_integer=>from_string( iv_base ).
 
       lo_check->modular_pow_montgomery(
         io_exponent = lo_exp
@@ -299,13 +281,9 @@ CLASS ltcl_mod IMPLEMENTATION.
 
     DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_op1.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     ro_int->mod( lo_var2 ).
 
@@ -424,13 +402,8 @@ CLASS ltcl_divide IMPLEMENTATION.
 
     DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_op1.
-
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     ro_int->divide( lo_var2 ).
 
@@ -591,13 +564,9 @@ CLASS ltcl_gt IMPLEMENTATION.
     DATA: lo_var1 TYPE REF TO zcl_abappgp_integer,
           lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT lo_var1
-      EXPORTING
-        iv_integer = iv_op1.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     rv_bool = lo_var1->is_gt( lo_var2 ).
 
@@ -741,13 +710,9 @@ CLASS ltcl_power IMPLEMENTATION.
 
     DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_op1.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     ro_int->power( lo_var2 ).
 
@@ -872,13 +837,9 @@ CLASS ltcl_multiply IMPLEMENTATION.
 
     DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_op1.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     ro_int->multiply( lo_var2 ).
 
@@ -1117,13 +1078,9 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
     DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_op1.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     ro_int->subtract( lo_var2 ).
 
@@ -1327,13 +1284,9 @@ CLASS ltcl_add IMPLEMENTATION.
 
     DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
 
-    CREATE OBJECT ro_int
-      EXPORTING
-        iv_integer = iv_op1.
 
-    CREATE OBJECT lo_var2
-      EXPORTING
-        iv_integer = iv_op2.
+    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
     ro_int->add( lo_var2 ).
 
@@ -1505,9 +1458,8 @@ CLASS ltcl_identity IMPLEMENTATION.
     DATA: lo_var1   TYPE REF TO zcl_abappgp_integer,
           lv_result TYPE string.
 
-    CREATE OBJECT lo_var1
-      EXPORTING
-        iv_integer = iv_string.
+
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_string ).
 
     lv_result = lo_var1->to_string( ).
 

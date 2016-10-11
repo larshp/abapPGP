@@ -42,21 +42,19 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
     CREATE OBJECT lo_one
       EXPORTING
-        iv_integer = '1'.
+        iv_integer = 1.
 
-    CREATE OBJECT lo_exponent
-      EXPORTING
-        iv_integer = iv_bits.
+    lo_exponent = zcl_abappgp_integer=>from_string( iv_bits ).
 
     CREATE OBJECT eo_high
       EXPORTING
-        iv_integer = '2'.
+        iv_integer = 2.
     eo_high->power( lo_exponent ).
 
     lo_exponent->subtract( lo_one ).
     CREATE OBJECT eo_low
       EXPORTING
-        iv_integer = '2'.
+        iv_integer = 2.
     eo_low->power( lo_exponent ).
 
   ENDMETHOD.
@@ -101,9 +99,7 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
                                       high = lv_rhigh ).
     CONCATENATE lv_front lv_str+1 INTO lv_str.
 
-    CREATE OBJECT ro_integer
-      EXPORTING
-        iv_integer = lv_str.
+    ro_integer = zcl_abappgp_integer=>from_string( lv_str ).
 
   ENDMETHOD.
 

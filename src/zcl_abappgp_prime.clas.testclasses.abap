@@ -30,9 +30,7 @@ CLASS ltcl_prime IMPLEMENTATION.
           lo_integer TYPE REF TO zcl_abappgp_integer.
 
 
-    CREATE OBJECT lo_integer
-      EXPORTING
-        iv_integer = iv_str.
+    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
 
     lv_bool = zcl_abappgp_prime=>check( lo_integer ).
 

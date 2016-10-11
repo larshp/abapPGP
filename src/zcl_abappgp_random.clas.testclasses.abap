@@ -19,11 +19,11 @@ CLASS ltcl_random IMPLEMENTATION.
 
     CREATE OBJECT lo_low
       EXPORTING
-        iv_integer = '111'.
+        iv_integer = 111.
 
     CREATE OBJECT lo_high
       EXPORTING
-        iv_integer = '999'.
+        iv_integer = 999.
 
     CREATE OBJECT lo_random
       EXPORTING
