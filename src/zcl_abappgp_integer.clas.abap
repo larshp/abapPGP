@@ -361,20 +361,20 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
 * try moving high down
-      lo_guess->copy( lo_high_guess )->subtract( lo_middle ).
-      lo_tmp->copy( lo_guess )->multiply( io_integer ).
+      lo_guess = lo_high_guess->clone( )->subtract( lo_middle ).
+      lo_tmp = lo_guess->clone( )->multiply( io_integer ).
       IF lo_tmp->is_ge( me ) = abap_true.
 *        WRITE: / 'move high to', lo_guess->get( ).
-        lo_high_guess->copy( lo_guess ).
+        lo_high_guess = lo_guess.
         CONTINUE.
       ENDIF.
 
 * try moving low up
-      lo_guess->copy( lo_low_guess )->add( lo_middle ).
-      lo_tmp->copy( lo_guess )->multiply( io_integer ).
+      lo_guess = lo_low_guess->clone( )->add( lo_middle ).
+      lo_tmp = lo_guess->clone( )->multiply( io_integer ).
       IF lo_tmp->is_le( me ) = abap_true.
 *        WRITE: / 'move low to', lo_guess->get( ).
-        lo_low_guess->copy( lo_guess ).
+        lo_low_guess = lo_guess.
       ENDIF.
 
     ENDDO.
@@ -621,12 +621,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT NOT io_integer->mv_negative = abap_true.
 
-    CREATE OBJECT lo_div.
-    CREATE OBJECT lo_mult.
+    lo_div = clone( )->divide( io_integer ).
 
-    lo_div->copy( me )->divide( io_integer ).
-
-    lo_mult->copy( lo_div )->multiply( io_integer ).
+    lo_mult = lo_div->clone( )->multiply( io_integer ).
 
     subtract( lo_mult ).
 
