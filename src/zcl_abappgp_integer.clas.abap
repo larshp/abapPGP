@@ -6,15 +6,12 @@ class ZCL_ABAPPGP_INTEGER definition
 
 public section.
 
-  methods CLONE
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_STRING
     importing
       !IV_INTEGER type STRING
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods CLASS_CONSTRUCTOR .
   methods ADD
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -25,14 +22,12 @@ public section.
       !IO_BINARY type ref to ZCL_ABAPPGP_BINARY_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods CLONE
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   methods CONSTRUCTOR
     importing
       !IV_INTEGER type I default 1 .
-  methods COPY
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   methods DIVIDE
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -135,31 +130,30 @@ public section.
   methods TO_STRING
     returning
       value(RV_INTEGER) type STRING .
-  PROTECTED SECTION.
+protected section.
 
-    TYPES:
-      ty_split TYPE i.
-    TYPES:
-      ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY.
+  types TY_SPLIT type I .
+  types:
+    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
-    DATA mv_negative TYPE abap_bool.
-    CLASS-DATA gv_max TYPE ty_split.
-    DATA mt_split TYPE ty_split_tt.
-    CLASS-DATA gv_length TYPE i.
+  data MV_NEGATIVE type ABAP_BOOL .
+  class-data GV_MAX type TY_SPLIT .
+  data MT_SPLIT type TY_SPLIT_TT .
+  class-data GV_LENGTH type I .
 
-    METHODS append_zeros
-      IMPORTING
-        !iv_int       TYPE i
-        !iv_zeros     TYPE i
-      RETURNING
-        VALUE(rv_str) TYPE string.
-    METHODS remove_leading_zeros.
-    METHODS split
-      IMPORTING
-        !iv_integer TYPE string.
-    METHODS toggle_negative
-      RETURNING
-        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer.
+  methods APPEND_ZEROS
+    importing
+      !IV_INT type I
+      !IV_ZEROS type I
+    returning
+      value(RV_STR) type STRING .
+  methods REMOVE_LEADING_ZEROS .
+  methods SPLIT
+    importing
+      !IV_INTEGER type STRING .
+  methods TOGGLE_NEGATIVE
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
 private section.
 ENDCLASS.
 
@@ -183,11 +177,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     IF mv_negative = abap_true AND io_integer->mv_negative = abap_false.
       lo_tmp = io_integer->clone( ).
       toggle_negative( ).
-      copy( lo_tmp->subtract( me ) ).
+      ro_result = lo_tmp->subtract( me ).
       RETURN.
     ELSEIF mv_negative = abap_false AND io_integer->mv_negative = abap_true.
       lo_tmp = io_integer->clone( )->toggle_negative( ).
-      subtract( lo_tmp ).
+      ro_result = subtract( lo_tmp ).
       RETURN.
     ENDIF.
 
@@ -238,9 +232,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     lo_binary->and( io_binary ).
 
-    copy( lo_binary->to_integer( ) ).
-
-    ro_result = me.
+    ro_result = lo_binary->to_integer( ).
 
   ENDMETHOD.
 
@@ -289,17 +281,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ASSERT iv_integer >= 0.
 
     APPEND iv_integer TO mt_split.
-
-  ENDMETHOD.
-
-
-  METHOD copy.
-* todo, remove this method?
-
-    mt_split = io_integer->mt_split.
-    mv_negative = io_integer->mv_negative.
-
-    ro_integer = me.
 
   ENDMETHOD.
 
@@ -625,9 +606,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     lo_mult = lo_div->clone( )->multiply( io_integer ).
 
-    subtract( lo_mult ).
-
-    ro_result = me.
+    ro_result = subtract( lo_mult ).
 
   ENDMETHOD.
 
@@ -697,6 +676,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     IF io_modulus->is_one( ) = abap_true.
       split( '0' ).
+      ro_result = me.
       RETURN.
     ENDIF.
 
@@ -733,9 +713,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
                                     io_y = lo_basem ).
     ENDWHILE.
 
-    copy( lo_mont->unbuild( lo_me ) ).
-
-    ro_result = me.
+    ro_result = lo_mont->unbuild( lo_me ).
 
   ENDMETHOD.
 
@@ -771,25 +749,17 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     CREATE OBJECT lo_one.
 
-    CREATE OBJECT lo_a.
-    lo_a->copy( me ).
-
-    CREATE OBJECT lo_b.
-    lo_b->copy( io_integer ).
+    lo_a = clone( ).
+    lo_b = io_integer->clone( ).
 
     CREATE OBJECT lo_t
       EXPORTING
         iv_integer = 0.
 
-    CREATE OBJECT lo_nt
-      EXPORTING
-        iv_integer = 1.
+    CREATE OBJECT lo_nt.
 
-    CREATE OBJECT lo_r.
-    lo_r->copy( lo_b ).
-
-    CREATE OBJECT lo_nr.
-    lo_nr->copy( lo_a )->mod( lo_b ).
+    lo_r = lo_b->clone( ).
+    lo_nr = lo_a->clone( )->mod( lo_b ).
 
     CREATE OBJECT lo_q.
     CREATE OBJECT lo_tmp.
@@ -800,20 +770,20 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     IF lo_a->is_negative( ) = abap_true.
-      lo_tmp->copy( lo_a )->toggle_negative( )->mod( lo_b ).
-      lo_a->copy( lo_b )->subtract( lo_tmp ).
+      lo_tmp = lo_a->clone( )->toggle_negative( )->mod( lo_b ).
+      lo_a = lo_b->clone( )->subtract( lo_tmp ).
     ENDIF.
 
     WHILE lo_nr->is_zero( ) = abap_false.
-      lo_q->copy( lo_r )->divide( lo_nr ).
-      lo_tmp->copy( lo_nt ).
-      lo_foo->copy( lo_q )->multiply( lo_nt ).
-      lo_nt->copy( lo_t )->subtract( lo_foo ).
-      lo_t->copy( lo_tmp ).
-      lo_tmp->copy( lo_nr ).
-      lo_foo->copy( lo_q )->multiply( lo_nr ).
-      lo_nr->copy( lo_r )->subtract( lo_foo ).
-      lo_r->copy( lo_tmp ).
+      lo_q = lo_r->clone( )->divide( lo_nr ).
+      lo_tmp = lo_nt->clone( ).
+      lo_foo = lo_q->clone( )->multiply( lo_nt ).
+      lo_nt = lo_t->clone( )->subtract( lo_foo ).
+      lo_t = lo_tmp->clone( ).
+      lo_tmp = lo_nr->clone( ).
+      lo_foo = lo_q->clone( )->multiply( lo_nr ).
+      lo_nr = lo_r->clone( )->subtract( lo_foo ).
+      lo_r = lo_tmp->clone( ).
     ENDWHILE.
 
     IF lo_r->is_gt( lo_one ) = abap_true.
@@ -822,11 +792,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     IF lo_t->is_negative( ) = abap_true.
-      lo_t->add( lo_b ).
+      lo_t = lo_t->add( lo_b ).
     ENDIF.
 
-    copy( lo_t ).
-    ro_result = me.
+    ro_result = lo_t.
 
   ENDMETHOD.
 
@@ -1025,8 +994,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ELSEIF ( is_lt( io_integer ) = abap_true AND mv_negative = abap_false )
         OR ( is_gt( io_integer ) = abap_true AND mv_negative = abap_true ).
       lo_tmp = io_integer->clone( )->subtract( me ).
-      copy( lo_tmp ).
-      toggle_negative( ).
+*      copy( lo_tmp ).
+*      toggle_negative( ).
+      ro_result = lo_tmp->toggle_negative( ).
       RETURN.
     ENDIF.
 

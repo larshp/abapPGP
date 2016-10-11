@@ -184,7 +184,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
     IF lo_mod->is_even( ) = abap_false.
       lo_check = zcl_abappgp_integer=>from_string( iv_base ).
 
-      lo_check->modular_pow_montgomery(
+      lo_check = lo_check->modular_pow_montgomery(
         io_exponent = lo_exp
         io_modulus  = lo_mod ).
 
@@ -1082,7 +1082,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
     lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
-    ro_int->subtract( lo_var2 ).
+    ro_int = ro_int->subtract( lo_var2 ).
 
   ENDMETHOD.
 
@@ -1288,7 +1288,7 @@ CLASS ltcl_add IMPLEMENTATION.
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
     lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
 
-    ro_int->add( lo_var2 ).
+    ro_int = ro_int->add( lo_var2 ).
 
   ENDMETHOD.
 

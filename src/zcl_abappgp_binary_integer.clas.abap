@@ -203,7 +203,7 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
       lv_bit = mv_data+lv_offset(1).
       IF lv_bit = '1'.
-        ro_integer->add( lo_int ).
+        ro_integer = ro_integer->add( lo_int ).
       ENDIF.
 
       lv_offset = lv_offset - 1.
