@@ -4,7 +4,11 @@ class ZCL_ABAPPGP_INTEGER2 definition
 
 public section.
 
-  methods CONSTRUCTOR .
+  class-methods FROM_INTEGER
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
   class-methods FROM_STRING
     importing
       !IV_INTEGER type STRING
@@ -15,14 +19,12 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods AND .
+  methods CONSTRUCTOR .
   methods TO_STRING
     returning
       value(RV_INTEGER) type STRING .
-  class-methods FROM_INTEGER
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods CLONE .
 protected section.
 
   types TY_SPLIT type I .
@@ -42,6 +44,14 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   endmethod.
 
 
+  method AND.
+  endmethod.
+
+
+  method CLONE.
+  endmethod.
+
+
   method CONSTRUCTOR.
   endmethod.
 
@@ -57,6 +67,10 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  method TO_STRING.
-  endmethod.
+  METHOD to_string.
+
+* output integer base 10
+
+
+  ENDMETHOD.
 ENDCLASS.
