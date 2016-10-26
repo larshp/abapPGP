@@ -1,20 +1,18 @@
 CLASS zcl_abappgp_montgomery_integer DEFINITION
   PUBLIC
-  CREATE PROTECTED
-
-  GLOBAL FRIENDS zcl_abappgp_montgomery.
+  CREATE PUBLIC.
 
   PUBLIC SECTION.
-  PROTECTED SECTION.
-
-    DATA mo_integer TYPE REF TO zcl_abappgp_integer.
 
     METHODS constructor
       IMPORTING
-        !io_integer TYPE REF TO zcl_abappgp_integer.
+        !io_integer TYPE REF TO zcl_abappgp_integer .
     METHODS get_integer
       RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+  PROTECTED SECTION.
+
+    DATA mo_integer TYPE REF TO zcl_abappgp_integer .
   PRIVATE SECTION.
 ENDCLASS.
 
