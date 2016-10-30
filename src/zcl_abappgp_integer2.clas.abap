@@ -25,6 +25,9 @@ public section.
     returning
       value(RV_INTEGER) type STRING .
   methods CLONE .
+  methods MULTIPLY .
+  methods SHIFT_RIGHT .
+  methods SUBTRACT .
 protected section.
 
   types TY_SPLIT type I .
@@ -65,6 +68,18 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
     BREAK-POINT.
 
   ENDMETHOD.
+
+
+  method MULTIPLY.
+  endmethod.
+
+
+  method SHIFT_RIGHT.
+  endmethod.
+
+
+  method SUBTRACT.
+  endmethod.
 
 
   METHOD to_string.
