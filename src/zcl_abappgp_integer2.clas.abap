@@ -4,6 +4,14 @@ class ZCL_ABAPPGP_INTEGER2 definition
 
 public section.
 
+  type-pools ABAP .
+  methods IS_ONE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_ZERO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_INTEGER
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -20,21 +28,39 @@ public section.
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
   methods AND .
-  methods CONSTRUCTOR .
-  methods TO_STRING
+  methods CLONE
     returning
-      value(RV_INTEGER) type STRING .
-  methods CLONE .
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods CONSTRUCTOR
+    importing
+      !IV_INTEGER type I default 1 .
+  methods GET_BINARY_LENGTH
+    returning
+      value(RV_LENGTH) type I .
   methods MULTIPLY .
   methods SHIFT_RIGHT .
   methods SUBTRACT .
-protected section.
+  methods TO_BINARY_STRING
+    returning
+      value(RV_BINARY) type STRING .
+  methods TO_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods TO_STRING
+    returning
+      value(RV_INTEGER) type STRING .
+PROTECTED SECTION.
 
-  types TY_SPLIT type I .
-  types:
-    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
+  TYPES ty_split TYPE i.
+  TYPES:
+    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY.
 
-  data MT_SPLIT type TY_SPLIT_TT .
+  DATA mt_split TYPE ty_split_tt.
+  CLASS-DATA gv_max TYPE i VALUE 8192.
+  CLASS-DATA gv_bits TYPE i VALUE 13.
+
+  CLASS-DATA: go_max    TYPE REF TO zcl_abappgp_integer,
+              gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
 private section.
 ENDCLASS.
 
@@ -43,49 +69,227 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
 
-  method ADD.
-  endmethod.
-
-
-  method AND.
-  endmethod.
-
-
-  method CLONE.
-  endmethod.
-
-
-  method CONSTRUCTOR.
-  endmethod.
-
-
-  method FROM_INTEGER.
-  endmethod.
-
-
-  METHOD from_string.
+  METHOD add.
 
     BREAK-POINT.
 
   ENDMETHOD.
 
 
-  method MULTIPLY.
+  method AND.
+
+  BREAK-POINT.
+
   endmethod.
 
 
-  method SHIFT_RIGHT.
-  endmethod.
+  METHOD class_constructor.
+
+    CREATE OBJECT go_max
+      EXPORTING
+        iv_integer = 1.
+
+    APPEND go_max TO gt_powers.
+
+    CREATE OBJECT go_max
+      EXPORTING
+        iv_integer = gv_max.
+
+    APPEND go_max TO gt_powers.
+
+  ENDMETHOD.
 
 
-  method SUBTRACT.
-  endmethod.
+  METHOD clone.
+
+    CREATE OBJECT ro_integer.
+    ro_integer->mt_split = mt_split.
+
+  ENDMETHOD.
+
+
+  METHOD constructor.
+
+    ASSERT iv_integer >= 0.
+    ASSERT iv_integer < gv_max.
+
+    APPEND iv_integer TO mt_split.
+
+  ENDMETHOD.
+
+
+  METHOD from_integer.
+
+    DATA: lv_hex   TYPE x LENGTH 2, " 16 bits
+          lv_count TYPE i VALUE 16,
+          lv_int   TYPE i,
+          lo_int   TYPE REF TO zcl_abappgp_integer.
+
+
+    ASSERT io_integer->is_positive( ) = abap_true.
+
+    CREATE OBJECT ro_integer.
+    CLEAR ro_integer->mt_split.
+
+    lo_int = io_integer->clone( ).
+
+    WHILE lo_int->is_zero( ) = abap_false.
+      IF lo_int->mod_2( ) = 1.
+        SET BIT lv_count OF lv_hex.
+      ENDIF.
+
+      IF lv_count = 4.
+        lv_count = 16.
+
+        lv_int = lv_hex.
+        APPEND lv_int TO ro_integer->mt_split.
+        CLEAR lv_hex.
+      ELSE.
+        lv_count = lv_count - 1.
+      ENDIF.
+
+      lo_int->divide_by_2( ).
+    ENDWHILE.
+
+    IF NOT lv_hex IS INITIAL.
+      lv_int = lv_hex.
+      APPEND lv_int TO ro_integer->mt_split.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD from_string.
+* input = base 10
+
+    ro_integer = from_integer( zcl_abappgp_integer=>from_string( iv_integer ) ).
+
+  ENDMETHOD.
+
+
+  METHOD get_binary_length.
+
+    DATA: lv_split LIKE LINE OF mt_split,
+          lv_bit   TYPE c LENGTH 1,
+          lv_hex   TYPE x LENGTH 2.
+
+
+    IF is_zero( ) = abap_true.
+      rv_length = 1.
+    ENDIF.
+
+    IF lines( mt_split ) > 1.
+      rv_length = ( lines( mt_split ) - 1 ) * gv_bits.
+    ENDIF.
+
+    READ TABLE mt_split INDEX lines( mt_split ) INTO lv_split.
+    lv_hex = lv_split.
+    DO 16 TIMES.
+      GET BIT sy-index OF lv_hex INTO lv_bit.
+      IF lv_bit = '1'.
+        rv_length = rv_length + 17 - sy-index.
+        RETURN.
+      ENDIF.
+    ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD is_one.
+
+    DATA: lv_split LIKE LINE OF mt_split.
+
+
+    rv_bool = abap_false.
+
+    IF lines( mt_split ) = 1.
+      READ TABLE mt_split INDEX 1 INTO lv_split.
+      rv_bool = boolc( lv_split = 1 ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD is_zero.
+
+    DATA: lv_split LIKE LINE OF mt_split.
+
+
+    rv_bool = abap_false.
+
+    IF lines( mt_split ) = 1.
+      READ TABLE mt_split INDEX 1 INTO lv_split.
+      rv_bool = boolc( lv_split = 0 ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD multiply.
+
+    BREAK-POINT.
+
+  ENDMETHOD.
+
+
+  METHOD shift_right.
+
+    BREAK-POINT.
+
+  ENDMETHOD.
+
+
+  METHOD subtract.
+
+    BREAK-POINT.
+
+  ENDMETHOD.
+
+
+  METHOD to_binary_string.
+
+    BREAK-POINT.
+
+  ENDMETHOD.
+
+
+  METHOD to_integer.
+
+    DATA: lv_split LIKE LINE OF mt_split,
+          lo_tmp   TYPE REF TO zcl_abappgp_integer,
+          lo_split TYPE REF TO zcl_abappgp_integer,
+          lo_int   TYPE REF TO zcl_abappgp_integer.
+
+* todo, remove lo_tmp variable?
+
+    CREATE OBJECT ro_integer
+      EXPORTING
+        iv_integer = 0.
+
+    LOOP AT mt_split INTO lv_split.
+
+      READ TABLE gt_powers INTO lo_int INDEX sy-tabix.
+      IF sy-subrc <> 0.
+        ASSERT lo_int IS BOUND.
+        lo_tmp = lo_int->clone( )->multiply( go_max ).
+        APPEND lo_tmp TO gt_powers.
+        lo_int = lo_tmp.
+      ENDIF.
+
+      CREATE OBJECT lo_split
+        EXPORTING
+          iv_integer = lv_split.
+
+      ro_integer = ro_integer->add( lo_split->multiply( lo_int ) ).
+    ENDLOOP.
+
+  ENDMETHOD.
 
 
   METHOD to_string.
-
 * output integer base 10
 
+    rv_integer = to_integer( )->to_string( ).
 
   ENDMETHOD.
 ENDCLASS.

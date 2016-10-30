@@ -279,6 +279,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD constructor.
 
     ASSERT iv_integer >= 0.
+    ASSERT iv_integer < gv_max.
 
     APPEND iv_integer TO mt_split.
 

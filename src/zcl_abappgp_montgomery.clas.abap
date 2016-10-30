@@ -81,7 +81,7 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
     CREATE OBJECT lo_binary
       EXPORTING
         io_integer = io_modulus.
-    mv_bits = ( strlen( lo_binary->to_string( ) ) DIV 8 + 1 ) * 8.
+    mv_bits = ( lo_binary->get_binary_length( ) DIV 8 + 1 ) * 8.
 
     CREATE OBJECT lo_one.
     CREATE OBJECT lo_binary

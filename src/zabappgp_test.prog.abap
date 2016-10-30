@@ -25,7 +25,7 @@ FORM test_prime USING iv_prime TYPE string.
       io_integer = lo_integer.
   lv_length = strlen( iv_prime ).
   WRITE: / 'string length:', lv_length.
-  lv_length = strlen( lo_binary->to_string( ) ).
+  lv_length = lo_binary->get_binary_length( ).
   WRITE: / 'bit length   :', lv_length.
 
   GET RUN TIME FIELD t1.

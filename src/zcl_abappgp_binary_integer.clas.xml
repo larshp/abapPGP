@@ -6,7 +6,7 @@
     <CLSNAME>ZCL_ABAPPGP_BINARY_INTEGER</CLSNAME>
     <VERSION>1</VERSION>
     <LANGU>E</LANGU>
-    <DESCRIPT>Binary Big Integer</DESCRIPT>
+    <DESCRIPT>Big Integer, stored as string</DESCRIPT>
     <UUID/>
     <CATEGORY>00</CATEGORY>
     <EXPOSURE>2</EXPOSURE>

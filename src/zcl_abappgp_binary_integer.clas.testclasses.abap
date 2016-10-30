@@ -271,7 +271,7 @@ CLASS ltcl_to_string IMPLEMENTATION.
       EXPORTING
         io_integer = lo_integer.
 
-    rv_binary = lo_binary->to_string( ).
+    rv_binary = lo_binary->to_binary_string( ).
 
   ENDMETHOD.
 
