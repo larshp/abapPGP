@@ -75,7 +75,46 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD add.
 
-    BREAK-POINT.
+    DATA: lv_max   TYPE i,
+          lv_carry TYPE ty_split,
+          lv_op1   TYPE ty_split,
+          lv_op2   TYPE ty_split,
+          lv_index TYPE i,
+          lo_tmp   TYPE REF TO zcl_abappgp_integer.
+
+
+    ro_result = me.
+
+    lv_max = nmax( val1 = lines( io_integer->mt_split )
+                   val2 = lines( mt_split ) ).
+
+    DO lv_max TIMES.
+      lv_index = sy-index.
+
+      CLEAR: lv_op1,
+             lv_op2.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.     "#EC CI_SUBRC
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2. "#EC CI_SUBRC
+
+      lv_op1 = lv_op1 + lv_op2 + lv_carry.
+
+      lv_carry = lv_op1 DIV gv_max.
+      lv_op1 = lv_op1 - lv_carry * gv_max.
+
+      MODIFY mt_split INDEX lv_index FROM lv_op1.
+      IF sy-subrc <> 0.
+        APPEND lv_op1 TO mt_split.
+      ENDIF.
+    ENDDO.
+
+    IF lv_carry <> 0.
+      lv_index = lv_max + 1.
+      MODIFY mt_split INDEX lv_index FROM lv_carry.
+      IF sy-subrc <> 0.
+        APPEND lv_carry TO mt_split.
+      ENDIF.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -90,6 +129,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
           lv_split  LIKE LINE OF mt_split.
 
 
+* todo, nmin() instead?
     IF lines( io_integer->mt_split ) < lines( mt_split ).
       lv_lines = lines( io_integer->mt_split ).
     ELSE.
@@ -198,6 +238,8 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD from_string.
 * input = base 10
+
+    ASSERT iv_integer CO '0123456789'.
 
     ro_integer = from_integer( zcl_abappgp_integer=>from_string( iv_integer ) ).
 

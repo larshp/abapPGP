@@ -1,3 +1,166 @@
+CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      add1 FOR TESTING,
+      add2 FOR TESTING,
+      add3 FOR TESTING,
+      add4 FOR TESTING,
+      add5 FOR TESTING,
+      add6 FOR TESTING,
+      add7 FOR TESTING,
+      add8 FOR TESTING,
+      add9 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1        TYPE string
+                     iv_op2        TYPE string
+           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer2.
+
+ENDCLASS.       "ltcl_Add
+
+CLASS ltcl_add IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer2.
+
+
+    ro_int = zcl_abappgp_integer2=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer2=>from_string( iv_op2 ).
+
+    ro_int = ro_int->add( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD add1.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '2' ).
+
+  ENDMETHOD.
+
+  METHOD add2.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '0' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD add3.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '1111'
+                   iv_op2 = '1111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '2222' ).
+
+  ENDMETHOD.
+
+  METHOD add4.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '111111'
+                   iv_op2 = '1111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '112222' ).
+
+  ENDMETHOD.
+
+  METHOD add5.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '1111'
+                   iv_op2 = '111111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '112222' ).
+
+  ENDMETHOD.
+
+  METHOD add6.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '9999' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '10000' ).
+
+  ENDMETHOD.
+
+  METHOD add7.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '99980001'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '99980002' ).
+
+  ENDMETHOD.
+
+  METHOD add8.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '111111111111111111111'
+                   iv_op2 = '1' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '111111111111111111112' ).
+
+  ENDMETHOD.
+
+  METHOD add9.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_res = test( iv_op1 = '1'
+                   iv_op2 = '111111111111111111111' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '111111111111111111112' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_and DEFINITION FOR TESTING
     DURATION SHORT
     RISK LEVEL HARMLESS
