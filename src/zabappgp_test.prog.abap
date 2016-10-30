@@ -37,9 +37,11 @@ FORM test_prime USING iv_prime TYPE string.
 
   GET RUN TIME FIELD t2.
   t = t2 - t1.
-  WRITE: / 'Integer Runtime: ', t, 'microseconds'.
-
+  WRITE: / 'Runtime: ', t, 'microseconds'.
   WRITE: /.
+
+  MESSAGE |Bits: { lv_length } Time: { t DIV 1000000 } s| TYPE 'S'.
+  COMMIT WORK.
 
 ENDFORM.
 
