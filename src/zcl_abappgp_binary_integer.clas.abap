@@ -4,6 +4,14 @@ class ZCL_ABAPPGP_BINARY_INTEGER definition
 
 public section.
 
+  class-methods FROM_STRING
+    importing
+      !IV_STRING type STRING
+    returning
+      value(RO_BINARY) type ref to ZCL_ABAPPGP_BINARY_INTEGER .
+  methods TO_STRING
+    returning
+      value(RV_STRING) type STRING .
   class-methods CLASS_CONSTRUCTOR .
   methods AND
     importing
@@ -127,6 +135,20 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD from_string.
+
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_integer = zcl_abappgp_integer=>from_string( iv_string ).
+
+    CREATE OBJECT ro_binary
+      EXPORTING
+        io_integer = lo_integer.
+
+  ENDMETHOD.
+
+
   METHOD get_binary_length.
 
     rv_length = strlen( to_binary_string( ) ).
@@ -225,6 +247,13 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
       lv_offset = lv_offset - 1.
     ENDWHILE.
+
+  ENDMETHOD.
+
+
+  METHOD to_string.
+
+    rv_string = to_integer( )->to_string( ).
 
   ENDMETHOD.
 ENDCLASS.

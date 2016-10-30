@@ -1,3 +1,91 @@
+CLASS ltcl_and DEFINITION FOR TESTING
+    DURATION SHORT
+    RISK LEVEL HARMLESS
+    FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      and1 FOR TESTING,
+      and2 FOR TESTING,
+      and3 FOR TESTING,
+      and4 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1           TYPE string
+                     iv_op2           TYPE string
+           RETURNING VALUE(rv_result) TYPE string.
+
+ENDCLASS.       "ltcl_Get
+
+CLASS ltcl_and IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_binary1  TYPE REF TO zcl_abappgp_integer2,
+          lo_binary2  TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_binary1 = zcl_abappgp_integer2=>from_string( iv_op1 ).
+    lo_binary2 = zcl_abappgp_integer2=>from_string( iv_op2 ).
+
+    rv_result = lo_binary1->and( lo_binary2 )->to_string( ).
+
+  ENDMETHOD.
+
+  METHOD and1.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_op1 = '16'
+                      iv_op2 = '16' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '16' ).
+
+  ENDMETHOD.
+
+  METHOD and2.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_op1 = '32'
+                      iv_op2 = '16' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '0' ).
+
+  ENDMETHOD.
+
+  METHOD and3.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_op1 = '48'
+                      iv_op2 = '16' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '16' ).
+
+  ENDMETHOD.
+
+  METHOD and4.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_op1 = '8191'
+                      iv_op2 = '8192' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '0' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_binary_length DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

@@ -20,24 +20,14 @@ CLASS ltcl_and IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_integer1 TYPE REF TO zcl_abappgp_integer,
-          lo_integer2 TYPE REF TO zcl_abappgp_integer,
-          lo_binary1  TYPE REF TO zcl_abappgp_binary_integer,
+    DATA: lo_binary1  TYPE REF TO zcl_abappgp_binary_integer,
           lo_binary2  TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    lo_integer1 = zcl_abappgp_integer=>from_string( iv_op1 ).
-    lo_integer2 = zcl_abappgp_integer=>from_string( iv_op2 ).
+    lo_binary1 = zcl_abappgp_binary_integer=>from_string( iv_op1 ).
+    lo_binary2 = zcl_abappgp_binary_integer=>from_string( iv_op2 ).
 
-    CREATE OBJECT lo_binary1
-      EXPORTING
-        io_integer = lo_integer1.
-
-    CREATE OBJECT lo_binary2
-      EXPORTING
-        io_integer = lo_integer2.
-
-    rv_result = lo_binary1->and( lo_binary2 )->to_integer( )->to_string( ).
+    rv_result = lo_binary1->and( lo_binary2 )->to_string( ).
 
   ENDMETHOD.
 
@@ -102,16 +92,10 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
-          lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
-
-    CREATE OBJECT lo_binary
-      EXPORTING
-        io_integer = lo_integer.
-
+    lo_binary = zcl_abappgp_binary_integer=>from_string( iv_str ).
     rv_result = lo_binary->mod_2( ).
 
   ENDMETHOD.
@@ -150,21 +134,12 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
-          lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_binary TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
-
-    CREATE OBJECT lo_binary
-      EXPORTING
-        io_integer = lo_integer.
-
+    lo_binary = zcl_abappgp_binary_integer=>from_string( iv_str ).
     lo_binary->shift_right( ).
-
-    lo_integer = lo_binary->to_integer( ).
-
-    rv_str = lo_integer->to_string( ).
+    rv_str = lo_binary->to_string( ).
 
   ENDMETHOD.
 
@@ -202,18 +177,13 @@ CLASS ltcl_identity IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
-          lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
+    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    lo_integer = zcl_abappgp_integer=>from_string( iv_input ).
-
-    CREATE OBJECT lo_binary
-      EXPORTING
-        io_integer = lo_integer.
+    lo_binary = zcl_abappgp_binary_integer=>from_string( iv_input ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_binary->to_integer( )->to_string( )
+      act = lo_binary->to_string( )
       exp = iv_input ).
 
   ENDMETHOD.
@@ -236,7 +206,7 @@ CLASS ltcl_identity IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ltcl_to_string DEFINITION FOR TESTING
+CLASS ltcl_to_binary_string DEFINITION FOR TESTING
     DURATION SHORT
     RISK LEVEL HARMLESS
     FINAL.
@@ -257,20 +227,14 @@ CLASS ltcl_to_string DEFINITION FOR TESTING
 
 ENDCLASS.       "ltcl_Get
 
-CLASS ltcl_to_string IMPLEMENTATION.
+CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
-          lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_binary TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
-
-    CREATE OBJECT lo_binary
-      EXPORTING
-        io_integer = lo_integer.
-
+    lo_binary = zcl_abappgp_binary_integer=>from_string( iv_str ).
     rv_binary = lo_binary->to_binary_string( ).
 
   ENDMETHOD.

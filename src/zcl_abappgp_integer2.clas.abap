@@ -4,13 +4,6 @@ class ZCL_ABAPPGP_INTEGER2 definition
 
 public section.
 
-  type-pools ABAP .
-  methods IS_ONE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
   class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_INTEGER
     importing
@@ -27,7 +20,11 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods AND .
+  methods AND
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
   methods CLONE
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
@@ -37,6 +34,13 @@ public section.
   methods GET_BINARY_LENGTH
     returning
       value(RV_LENGTH) type I .
+  type-pools ABAP .
+  methods IS_ONE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+  methods IS_ZERO
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   methods MULTIPLY .
   methods SHIFT_RIGHT .
   methods SUBTRACT .
@@ -76,11 +80,44 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  method AND.
+  METHOD and.
 
-  BREAK-POINT.
+    DATA: lv_hres   TYPE x LENGTH 2,
+          lv_hex1   TYPE x LENGTH 2,
+          lv_hex2   TYPE x LENGTH 2,
+          lv_lines  TYPE i,
+          lt_result LIKE mt_split,
+          lv_split  LIKE LINE OF mt_split.
 
-  endmethod.
+
+    IF lines( io_integer->mt_split ) < lines( mt_split ).
+      lv_lines = lines( io_integer->mt_split ).
+    ELSE.
+      lv_lines = lines( mt_split ).
+    ENDIF.
+
+    DO lv_lines TIMES.
+      READ TABLE io_integer->mt_split INTO lv_hex1 INDEX sy-index.
+      READ TABLE mt_split INTO lv_hex2 INDEX sy-index.
+
+      lv_hres = lv_hex1 BIT-AND lv_hex2.
+      APPEND lv_hres TO lt_result.
+    ENDDO.
+
+    mt_split = lt_result.
+
+    WHILE lines( mt_split ) > 0.
+      READ TABLE mt_split INDEX lines( mt_split ) INTO lv_split.
+      IF lv_split = 0.
+        DELETE mt_split INDEX lines( mt_split ).
+      ELSE.
+        EXIT. " current loop
+      ENDIF.
+    ENDWHILE.
+
+    ro_result = me.
+
+  ENDMETHOD.
 
 
   METHOD class_constructor.
@@ -256,30 +293,25 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   METHOD to_integer.
 
     DATA: lv_split LIKE LINE OF mt_split,
-          lo_tmp   TYPE REF TO zcl_abappgp_integer,
           lo_split TYPE REF TO zcl_abappgp_integer,
           lo_int   TYPE REF TO zcl_abappgp_integer.
 
-* todo, remove lo_tmp variable?
 
     CREATE OBJECT ro_integer
       EXPORTING
         iv_integer = 0.
 
     LOOP AT mt_split INTO lv_split.
-
       READ TABLE gt_powers INTO lo_int INDEX sy-tabix.
       IF sy-subrc <> 0.
         ASSERT lo_int IS BOUND.
-        lo_tmp = lo_int->clone( )->multiply( go_max ).
-        APPEND lo_tmp TO gt_powers.
-        lo_int = lo_tmp.
+        lo_int = lo_int->clone( )->multiply( go_max ).
+        APPEND lo_int TO gt_powers.
       ENDIF.
 
       CREATE OBJECT lo_split
         EXPORTING
           iv_integer = lv_split.
-
       ro_integer = ro_integer->add( lo_split->multiply( lo_int ) ).
     ENDLOOP.
 
