@@ -661,6 +661,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     DATA: lo_base     TYPE REF TO zcl_abappgp_integer,
           lo_tmp      TYPE REF TO zcl_abappgp_integer,
+          lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_binary_integer,
           lo_mont     TYPE REF TO zcl_abappgp_montgomery,
           lo_me       TYPE REF TO zcl_abappgp_montgomery_integer,
@@ -679,7 +680,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     lo_base = clone( ).
 
-    split( '1' ).
+    CREATE OBJECT lo_one.
+*    split( '1' ).
 
     IF io_exponent->is_zero( ) = abap_true.
       RETURN.
@@ -694,7 +696,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     CREATE OBJECT lo_mont
       EXPORTING
         io_modulus = io_modulus.
-    lo_me = lo_mont->build( me ).
+    lo_me = lo_mont->build( lo_one ).
     lo_basem = lo_mont->build( lo_base ).
 
     WHILE lo_exponent->is_zero( ) = abap_false.

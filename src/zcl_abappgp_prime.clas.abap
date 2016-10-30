@@ -300,6 +300,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
         i_output_immediately = abap_true ).
 
       lo_a = lo_random->random( ).
+      ASSERT lo_a->is_one( ) = abap_false.
 
       lo_x = lo_a->modular_pow_montgomery( io_exponent = lo_d
                                            io_modulus  = io_n ).
