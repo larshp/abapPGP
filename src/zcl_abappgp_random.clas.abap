@@ -16,16 +16,16 @@ CLASS zcl_abappgp_random DEFINITION
     METHODS random
       RETURNING
         VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
-  PROTECTED SECTION.
+protected section.
 
-    DATA mv_low TYPE string.
-    DATA mv_high TYPE string.
+  data MO_LOW type ref to ZCL_ABAPPGP_INTEGER .
+  data MO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
 
-    METHODS random_digits
-      IMPORTING
-        !iv_digits       TYPE i
-      RETURNING
-        VALUE(rv_random) TYPE string.
+  methods RANDOM_DIGITS
+    importing
+      !IV_DIGITS type I
+    returning
+      value(RV_RANDOM) type STRING .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -35,6 +35,9 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
 
   METHOD bits_to_low_high.
+
+* todo, to be used for random keys
+* or not, it can easily be shorter than required number of bits?
 
     DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_integer.
@@ -62,44 +65,31 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
   METHOD constructor.
 
-    mv_low = io_low->to_string( ).
-    mv_high = io_high->to_string( ).
+    mo_low = io_low.
+    mo_high = io_high.
 
   ENDMETHOD.
 
 
   METHOD random.
 
-    DATA: lv_rlow   TYPE i,
-          lv_rhigh  TYPE i,
-          lv_str    TYPE string,
-          lv_digits TYPE i,
-          lv_front  TYPE c LENGTH 1,
-          lo_random TYPE REF TO cl_abap_random.
+    DATA: lv_str TYPE string.
 
 
-    lo_random = cl_abap_random=>create( cl_abap_random=>seed( ) ).
+    DO 100 TIMES.
+      CLEAR ro_integer.
 
-* this approach makes the random numbers non uniform
-* at both ends of the interval, but typically the interval
-* is very large, so it should not matter in the big picture?
-    lv_digits = lo_random->intinrange( low  = strlen( mv_low )
-                                       high = strlen( mv_high ) ).
-    lv_str = random_digits( lv_digits ).
+      lv_str = random_digits( strlen( mo_high->to_string( ) ) ).
+      ro_integer = zcl_abappgp_integer=>from_string( lv_str ).
 
-    lv_rlow = 1.
-    lv_rhigh = 9.
-    IF lv_digits = strlen( mv_low ).
-      lv_rlow = mv_low(1).
-    ENDIF.
-    IF lv_digits = strlen( mv_high ).
-      lv_rhigh = mv_high(1).
-    ENDIF.
-    lv_front = lo_random->intinrange( low  = lv_rlow
-                                      high = lv_rhigh ).
-    CONCATENATE lv_front lv_str+1 INTO lv_str.
+      IF ro_integer->is_le( mo_high ) = abap_true
+          AND ro_integer->is_ge( mo_low ) = abap_true.
+* todo, or EQ
+        EXIT.
+      ENDIF.
+    ENDDO.
 
-    ro_integer = zcl_abappgp_integer=>from_string( lv_str ).
+    ASSERT ro_integer IS BOUND.
 
   ENDMETHOD.
 
@@ -109,12 +99,12 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 * hmm, is CL_ABAP_RANDOM=>seed crypto secure?
 
     DATA: lv_str TYPE string,
-          lv_tmp TYPE string.
+          lv_tmp TYPE n LENGTH 10.
 
 
     WHILE strlen( lv_str ) <= iv_digits.
       lv_tmp = cl_abap_random=>seed( ).
-      CONDENSE lv_tmp.
+      lv_tmp = lv_tmp+1. " first digit cannot be larger than 2
       CONCATENATE lv_tmp lv_str INTO lv_str.
     ENDWHILE.
 
