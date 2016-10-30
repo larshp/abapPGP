@@ -1,18 +1,18 @@
-CLASS zcl_abappgp_montgomery_integer DEFINITION
-  PUBLIC
-  CREATE PUBLIC.
+class ZCL_ABAPPGP_MONTGOMERY_INTEGER definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    METHODS constructor
-      IMPORTING
-        !io_integer TYPE REF TO zcl_abappgp_integer .
-    METHODS get_integer
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
-  PROTECTED SECTION.
+  methods CONSTRUCTOR
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods GET_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
+protected section.
 
-    DATA mo_integer TYPE REF TO zcl_abappgp_integer .
+  data MO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2 .
   PRIVATE SECTION.
 ENDCLASS.
 
