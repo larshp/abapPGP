@@ -516,9 +516,26 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD shift_right.
 
-    DO iv_times TIMES.
+    DATA: lv_delete TYPE i,
+          lv_divide TYPE i.
+
+
+    lv_delete = iv_times DIV gv_bits.
+    lv_divide = iv_times MOD gv_bits.
+
+    DO lv_delete TIMES.
+      DELETE mt_split INDEX 1.
+    ENDDO.
+
+    IF lines( mt_split ) = 0.
+      APPEND 0 TO mt_split.
+    ENDIF.
+
+    DO lv_divide TIMES.
       ro_result = divide_by_2( ).
     ENDDO.
+
+    ro_result = me.
 
   ENDMETHOD.
 

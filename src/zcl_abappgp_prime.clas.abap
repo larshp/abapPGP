@@ -276,12 +276,8 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
     lo_d = io_n->clone( )->subtract( lo_one ).
 
-    CREATE OBJECT lo_tmp2.
-
     DO.
-      lo_tmp = lo_d->clone( ).
-      lo_tmp->mod( lo_two ).  " todo, optimize via 'divide_by_2'?
-      IF lo_tmp->is_zero( ) = abap_false.
+      IF lo_d->mod_2( ) = 0.
         EXIT.
       ENDIF.
       lo_d->divide_by_2( ).
@@ -296,6 +292,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
     DO lc_k TIMES.
       lv_index = sy-index.
+
       cl_progress_indicator=>progress_indicate(
         i_text               = |Running { lv_index }/{ lc_k }|
         i_processed          = lv_index
@@ -313,8 +310,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
       lv_continue = abap_false.
       DO lv_s - 1 TIMES.
-        lo_tmp2 = lo_x->clone( ).
-        lo_x->multiply( lo_tmp2 )->mod( io_n ).
+        lo_x->multiply( lo_x->clone( ) )->mod( io_n ).
 
         IF lo_x->is_one( ) = abap_true.
           rv_bool = abap_false.

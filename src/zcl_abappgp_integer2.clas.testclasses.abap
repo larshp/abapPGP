@@ -7,10 +7,13 @@ CLASS ltcl_shift_right DEFINITION FOR TESTING
     METHODS:
       shift1 FOR TESTING,
       shift2 FOR TESTING,
-      shift3 FOR TESTING.
+      shift3 FOR TESTING,
+      shift4 FOR TESTING,
+      shift5 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_str        TYPE string
+                     iv_times      TYPE i DEFAULT 1
            RETURNING VALUE(rv_str) TYPE string.
 
 ENDCLASS.       "ltcl_Get
@@ -23,7 +26,7 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
 
     lo_binary = zcl_abappgp_integer2=>from_string( iv_str ).
-    lo_binary->shift_right( 1 ).
+    lo_binary->shift_right( iv_times ).
     rv_str = lo_binary->to_string( ).
 
   ENDMETHOD.
@@ -61,6 +64,32 @@ CLASS ltcl_shift_right IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
       exp = '4096' ).
+
+  ENDMETHOD.
+
+  METHOD shift4.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_str   = '8192'
+                      iv_times = 13 ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD shift5.
+
+    DATA: lv_result TYPE string.
+
+    lv_result = test( iv_str   = '8191'
+                      iv_times = 13 ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = '0' ).
 
   ENDMETHOD.
 
