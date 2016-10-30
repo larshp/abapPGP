@@ -56,7 +56,6 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
       EXPORTING
         io_integer = lo_integer.
 
-
   ENDMETHOD.
 
 

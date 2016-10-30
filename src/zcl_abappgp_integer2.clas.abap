@@ -4,6 +4,12 @@ class ZCL_ABAPPGP_INTEGER2 definition
 
 public section.
 
+  type-pools ABAP .
+  methods IS_GT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_INTEGER
     importing
@@ -31,40 +37,58 @@ public section.
   methods CONSTRUCTOR
     importing
       !IV_INTEGER type I default 1 .
+  methods DIVIDE_BY_2
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
   methods GET_BINARY_LENGTH
     returning
       value(RV_LENGTH) type I .
-  type-pools ABAP .
+  methods IS_EQ
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   methods IS_ONE
     returning
       value(RV_BOOL) type ABAP_BOOL .
   methods IS_ZERO
     returning
       value(RV_BOOL) type ABAP_BOOL .
-  methods MULTIPLY .
-  methods SHIFT_RIGHT .
-  methods SUBTRACT .
-  methods TO_BINARY_STRING
+  methods MULTIPLY
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
     returning
-      value(RV_BINARY) type STRING .
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods SHIFT_RIGHT
+    importing
+      !IV_TIMES type I
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods SUBTRACT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
   methods TO_INTEGER
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   methods TO_STRING
     returning
       value(RV_INTEGER) type STRING .
-PROTECTED SECTION.
+protected section.
 
-  TYPES ty_split TYPE i.
-  TYPES:
-    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY.
+  types TY_SPLIT type I .
+  types:
+    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
-  DATA mt_split TYPE ty_split_tt.
-  CLASS-DATA gv_max TYPE i VALUE 8192.
-  CLASS-DATA gv_bits TYPE i VALUE 13.
+  data MT_SPLIT type TY_SPLIT_TT .
+  class-data GV_MAX type I value 8192. "#EC NOTEXT .
+  class-data GV_BITS type I value 13. "#EC NOTEXT .
+  class-data GO_MAX type ref to ZCL_ABAPPGP_INTEGER .
+  class-data:
+    gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
-  CLASS-DATA: go_max    TYPE REF TO zcl_abappgp_integer,
-              gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
+  methods REMOVE_LEADING_ZEROS .
 private section.
 ENDCLASS.
 
@@ -79,8 +103,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
           lv_carry TYPE ty_split,
           lv_op1   TYPE ty_split,
           lv_op2   TYPE ty_split,
-          lv_index TYPE i,
-          lo_tmp   TYPE REF TO zcl_abappgp_integer.
+          lv_index TYPE i.
 
 
     ro_result = me.
@@ -129,12 +152,8 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
           lv_split  LIKE LINE OF mt_split.
 
 
-* todo, nmin() instead?
-    IF lines( io_integer->mt_split ) < lines( mt_split ).
-      lv_lines = lines( io_integer->mt_split ).
-    ELSE.
-      lv_lines = lines( mt_split ).
-    ENDIF.
+    lv_lines = nmin( val1 = lines( io_integer->mt_split )
+                     val2 = lines( mt_split ) ).
 
     DO lv_lines TIMES.
       READ TABLE io_integer->mt_split INTO lv_hex1 INDEX sy-index.
@@ -195,6 +214,38 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD divide_by_2.
+
+    DATA: lv_index TYPE i,
+          lv_value TYPE ty_split,
+          lv_carry TYPE ty_split.
+
+
+    lv_index = lines( mt_split ) + 1.
+
+    DO lines( mt_split ) TIMES.
+      lv_index = lv_index - 1.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_value.
+
+      lv_value = lv_value + lv_carry * gv_max.
+      lv_carry = lv_value MOD 2.
+      lv_value = lv_value DIV 2.
+
+      MODIFY mt_split INDEX lv_index FROM lv_value.
+    ENDDO.
+
+* remove leading zero, note: there can only be one when dividing with 2
+    READ TABLE mt_split INTO lv_value INDEX lines( mt_split ).
+    IF lv_value = 0 AND lines( mt_split ) > 1.
+      DELETE mt_split INDEX lines( mt_split ).
+    ENDIF.
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
   METHOD from_integer.
 
     DATA: lv_hex   TYPE x LENGTH 2, " 16 bits
@@ -241,7 +292,13 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
     ASSERT iv_integer CO '0123456789'.
 
-    ro_integer = from_integer( zcl_abappgp_integer=>from_string( iv_integer ) ).
+    IF iv_integer = '0'.
+      CREATE OBJECT ro_integer
+        EXPORTING
+          iv_integer = 0.
+    ELSE.
+      ro_integer = from_integer( zcl_abappgp_integer=>from_string( iv_integer ) ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -268,6 +325,76 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
       IF lv_bit = '1'.
         rv_length = rv_length + 17 - sy-index.
         RETURN.
+      ENDIF.
+    ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD is_eq.
+
+    FIELD-SYMBOLS: <lv_op1> LIKE LINE OF mt_split,
+                   <lv_op2> LIKE LINE OF mt_split.
+
+
+    IF lines( mt_split ) <> lines( io_integer->mt_split ).
+      rv_bool = abap_false.
+      RETURN.
+    ENDIF.
+
+    DO lines( mt_split ) TIMES.
+      READ TABLE mt_split INDEX 1 ASSIGNING <lv_op1>.
+      ASSERT sy-subrc = 0.
+      READ TABLE io_integer->mt_split INDEX 1 ASSIGNING <lv_op2>.
+      ASSERT sy-subrc = 0.
+
+      IF <lv_op1> <> <lv_op2>.
+        rv_bool = abap_false.
+        RETURN.
+      ENDIF.
+    ENDDO.
+
+    rv_bool = abap_true.
+
+  ENDMETHOD.
+
+
+  METHOD is_gt.
+
+    DATA: lv_index   TYPE i,
+          lv_op1     TYPE ty_split,
+          lv_op2     TYPE ty_split,
+          lv_length1 TYPE i,
+          lv_length2 TYPE i.
+
+
+    lv_length1 = lines( mt_split ).
+    lv_length2 = lines( io_integer->mt_split ).
+
+    IF lv_length1 > lv_length2.
+      rv_bool = abap_true.
+      RETURN.
+    ELSEIF lv_length1 < lv_length2.
+      rv_bool = abap_false.
+      RETURN.
+    ENDIF.
+
+    rv_bool = abap_false.
+
+    DO lines( mt_split ) TIMES.
+      lv_index = lines( mt_split ) - sy-index + 1.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.
+      ASSERT sy-subrc = 0.
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2.
+      ASSERT sy-subrc = 0.
+
+      IF lv_op1 > lv_op2.
+        rv_bool = abap_true.
+        EXIT.
+      ELSEIF lv_op1 < lv_op2.
+        rv_bool = abap_false.
+        EXIT.
       ENDIF.
     ENDDO.
 
@@ -306,28 +433,137 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD multiply.
 
-    BREAK-POINT.
+    DATA: lv_index  TYPE i,
+          lv_index1 TYPE i,
+          lv_op     TYPE ty_split,
+          lv_add    TYPE ty_split,
+          lv_carry  TYPE ty_split,
+          lt_result LIKE mt_split.
+
+    FIELD-SYMBOLS: <lv_result> TYPE ty_split,
+                   <lv_op1>    TYPE ty_split,
+                   <lv_op2>    TYPE ty_split.
+
+
+    ro_result = me.
+
+    IF is_zero( ) = abap_true OR io_integer->is_zero( ) = abap_true.
+      CLEAR mt_split.
+      APPEND 0 TO mt_split.
+      RETURN.
+    ENDIF.
+
+    LOOP AT mt_split ASSIGNING <lv_op1>.
+      lv_index1 = sy-tabix.
+      LOOP AT io_integer->mt_split ASSIGNING <lv_op2>.
+        lv_index = lv_index1 + sy-tabix - 1.
+
+        READ TABLE lt_result INDEX lv_index ASSIGNING <lv_result>.
+        IF sy-subrc <> 0.
+          APPEND INITIAL LINE TO lt_result ASSIGNING <lv_result>.
+        ENDIF.
+
+        lv_op = <lv_op1> * <lv_op2>.
+        lv_add = lv_op MOD gv_max.
+        <lv_result> = <lv_result> + lv_add.
+
+        lv_carry = <lv_result> DIV gv_max + lv_op DIV gv_max.
+        <lv_result> = <lv_result> MOD gv_max.
+
+        WHILE lv_carry <> 0.
+          lv_index = lv_index + 1.
+          READ TABLE lt_result INDEX lv_index ASSIGNING <lv_result>.
+          IF sy-subrc <> 0.
+            APPEND INITIAL LINE TO lt_result ASSIGNING <lv_result>.
+          ENDIF.
+* carry might trigger the next carry
+          <lv_result> = <lv_result> + lv_carry.
+          lv_carry    = <lv_result> DIV gv_max.
+          <lv_result> = <lv_result> MOD gv_max.
+        ENDWHILE.
+
+      ENDLOOP.
+    ENDLOOP.
+
+    mt_split = lt_result.
+
+  ENDMETHOD.
+
+
+  METHOD remove_leading_zeros.
+
+    DATA: lv_lines TYPE i,
+          lv_value TYPE ty_split.
+
+
+    lv_lines = lines( mt_split ) + 1.
+
+    DO.
+      lv_lines = lv_lines - 1.
+
+      READ TABLE mt_split INTO lv_value INDEX lv_lines.
+
+      IF lv_value = 0 AND lv_lines <> 1.
+        DELETE mt_split INDEX lv_lines.
+        ASSERT sy-subrc = 0.
+      ELSE.
+        EXIT.
+      ENDIF.
+    ENDDO.
 
   ENDMETHOD.
 
 
   METHOD shift_right.
 
-    BREAK-POINT.
+    DO iv_times TIMES.
+      ro_result = divide_by_2( ).
+    ENDDO.
 
   ENDMETHOD.
 
 
   METHOD subtract.
 
-    BREAK-POINT.
+    DATA: lv_max   TYPE i,
+          lv_carry TYPE ty_split,
+          lv_op1   TYPE ty_split,
+          lv_op2   TYPE ty_split,
+          lv_index TYPE i.
 
-  ENDMETHOD.
 
+    ro_result = me.
 
-  METHOD to_binary_string.
+    ASSERT is_gt( io_integer ) = abap_true
+      OR is_eq( io_integer ) = abap_true.
 
-    BREAK-POINT.
+    lv_max = nmax( val1 = lines( io_integer->mt_split )
+                   val2 = lines( mt_split ) ).
+
+    DO lv_max TIMES.
+      lv_index = sy-index.
+
+      CLEAR: lv_op1,
+             lv_op2.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.     "#EC CI_SUBRC
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2. "#EC CI_SUBRC
+
+      lv_op1 = lv_op1 - lv_op2 - lv_carry.
+      lv_carry = 0.
+
+      IF lv_op1 < 0.
+        lv_op1 = lv_op1 + gv_max.
+        lv_carry = 1.
+      ENDIF.
+
+      MODIFY mt_split INDEX lv_index FROM lv_op1.
+      ASSERT sy-subrc = 0.
+    ENDDO.
+
+    ASSERT lv_carry = 0.
+
+    remove_leading_zeros( ).
 
   ENDMETHOD.
 

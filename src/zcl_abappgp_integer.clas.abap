@@ -400,6 +400,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT iv_integer CO '-1234567890'.
 
+* todo, leading zeros not allowed
+
     CREATE OBJECT ro_integer.
     ro_integer->split( iv_integer ).
 
@@ -407,8 +409,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
 
   METHOD is_eq.
-
-    DATA: lv_index TYPE i.
 
     FIELD-SYMBOLS: <lv_op1> LIKE LINE OF mt_split,
                    <lv_op2> LIKE LINE OF mt_split.
@@ -421,8 +421,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     DO lines( mt_split ) TIMES.
-      lv_index = sy-index.
-
       READ TABLE mt_split INDEX 1 ASSIGNING <lv_op1>.
       ASSERT sy-subrc = 0.
       READ TABLE io_integer->mt_split INDEX 1 ASSIGNING <lv_op2>.
@@ -617,9 +615,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * Modular exponentiation
 * https://en.wikipedia.org/wiki/Modular_exponentiation
 
-    DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
-          lo_one      TYPE REF TO zcl_abappgp_integer,
-          lo_base     TYPE REF TO zcl_abappgp_integer,
+    DATA: lo_base     TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_binary_integer.
 
 
@@ -663,9 +659,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * Modular exponentiation
 * https://en.wikipedia.org/wiki/Modular_exponentiation
 
-    DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
-          lo_one      TYPE REF TO zcl_abappgp_integer,
-          lo_base     TYPE REF TO zcl_abappgp_integer,
+    DATA: lo_base     TYPE REF TO zcl_abappgp_integer,
           lo_tmp      TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_binary_integer,
           lo_mont     TYPE REF TO zcl_abappgp_montgomery,
@@ -995,8 +989,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ELSEIF ( is_lt( io_integer ) = abap_true AND mv_negative = abap_false )
         OR ( is_gt( io_integer ) = abap_true AND mv_negative = abap_true ).
       lo_tmp = io_integer->clone( )->subtract( me ).
-*      copy( lo_tmp ).
-*      toggle_negative( ).
       ro_result = lo_tmp->toggle_negative( ).
       RETURN.
     ENDIF.
