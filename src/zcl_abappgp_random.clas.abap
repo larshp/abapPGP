@@ -80,6 +80,12 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
       CLEAR ro_integer.
 
       lv_str = random_digits( strlen( mo_high->to_string( ) ) ).
+
+      SHIFT lv_str LEFT DELETING LEADING '0'.
+      IF lv_str IS INITIAL.
+        lv_str = '0'.
+      ENDIF.
+
       ro_integer = zcl_abappgp_integer=>from_string( lv_str ).
 
       IF ro_integer->is_le( mo_high ) = abap_true

@@ -399,8 +399,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD from_string.
 
     ASSERT iv_integer CO '-1234567890'.
-
-* todo, leading zeros not allowed
+    IF strlen( iv_integer ) > 1.
+      ASSERT NOT iv_integer(1) = '0'.
+    ENDIF.
 
     CREATE OBJECT ro_integer.
     ro_integer->split( iv_integer ).
@@ -934,6 +935,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_length  TYPE i,
           lv_offset  TYPE i.
 
+
+    ASSERT strlen( iv_integer ) > 0.
 
     CLEAR mt_split.
     CLEAR mv_negative.

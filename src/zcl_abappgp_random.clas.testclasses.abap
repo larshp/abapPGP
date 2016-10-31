@@ -33,7 +33,7 @@ CLASS ltcl_random IMPLEMENTATION.
         io_low  = lo_low
         io_high = lo_high.
 
-    DO 1000 TIMES.
+    DO 2000 TIMES.
       lo_result = lo_random->random( ).
       cl_abap_unit_assert=>assert_bound( lo_result ).
 
