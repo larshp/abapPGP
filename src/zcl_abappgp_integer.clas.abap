@@ -682,7 +682,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_base = clone( ).
 
     CREATE OBJECT lo_one.
-*    split( '1' ).
 
     IF io_exponent->is_zero( ) = abap_true.
       RETURN.
