@@ -387,7 +387,10 @@ CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       divide6 FOR TESTING,
       divide7 FOR TESTING,
       divide8 FOR TESTING,
-      divide9 FOR TESTING.
+      divide9 FOR TESTING,
+      divide10 FOR TESTING,
+      divide11 FOR TESTING,
+      divide_generic FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1        TYPE string
@@ -532,6 +535,61 @@ CLASS ltcl_divide IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lo_res->to_string( )
       exp = '142' ).
+
+  ENDMETHOD.
+
+  METHOD divide10.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '5827800983498960781124740512078744256512'
+                   iv_op2 = '48112959837082048697' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '121127467593613023351' ).
+
+  ENDMETHOD.
+
+  METHOD divide11.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '7382888'
+                   iv_op2 = '9' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '820320' ).
+
+  ENDMETHOD.
+
+  METHOD divide_generic.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer,
+          lv_op1 TYPE string,
+          lv_op2 TYPE string,
+          lv_expected TYPE i.
+
+
+    DO 100 TIMES.
+      lv_op1 = sy-index.
+      DO 100 TIMES.
+        lv_op2 = sy-index.
+
+        lv_expected = lv_op1 DIV lv_op2.
+
+        lo_res = test( iv_op1 = condense( lv_op1 )
+                       iv_op2 = condense( lv_op2 ) ).
+
+        cl_abap_unit_assert=>assert_equals(
+          act = lo_res->to_string( )
+          exp = lv_expected ).
+
+      ENDDO.
+    ENDDO.
 
   ENDMETHOD.
 

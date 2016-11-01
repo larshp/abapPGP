@@ -691,13 +691,15 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       EXPORTING
         io_integer = io_exponent.
 
-    lo_base->mod( io_modulus ).
+    lo_base = lo_base->mod( io_modulus ).
 
     CREATE OBJECT lo_mont
       EXPORTING
         io_modulus = io_modulus.
     lo_me = lo_mont->build( lo_one ).
     lo_basem = lo_mont->build( lo_base ).
+
+*    ASSERT lo_basem->get_integer( )->to_string( ) = '30968684203564132865'.
 
     WHILE lo_exponent->is_zero( ) = abap_false.
       IF lo_exponent->mod_2( ) = 1.
