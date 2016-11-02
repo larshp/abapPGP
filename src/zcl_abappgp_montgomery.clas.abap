@@ -51,7 +51,7 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
         io_integer = io_integer.
 
 * todo, optimize mod? it is a power of 2...
-* todo, no need to convert to binary? can do shift_left in zcl_abappgp_integer?
+* todo, no need to convert to binary? can do shift_left in zcl_abappgp_integer2?
     lo_integer = lo_binary->shift_left( mv_bits )->to_integer( ).
     lo_integer = lo_integer->mod( mo_modulus ).
 
@@ -111,10 +111,8 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
           lo_tmp     TYPE REF TO zcl_abappgp_integer2.
 
 
-* todo, remove assertions when it works
-
-    ASSERT NOT io_x->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
-    ASSERT NOT io_y->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
+*    ASSERT NOT io_x->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
+*    ASSERT NOT io_y->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
 
     lo_product = io_x->get_integer( )->clone( )->multiply( io_y->get_integer( ) ).
 

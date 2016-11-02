@@ -77,8 +77,6 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
 
     DO 100 TIMES.
-      CLEAR ro_integer.
-
       lv_str = random_digits( strlen( mo_high->to_string( ) ) ).
 
       SHIFT lv_str LEFT DELETING LEADING '0'.
@@ -90,8 +88,10 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
       IF ro_integer->is_le( mo_high ) = abap_true
           AND ro_integer->is_ge( mo_low ) = abap_true.
-* todo, or EQ
+* todo, or EQ?
         EXIT.
+      ELSE.
+        CLEAR ro_integer.
       ENDIF.
     ENDDO.
 

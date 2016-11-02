@@ -17,11 +17,6 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods AND
-    importing
-      !IO_BINARY type ref to ZCL_ABAPPGP_BINARY_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods CLONE
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
@@ -117,11 +112,6 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods SHIFT_RIGHT
-    importing
-      !IV_TIMES type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods SUBTRACT
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -141,12 +131,6 @@ protected section.
   data MT_SPLIT type TY_SPLIT_TT .
   class-data GV_LENGTH type I .
 
-  methods APPEND_ZEROS
-    importing
-      !IV_INT type I
-      !IV_ZEROS type I
-    returning
-      value(RV_STR) type STRING .
   methods REMOVE_LEADING_ZEROS .
   methods SPLIT
     importing
@@ -217,39 +201,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
         APPEND lv_carry TO mt_split.
       ENDIF.
     ENDIF.
-
-  ENDMETHOD.
-
-
-  METHOD and.
-
-    DATA: lo_binary TYPE REF TO zcl_abappgp_binary_integer.
-
-
-    CREATE OBJECT lo_binary
-      EXPORTING
-        io_integer = me.
-
-    lo_binary->and( io_binary ).
-
-    ro_result = lo_binary->to_integer( ).
-
-  ENDMETHOD.
-
-
-  METHOD append_zeros.
-
-    rv_str = iv_int.
-
-    rv_str = condense( rv_str ).
-
-    IF rv_str = '0'.
-      RETURN.
-    ENDIF.
-
-    DO iv_zeros TIMES.
-      CONCATENATE rv_str '0' INTO rv_str.
-    ENDDO.
 
   ENDMETHOD.
 
@@ -705,8 +656,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_me = lo_mont->build( lo_one ).
     lo_basem = lo_mont->build( lo_base ).
 
-*    ASSERT lo_basem->get_integer( )->to_string( ) = '30968684203564132865'.
-
     WHILE lo_exponent->is_zero( ) = abap_false.
       IF lo_exponent->mod_2( ) = 1.
         lo_me = lo_mont->multiply( io_x = lo_me
@@ -921,17 +870,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
         EXIT.
       ENDIF.
     ENDDO.
-
-  ENDMETHOD.
-
-
-  METHOD shift_right.
-
-    DO iv_times TIMES.
-      divide_by_2( ).
-    ENDDO.
-
-    ro_result = me.
 
   ENDMETHOD.
 
