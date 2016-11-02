@@ -1026,6 +1026,144 @@ CLASS ltcl_power IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltcl_multiply_10 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      multiply_10_1 FOR TESTING,
+      multiply_10_2 FOR TESTING,
+      multiply_10_3 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1 TYPE string
+                     iv_op2 TYPE i
+                     iv_exp TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_multiply_10 IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var1->multiply_10( iv_op2 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_var1->to_string( )
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD multiply_10_1.
+    test( iv_op1 = '1'
+          iv_op2 = 1
+          iv_exp = '10' ).
+  ENDMETHOD.
+
+  METHOD multiply_10_2.
+    test( iv_op1 = '1'
+          iv_op2 = 4
+          iv_exp = '10000' ).
+  ENDMETHOD.
+
+  METHOD multiply_10_3.
+    test( iv_op1 = '10'
+          iv_op2 = 4
+          iv_exp = '100000' ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltcl_karatsuba DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      karatsuba1 FOR TESTING,
+      karatsuba2 FOR TESTING,
+      karatsuba3 FOR TESTING,
+      karatsuba4 FOR TESTING,
+      karatsuba5 FOR TESTING,
+      karatsuba6 FOR TESTING,
+      karatsuba7 FOR TESTING,
+      karatsuba8 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1 TYPE string
+                     iv_op2 TYPE string
+                     iv_exp TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_karatsuba IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer,
+          lo_var2 TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
+    lo_var1->karatsuba( lo_var2 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_var1->to_string( )
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD karatsuba1.
+    test( iv_op1 = '1'
+          iv_op2 = '1'
+          iv_exp = '1' ).
+  ENDMETHOD.
+
+  METHOD karatsuba2.
+    test( iv_op1 = '11112222'
+          iv_op2 = '33334444'
+          iv_exp = '370419741974568' ).
+  ENDMETHOD.
+
+
+  METHOD karatsuba3.
+    test( iv_op1 = '1111'
+          iv_op2 = '1111'
+          iv_exp = '1234321' ).
+  ENDMETHOD.
+
+  METHOD karatsuba4.
+    test( iv_op1 = '9999'
+          iv_op2 = '9999'
+          iv_exp = '99980001' ).
+  ENDMETHOD.
+
+  METHOD karatsuba5.
+    test( iv_op1 = '500'
+          iv_op2 = '50000'
+          iv_exp = '25000000' ).
+  ENDMETHOD.
+
+  METHOD karatsuba6.
+    test( iv_op1 = '30558784'
+          iv_op2 = '44449'
+          iv_exp = '1358307390016' ).
+  ENDMETHOD.
+
+  METHOD karatsuba7.
+    test( iv_op1 = '100000'
+          iv_op2 = '0'
+          iv_exp = '0' ).
+  ENDMETHOD.
+
+  METHOD karatsuba8.
+    test( iv_op1 = '7777777777'
+          iv_op2 = '6666666666'
+          iv_exp = '51851851841481481482' ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
@@ -1047,9 +1185,9 @@ CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       multiply15 FOR TESTING.
 
     METHODS:
-      test IMPORTING iv_op1        TYPE string
-                     iv_op2        TYPE string
-           RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
+      test IMPORTING iv_op1 TYPE string
+                     iv_op2 TYPE string
+                     iv_exp TYPE string.
 
 ENDCLASS.
 
@@ -1057,214 +1195,116 @@ CLASS ltcl_multiply IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer,
+          lo_var2 TYPE REF TO zcl_abappgp_integer.
 
 
-    ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
     lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
-
-    ro_int->multiply( lo_var2 ).
+    lo_var1->multiply( lo_var2 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_var1->to_string( )
+      exp = iv_exp ).
 
   ENDMETHOD.
 
   METHOD multiply1.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-
-    lo_res = test( iv_op1 = '1'
-                   iv_op2 = '1' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '1' ).
-
+    test( iv_op1 = '1'
+          iv_op2 = '1'
+          iv_exp = '1' ).
   ENDMETHOD.
 
   METHOD multiply2.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-
-    lo_res = test( iv_op1 = '1'
-                   iv_op2 = '0' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '0' ).
-
+    test( iv_op1 = '1'
+          iv_op2 = '0'
+          iv_exp = '0' ).
   ENDMETHOD.
 
   METHOD multiply3.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-
-    lo_res = test( iv_op1 = '0'
-                   iv_op2 = '0' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '0' ).
-
+    test( iv_op1 = '0'
+          iv_op2 = '0'
+          iv_exp = '0' ).
   ENDMETHOD.
 
   METHOD multiply4.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-
-    lo_res = test( iv_op1 = '2'
-                   iv_op2 = '3' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '6' ).
-
+    test( iv_op1 = '2'
+          iv_op2 = '3'
+          iv_exp = '6' ).
   ENDMETHOD.
 
   METHOD multiply5.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-
-    lo_res = test( iv_op1 = '1111'
-                   iv_op2 = '1111' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '1234321' ).
-
+    test( iv_op1 = '1111'
+          iv_op2 = '1111'
+          iv_exp = '1234321' ).
   ENDMETHOD.
 
   METHOD multiply6.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-
-    lo_res = test( iv_op1 = '9999'
-                   iv_op2 = '9999' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '99980001' ).
-
+    test( iv_op1 = '9999'
+          iv_op2 = '9999'
+          iv_exp = '99980001' ).
   ENDMETHOD.
 
   METHOD multiply7.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '500'
-                   iv_op2 = '50000' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '25000000' ).
-
+    test( iv_op1 = '500'
+          iv_op2 = '50000'
+          iv_exp = '25000000' ).
   ENDMETHOD.
 
   METHOD multiply8.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '30558784'
-                   iv_op2 = '44449' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '1358307390016' ).
-
+    test( iv_op1 = '30558784'
+          iv_op2 = '44449'
+          iv_exp = '1358307390016' ).
   ENDMETHOD.
 
   METHOD multiply9.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '100000'
-                   iv_op2 = '0' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '0' ).
-
+    test( iv_op1 = '100000'
+          iv_op2 = '0'
+          iv_exp = '0' ).
   ENDMETHOD.
 
   METHOD multiply10.
-
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '7777777777'
-                   iv_op2 = '6666666666' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '51851851841481481482' ).
-
+    test( iv_op1 = '7777777777'
+          iv_op2 = '6666666666'
+          iv_exp = '51851851841481481482' ).
   ENDMETHOD.
 
   METHOD multiply11.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '-77'
-                   iv_op2 = '66' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '-5082' ).
+    test( iv_op1 = '-77'
+          iv_op2 = '66'
+          iv_exp = '-5082' ).
 
   ENDMETHOD.
 
   METHOD multiply12.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '-77'
-                   iv_op2 = '-66' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '5082' ).
+    test( iv_op1 = '-77'
+          iv_op2 = '-66'
+          iv_exp = '5082' ).
 
   ENDMETHOD.
 
   METHOD multiply13.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '77'
-                   iv_op2 = '-66' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '-5082' ).
+    test( iv_op1 = '77'
+          iv_op2 = '-66'
+          iv_exp = '-5082' ).
 
   ENDMETHOD.
 
   METHOD multiply14.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '999999999999999'
-                   iv_op2 = '999999999999999' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '999999999999998000000000000001' ).
+    test( iv_op1 = '999999999999999'
+          iv_op2 = '999999999999999'
+          iv_exp = '999999999999998000000000000001' ).
 
   ENDMETHOD.
 
   METHOD multiply15.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
-
-    lo_res = test( iv_op1 = '9999999999999990'
-                   iv_op2 = '9999999999999990' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lo_res->to_string( )
-      exp = '99999999999999800000000000000100' ).
+    test( iv_op1 = '9999999999999990'
+          iv_op2 = '9999999999999990'
+          iv_exp = '99999999999999800000000000000100' ).
 
   ENDMETHOD.
 

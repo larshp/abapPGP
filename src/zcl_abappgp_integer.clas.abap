@@ -16,6 +16,11 @@ public section.
       !IV_COUNT type I
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods KARATSUBA
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_STRING
     importing
@@ -120,6 +125,11 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MULTIPLY_10
+    importing
+      !IV_TIMES type I
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods POWER
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -144,6 +154,13 @@ protected section.
   data MT_SPLIT type TY_SPLIT_TT .
   class-data GV_LENGTH type I .
 
+  class-methods SPLIT_AT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+      !IV_AT type I
+    exporting
+      !EO_LOW type ref to ZCL_ABAPPGP_INTEGER
+      !EO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
   methods REMOVE_LEADING_ZEROS .
   methods SPLIT
     importing
@@ -619,6 +636,61 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD karatsuba.
+
+* https://en.wikipedia.org/wiki/Karatsuba_algorithm
+
+    DATA: lv_m     TYPE i,
+          lo_low1  TYPE REF TO zcl_abappgp_integer,
+          lo_low2  TYPE REF TO zcl_abappgp_integer,
+          lo_high1 TYPE REF TO zcl_abappgp_integer,
+          lo_high2 TYPE REF TO zcl_abappgp_integer,
+          lo_z0    TYPE REF TO zcl_abappgp_integer,
+          lo_z1    TYPE REF TO zcl_abappgp_integer,
+          lo_z2    TYPE REF TO zcl_abappgp_integer.
+
+
+    ASSERT io_integer->is_positive( ) = abap_true.
+    ASSERT is_positive( ) = abap_true.
+
+    IF lines( mt_split ) < 2 OR lines( io_integer->mt_split ) < 2.
+      ro_integer = multiply( io_integer ).
+      RETURN.
+    ENDIF.
+
+    lv_m = nmax( val1 = lines( mt_split )
+                 val2 = lines( io_integer->mt_split ) ).
+
+    lv_m = lv_m DIV 2.
+
+    split_at( EXPORTING io_integer = me
+                        iv_at      = lv_m
+              IMPORTING eo_low     = lo_low1
+                        eo_high    = lo_high1 ).
+
+    split_at( EXPORTING io_integer = io_integer
+                        iv_at      = lv_m
+              IMPORTING eo_low     = lo_low2
+                        eo_high    = lo_high2 ).
+
+* z0 = karatsuba(low1,low2)
+    lo_z0 = lo_low1->clone( )->karatsuba( lo_low2 ).
+* z1 = karatsuba((low1+high1),(low2+high2))
+    lo_z1 = lo_low1->add( lo_high1 )->karatsuba( lo_low2->clone( )->add( lo_high2 ) ).
+* z2 = karatsuba(high1,high2)
+    lo_z2 = lo_high1->karatsuba( lo_high2 ).
+
+* return (z2*10^(2*m2))+((z1-z2-z0)*10^(m2))+(z0)
+    mt_split = lo_z2->mt_split.
+    multiply_10( 2 * lv_m * 4 ).
+    add( lo_z1->subtract( lo_z2 )->subtract( lo_z0 )->multiply_10( lv_m * 4 ) ).
+    add( lo_z0 ).
+
+    ro_integer = me.
+
+  ENDMETHOD.
+
+
   METHOD mod.
 
     DATA: lo_div  TYPE REF TO zcl_abappgp_integer,
@@ -887,6 +959,39 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD multiply_10.
+
+    DATA: lv_insert TYPE i,
+          lv_int TYPE i,
+          lo_tens TYPE REF TO zcl_abappgp_integer.
+
+
+    CASE iv_times MOD 4.
+      WHEN 3.
+        lv_int = 1000.
+      WHEN 2.
+        lv_int = 100.
+      WHEN 1.
+        lv_int = 10.
+    ENDCASE.
+
+    IF lv_int > 0.
+      CREATE OBJECT lo_tens
+        EXPORTING
+          iv_integer = lv_int.
+
+      multiply( lo_tens ).
+    ENDIF.
+
+    DO iv_times DIV 4 TIMES.
+      INSERT 0 INTO mt_split INDEX 1.
+    ENDDO.
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
   METHOD power.
 
     DATA: lo_count    TYPE REF TO zcl_abappgp_integer,
@@ -983,6 +1088,34 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
       lv_offset = lv_offset - gv_length.
     ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD split_at.
+
+    DATA: lv_split TYPE ty_split.
+
+
+    CREATE OBJECT eo_low.
+    CLEAR eo_low->mt_split.
+
+    CREATE OBJECT eo_high.
+    CLEAR eo_high->mt_split.
+
+    LOOP AT io_integer->mt_split INTO lv_split.
+      IF sy-tabix <= iv_at.
+        APPEND lv_split TO eo_low->mt_split.
+      ELSE.
+        APPEND lv_split TO eo_high->mt_split.
+      ENDIF.
+    ENDLOOP.
+
+    ASSERT lines( eo_low->mt_split ) > 0.
+
+    IF lines( eo_high->mt_split ) = 0.
+      APPEND 0 TO eo_high->mt_split.
+    ENDIF.
 
   ENDMETHOD.
 
