@@ -390,6 +390,9 @@ CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       divide9 FOR TESTING,
       divide10 FOR TESTING,
       divide11 FOR TESTING,
+      divide12 FOR TESTING,
+      divide13 FOR TESTING,
+      divide14 FOR TESTING,
       divide_generic FOR TESTING.
 
     METHODS:
@@ -566,6 +569,48 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD divide12.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '91'
+                   iv_op2 = '10' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '9' ).
+
+  ENDMETHOD.
+
+  METHOD divide13.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '1000'
+                   iv_op2 = '1000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '1' ).
+
+  ENDMETHOD.
+
+  METHOD divide14.
+
+    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_res = test( iv_op1 = '1000000'
+                   iv_op2 = '1000' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_res->to_string( )
+      exp = '1000' ).
+
+  ENDMETHOD.
+
   METHOD divide_generic.
 
     DATA: lo_res TYPE REF TO zcl_abappgp_integer,
@@ -586,7 +631,8 @@ CLASS ltcl_divide IMPLEMENTATION.
 
         cl_abap_unit_assert=>assert_equals(
           act = lo_res->to_string( )
-          exp = lv_expected ).
+          exp = lv_expected
+          msg = |{ lv_op1 } DIV { lv_op2 }| ).
 
       ENDDO.
     ENDDO.

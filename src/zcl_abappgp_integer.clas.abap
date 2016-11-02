@@ -6,12 +6,25 @@ class ZCL_ABAPPGP_INTEGER definition
 
 public section.
 
+  class-methods FROM_HIGH_LENGTH
+    importing
+      !IV_COUNT type I
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods FROM_LOW_LENGTH
+    importing
+      !IV_COUNT type I
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_STRING
     importing
       !IV_INTEGER type STRING
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods GET_STRING_LENGTH
+    returning
+      value(RV_LENGTH) type I .
   methods ADD
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -239,7 +252,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD divide.
 
-    DATA: lv_iterations TYPE i,
+    DATA: lv_m TYPE i,
+          lv_n TYPE i,
+          lv_iterations TYPE i,
           lo_tmp        TYPE REF TO zcl_abappgp_integer,
           lo_middle     TYPE REF TO zcl_abappgp_integer,
           lo_guess      TYPE REF TO zcl_abappgp_integer,
@@ -262,16 +277,22 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    CREATE OBJECT lo_tmp
-      EXPORTING
-        iv_integer = 0.
-
-    CREATE OBJECT lo_guess
-      EXPORTING
-        iv_integer = 0.
-
-    CREATE OBJECT lo_low_guess.
-    lo_high_guess = clone( ).
+* guesstimate result size
+    lv_m = get_string_length( ).
+    lv_n = io_integer->get_string_length( ).
+    IF lv_m = lv_n.
+      CREATE OBJECT lo_low_guess
+        EXPORTING
+          iv_integer = 1.
+      lo_high_guess = clone( ).
+    ELSE.
+      lv_m = lv_m - lv_n.
+      lo_low_guess = from_low_length( lv_m ).
+      lo_high_guess = from_high_length( lv_m + 1 ).
+      IF lo_high_guess->is_ge( me ) = abap_true.
+        lo_high_guess = clone( ).
+      ENDIF.
+    ENDIF.
 
     DO.
 *      WRITE: / .
@@ -349,6 +370,40 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD FROM_HIGH_LENGTH.
+
+    DATA: lv_str TYPE string.
+
+
+    ASSERT iv_count >= 1.
+
+    DO iv_count TIMES.
+      CONCATENATE '9' lv_str INTO lv_str.
+    ENDDO.
+
+    ro_integer = from_string( lv_str ).
+
+  ENDMETHOD.
+
+
+  METHOD from_low_length.
+
+    DATA: lv_str TYPE string.
+
+
+    ASSERT iv_count >= 1.
+
+    lv_str = '1'.
+
+    DO iv_count - 1 TIMES.
+      CONCATENATE lv_str '0' INTO lv_str.
+    ENDDO.
+
+    ro_integer = from_string( lv_str ).
+
+  ENDMETHOD.
+
+
   METHOD from_string.
 
     ASSERT iv_integer CO '-1234567890'.
@@ -358,6 +413,14 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     CREATE OBJECT ro_integer.
     ro_integer->split( iv_integer ).
+
+  ENDMETHOD.
+
+
+  METHOD get_string_length.
+
+* todo, this can be optimized
+    rv_length = strlen( to_string( ) ).
 
   ENDMETHOD.
 
@@ -421,29 +484,34 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD is_gt.
 
     DATA: lv_index TYPE i,
+          lv_lines TYPE i,
           lv_op1   TYPE ty_split,
           lv_op2   TYPE ty_split.
 
 
-    IF lines( mt_split ) > lines( io_integer->mt_split )
-        OR mv_negative = abap_false AND io_integer->mv_negative = abap_true.
+    lv_lines = lines( mt_split ).
+
+    IF lv_lines > lines( io_integer->mt_split )
+        OR mv_negative = abap_false
+        AND io_integer->mv_negative = abap_true.
       rv_bool = abap_true.
       RETURN.
-    ELSEIF lines( mt_split ) < lines( io_integer->mt_split )
-        OR mv_negative = abap_true AND io_integer->mv_negative = abap_false.
+    ELSEIF lv_lines < lines( io_integer->mt_split )
+        OR mv_negative = abap_true
+        AND io_integer->mv_negative = abap_false.
       rv_bool = abap_false.
       RETURN.
     ENDIF.
 
     rv_bool = abap_false.
 
-    DO lines( mt_split ) TIMES.
-      lv_index = lines( mt_split ) - sy-index + 1.
+    DO lv_lines TIMES.
+      lv_index = lv_lines - sy-index + 1.
 
       READ TABLE mt_split INDEX lv_index INTO lv_op1.
-      ASSERT sy-subrc = 0.
+*      ASSERT sy-subrc = 0.
       READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2.
-      ASSERT sy-subrc = 0.
+*      ASSERT sy-subrc = 0.
 
       IF lv_op1 > lv_op2.
         rv_bool = abap_true.
