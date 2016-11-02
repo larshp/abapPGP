@@ -323,10 +323,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lo_high_guess = clone( ).
 
     DO.
+*      WRITE: / .
       lv_iterations = lv_iterations + 1.
 
       lo_middle = lo_high_guess->clone( )->subtract( lo_low_guess )->divide_by_2( ).
-*      WRITE: / 'middle', lo_middle->get( ).
+*      WRITE: / 'middle', lo_middle->to_string( ).
 
       IF lo_middle->is_zero( ) = abap_true.
         lo_tmp = lo_high_guess->clone( )->multiply( io_integer ).
@@ -346,7 +347,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_guess = lo_high_guess->clone( )->subtract( lo_middle ).
       lo_tmp = lo_guess->clone( )->multiply( io_integer ).
       IF lo_tmp->is_ge( me ) = abap_true.
-*        WRITE: / 'move high to', lo_guess->get( ).
+*        WRITE: / 'tmp', lo_tmp->to_string( ), 'guess', lo_guess->to_string( ).
+*        WRITE: / 'move high to', lo_guess->to_string( ).
         lo_high_guess = lo_guess.
         CONTINUE.
       ENDIF.
@@ -355,7 +357,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_guess = lo_low_guess->clone( )->add( lo_middle ).
       lo_tmp = lo_guess->clone( )->multiply( io_integer ).
       IF lo_tmp->is_le( me ) = abap_true.
-*        WRITE: / 'move low to', lo_guess->get( ).
+*        WRITE: / 'move low to', lo_guess->to_string( ).
         lo_low_guess = lo_guess.
       ENDIF.
 
@@ -411,6 +413,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_eq.
 
+    DATA: lv_index TYPE i.
+
     FIELD-SYMBOLS: <lv_op1> LIKE LINE OF mt_split,
                    <lv_op2> LIKE LINE OF mt_split.
 
@@ -422,9 +426,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     DO lines( mt_split ) TIMES.
-      READ TABLE mt_split INDEX 1 ASSIGNING <lv_op1>.
+      lv_index = sy-index.
+
+      READ TABLE mt_split INDEX lv_index ASSIGNING <lv_op1>.
       ASSERT sy-subrc = 0.
-      READ TABLE io_integer->mt_split INDEX 1 ASSIGNING <lv_op2>.
+      READ TABLE io_integer->mt_split INDEX lv_index ASSIGNING <lv_op2>.
       ASSERT sy-subrc = 0.
 
       IF <lv_op1> <> <lv_op2>.

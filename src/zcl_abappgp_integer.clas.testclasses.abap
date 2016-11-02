@@ -595,6 +595,109 @@ CLASS ltcl_divide IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltcl_eq DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      eq1 FOR TESTING,
+      eq2 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1         TYPE string
+                     iv_op2         TYPE string
+           RETURNING VALUE(rv_bool) TYPE abap_bool.
+
+ENDCLASS.
+
+CLASS ltcl_eq IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer,
+          lo_var2 TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
+
+    rv_bool = lo_var1->is_eq( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD eq1.
+
+    DATA: lv_eq TYPE bool.
+
+
+    lv_eq = test( iv_op1 = '7382888'
+                  iv_op2 = '4152888' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_eq
+      exp = abap_false ).
+
+  ENDMETHOD.
+
+  METHOD eq2.
+
+    DATA: lv_eq TYPE bool.
+
+
+    lv_eq = test( iv_op1 = '1112888'
+                  iv_op2 = '1112888' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_eq
+      exp = abap_true ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltcl_ge DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      ge1 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1         TYPE string
+                     iv_op2         TYPE string
+           RETURNING VALUE(rv_bool) TYPE abap_bool.
+
+ENDCLASS.
+
+CLASS ltcl_ge IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer,
+          lo_var2 TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
+
+    rv_bool = lo_var1->is_ge( lo_var2 ).
+
+  ENDMETHOD.
+
+  METHOD ge1.
+
+    DATA: lv_ge TYPE bool.
+
+
+    lv_ge = test( iv_op1 = '7382888'
+                  iv_op2 = '4152888' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_ge
+      exp = abap_true ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
@@ -606,7 +709,8 @@ CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       gt5 FOR TESTING,
       gt6 FOR TESTING,
       gt7 FOR TESTING,
-      gt8 FOR TESTING.
+      gt8 FOR TESTING,
+      gt9 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1         TYPE string
@@ -739,6 +843,20 @@ CLASS ltcl_gt IMPLEMENTATION.
     cl_abap_unit_assert=>assert_equals(
       act = lv_gt
       exp = abap_false ).
+
+  ENDMETHOD.
+
+  METHOD gt9.
+
+    DATA: lv_gt TYPE bool.
+
+
+    lv_gt = test( iv_op1 = '7382888'
+                  iv_op2 = '4152888' ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_gt
+      exp = abap_true ).
 
   ENDMETHOD.
 

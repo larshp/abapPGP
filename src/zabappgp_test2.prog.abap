@@ -69,3 +69,14 @@ FORM run3.
   WRITE: / 'Done'.
 
 ENDFORM.
+
+FORM run4.
+
+  DATA(ro_int) = zcl_abappgp_integer=>from_string( '7382888' ).
+  DATA(lo_var2) = zcl_abappgp_integer=>from_string( '9' ).
+
+  ro_int = ro_int->divide( lo_var2 ).
+
+  WRITE: / ro_int->to_string( ).
+
+ENDFORM.
