@@ -10,8 +10,8 @@ CLASS ltcl_random IMPLEMENTATION.
 
   METHOD random.
 
-    CONSTANTS: lc_low  TYPE i VALUE 2,
-               lc_high TYPE i VALUE 150.
+    CONSTANTS: lc_low  TYPE i VALUE 1111,
+               lc_high TYPE i VALUE 9999.
 
     DATA: lo_low    TYPE REF TO zcl_abappgp_integer,
           lo_high   TYPE REF TO zcl_abappgp_integer,

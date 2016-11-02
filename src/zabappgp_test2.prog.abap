@@ -42,7 +42,7 @@ FORM run3.
     io_high = zcl_abappgp_integer=>from_string( '9999' ) ).
 
 
-  DATA: lv_total TYPE i VALUE 1000.
+  DATA: lv_total TYPE i VALUE 5000.
   DO lv_total TIMES.
     cl_progress_indicator=>progress_indicate(
       i_text               = 'Running'

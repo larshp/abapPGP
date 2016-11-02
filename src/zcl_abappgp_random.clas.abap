@@ -110,8 +110,8 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
     WHILE strlen( lv_str ) <= iv_digits.
       lv_tmp = cl_abap_random=>seed( ).
-      lv_tmp = lv_tmp+1. " first digit cannot be larger than 2
-      CONCATENATE lv_tmp lv_str INTO lv_str.
+* first digit cannot be larger than 2
+      CONCATENATE lv_tmp+1 lv_str INTO lv_str.
     ENDWHILE.
 
     rv_random = lv_str(iv_digits).
