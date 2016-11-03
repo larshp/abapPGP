@@ -49,6 +49,11 @@ public section.
   methods DIVIDE_BY_2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods DIVIDE_BY_INT
+    importing
+      !IV_INTEGER type I
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods IS_EQ
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -294,6 +299,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
+    IF lines( io_integer->mt_split ) = 1.
+      ro_result = divide_by_int( io_integer->mt_split[ 1 ] ).
+      RETURN.
+    ENDIF.
+
 * guesstimate result size
     lv_m = get_string_length( ).
     lv_n = io_integer->get_string_length( ).
@@ -381,6 +391,43 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     IF lv_value = 0 AND lines( mt_split ) > 1.
       DELETE mt_split INDEX lines( mt_split ).
     ENDIF.
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD divide_by_int.
+
+    DATA: lv_index TYPE i,
+          lv_value TYPE ty_split,
+          lv_carry TYPE ty_split.
+
+
+    ASSERT iv_integer > 0.
+    ASSERT iv_integer < gv_max.
+
+    ro_result = me.
+
+    IF iv_integer = 1.
+      RETURN.
+    ENDIF.
+
+    lv_index = lines( mt_split ) + 1.
+
+    DO lines( mt_split ) TIMES.
+      lv_index = lv_index - 1.
+
+      READ TABLE mt_split INDEX lv_index INTO lv_value.
+
+      lv_value = lv_value + lv_carry * gv_max.
+      lv_carry = lv_value MOD iv_integer.
+      lv_value = lv_value DIV iv_integer.
+
+      MODIFY mt_split INDEX lv_index FROM lv_value.
+    ENDDO.
+
+    remove_leading_zeros( ).
 
     ro_result = me.
 

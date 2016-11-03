@@ -30,7 +30,7 @@ FORM test_prime USING iv_prime TYPE string.
 
   GET TIME STAMP FIELD lv_t1.
   lv_bool = zcl_abappgp_prime=>check(
-    io_integer = lo_integer
+    io_integer       = lo_integer
     iv_show_progress = abap_true ).
   WRITE: / 'result', lv_bool.
   ASSERT lv_bool = abap_true.
