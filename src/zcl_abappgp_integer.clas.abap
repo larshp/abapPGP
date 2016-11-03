@@ -6,6 +6,7 @@ class ZCL_ABAPPGP_INTEGER definition
 
 public section.
 
+  class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_HIGH_LENGTH
     importing
       !IV_COUNT type I
@@ -16,20 +17,11 @@ public section.
       !IV_COUNT type I
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods KARATSUBA
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods CLASS_CONSTRUCTOR .
   class-methods FROM_STRING
     importing
       !IV_INTEGER type STRING
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_STRING_LENGTH
-    returning
-      value(RV_LENGTH) type I .
   methods ADD
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -46,6 +38,11 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods DIVIDE_BY_10
+    importing
+      !IV_TIMES type I
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
   methods DIVIDE_BY_2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
@@ -54,6 +51,14 @@ public section.
       !IV_INTEGER type I
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods DIVIDE_KNUTH
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods GET_STRING_LENGTH
+    returning
+      value(RV_LENGTH) type I .
   methods IS_EQ
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -135,6 +140,16 @@ public section.
       !IV_TIMES type I
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MULTIPLY_INT
+    importing
+      !IV_INTEGER type I
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods MULTIPLY_KARATSUBA
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   methods POWER
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
@@ -365,6 +380,36 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD divide_by_10.
+
+    DATA: lv_insert TYPE i,
+          lv_int    TYPE i.
+
+
+    DO iv_times DIV gv_length TIMES.
+      DELETE mt_split INDEX 1.
+    ENDDO.
+
+    ASSERT lines( mt_split ) > 0.
+
+    CASE iv_times MOD gv_length.
+      WHEN 3.
+        lv_int = 1000.
+      WHEN 2.
+        lv_int = 100.
+      WHEN 1.
+        lv_int = 10.
+    ENDCASE.
+
+    IF lv_int > 0.
+      divide_by_int( lv_int ).
+    ENDIF.
+
+    ro_result = me.
+
+  ENDMETHOD.
+
+
   METHOD divide_by_2.
 
     DATA: lv_index TYPE i,
@@ -429,6 +474,140 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     remove_leading_zeros( ).
 
+    ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD divide_knuth.
+
+    DATA: lv_v1    TYPE ty_split,
+          lv_j     TYPE i,
+          lv_b     TYPE i,
+          lv_shift TYPE i,
+          lv_u_j   TYPE ty_split,
+          lv_v_1   TYPE ty_split,
+          lv_v_2   TYPE ty_split,
+          lv_q_hat TYPE ty_split,
+          lv_u_j_1 TYPE ty_split,
+          lv_u_j_2 TYPE ty_split,
+          lo_tmp   TYPE REF TO zcl_abappgp_integer,
+          lo_v     TYPE REF TO zcl_abappgp_integer,
+          lo_u     TYPE REF TO zcl_abappgp_integer,
+          lo_d     TYPE REF TO zcl_abappgp_integer,
+          lo_q     TYPE REF TO zcl_abappgp_integer.
+
+
+    ASSERT is_negative( ) = abap_false.
+    ASSERT io_integer->is_negative( ) = abap_false.
+    ASSERT io_integer->is_zero( ) = abap_false.
+
+    ro_result = me.
+
+    IF io_integer->is_one( ) = abap_true.
+      RETURN.
+    ELSEIF io_integer->is_gt( me ) = abap_true.
+      split( '0' ).
+      RETURN.
+    ELSEIF io_integer->is_eq( me ) = abap_true.
+      split( '1' ).
+      RETURN.
+    ENDIF.
+
+    IF lines( io_integer->mt_split ) = 1.
+      ro_result = divide_by_int( io_integer->mt_split[ 1 ] ).
+      RETURN.
+    ENDIF.
+
+    CREATE OBJECT lo_q
+      EXPORTING
+        iv_integer = 0.
+
+    lv_b = gv_max.
+
+*    WRITE: / 'Original':.
+*    WRITE: / to_string( ), 'DIV', io_integer->to_string( ).
+
+    lv_shift = lines( mt_split ) - lines( io_integer->mt_split ) - 1.
+
+* D1 - Normalize
+    READ TABLE io_integer->mt_split INDEX lines( io_integer->mt_split ) INTO lv_v1.
+    CREATE OBJECT lo_d
+      EXPORTING
+        iv_integer = lv_b DIV ( lv_v1 + 1 ).
+*    WRITE: / 'd:', lo_d->to_string( ).
+
+    IF lo_d->is_one( ) = abap_false.
+      lv_shift = lv_shift + 1.
+    ENDIF.
+
+    lo_u = multiply( lo_d ).
+    lo_v = io_integer->clone( )->multiply( lo_d ).
+*    WRITE: / 'After normalization:'.
+*    WRITE: / to_string( ), 'DIV', lo_v->to_string( ).
+
+* D2 - Initialize j
+    lv_j = lines( lo_u->mt_split ).
+
+    WHILE lv_j > 2.
+
+* D3 - Calculate q_hat
+      READ TABLE lo_u->mt_split INDEX lv_j INTO lv_u_j.
+      ASSERT sy-subrc = 0.
+      READ TABLE lo_u->mt_split INDEX lv_j - 1 INTO lv_u_j_1.
+      ASSERT sy-subrc = 0.
+      READ TABLE lo_u->mt_split INDEX lv_j - 2 INTO lv_u_j_2.
+      ASSERT sy-subrc = 0.
+      READ TABLE lo_v->mt_split INDEX lines( lo_v->mt_split ) INTO lv_v_1.
+      ASSERT sy-subrc = 0.
+      READ TABLE lo_v->mt_split INDEX lines( lo_v->mt_split ) - 1 INTO lv_v_2.
+      ASSERT sy-subrc = 0.
+
+*      WRITE: / 'lv_u_j', lv_u_j.
+*      WRITE: / 'lv_u_j_1', lv_u_j_1.
+*      WRITE: / 'lv_v_1', lv_v_1.
+
+      IF lv_u_j = lv_v_1.
+        lv_q_hat = lv_b - 1.
+      ELSE.
+        lv_q_hat = ( lv_u_j * lv_b + lv_u_j_1 ) DIV lv_v_1.
+
+        WHILE lv_v_2 * lv_q_hat > ( lv_u_j * lv_b + lv_u_j_1 - lv_q_hat * lv_v_1 ) * lv_b + lv_u_j_2.
+*          WRITE: / 'adjust q_hat - 1'.
+          lv_q_hat = lv_q_hat - 1.
+        ENDWHILE.
+
+      ENDIF.
+*      WRITE: / 'q_hat:', lv_q_hat.
+
+* D4 - Multiply and subtract
+      lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
+      IF lo_u->is_negative( ) = abap_true.
+*        WRITE: / 'negative! todo'.
+        BREAK-POINT.
+      ENDIF.
+*      WRITE: / 'D4, u:', lo_u->to_string( ).
+*      WRITE: /.
+
+* D5 - Test remainder
+      CREATE OBJECT lo_tmp
+        EXPORTING
+          iv_integer = lv_q_hat.
+      lo_q = lo_q->add( lo_tmp->multiply_10( lv_shift * 4 ) ).
+
+      lv_shift = lv_shift - 1.
+
+* D6 - Add back
+* todo
+
+* D7 - Loop on j
+      lv_j = lv_j - 1.
+    ENDWHILE.
+
+* D8 - Unnormalize
+* todo, also return remainder?
+
+    mt_split = lo_q->mt_split.
     ro_result = me.
 
   ENDMETHOD.
@@ -679,61 +858,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     READ TABLE mt_split INDEX 1 INTO lv_value.
 
     rv_bool = boolc( lv_value = 0 ).
-
-  ENDMETHOD.
-
-
-  METHOD karatsuba.
-
-* https://en.wikipedia.org/wiki/Karatsuba_algorithm
-
-    DATA: lv_m     TYPE i,
-          lo_low1  TYPE REF TO zcl_abappgp_integer,
-          lo_low2  TYPE REF TO zcl_abappgp_integer,
-          lo_high1 TYPE REF TO zcl_abappgp_integer,
-          lo_high2 TYPE REF TO zcl_abappgp_integer,
-          lo_z0    TYPE REF TO zcl_abappgp_integer,
-          lo_z1    TYPE REF TO zcl_abappgp_integer,
-          lo_z2    TYPE REF TO zcl_abappgp_integer.
-
-
-    ASSERT io_integer->is_positive( ) = abap_true.
-    ASSERT is_positive( ) = abap_true.
-
-    IF lines( mt_split ) < 2 OR lines( io_integer->mt_split ) < 2.
-      ro_integer = multiply( io_integer ).
-      RETURN.
-    ENDIF.
-
-    lv_m = nmax( val1 = lines( mt_split )
-                 val2 = lines( io_integer->mt_split ) ).
-
-    lv_m = lv_m DIV 2.
-
-    split_at( EXPORTING io_integer = me
-                        iv_at      = lv_m
-              IMPORTING eo_low     = lo_low1
-                        eo_high    = lo_high1 ).
-
-    split_at( EXPORTING io_integer = io_integer
-                        iv_at      = lv_m
-              IMPORTING eo_low     = lo_low2
-                        eo_high    = lo_high2 ).
-
-* z0 = karatsuba(low1,low2)
-    lo_z0 = lo_low1->clone( )->karatsuba( lo_low2 ).
-* z1 = karatsuba((low1+high1),(low2+high2))
-    lo_z1 = lo_low1->add( lo_high1 )->karatsuba( lo_low2->clone( )->add( lo_high2 ) ).
-* z2 = karatsuba(high1,high2)
-    lo_z2 = lo_high1->karatsuba( lo_high2 ).
-
-* return (z2*10^(2*m2))+((z1-z2-z0)*10^(m2))+(z0)
-    mt_split = lo_z2->mt_split.
-    multiply_10( 2 * lv_m * 4 ).
-    add( lo_z1->subtract( lo_z2 )->subtract( lo_z0 )->multiply_10( lv_m * 4 ) ).
-    add( lo_z0 ).
-
-    ro_integer = me.
 
   ENDMETHOD.
 
@@ -1009,11 +1133,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   METHOD multiply_10.
 
     DATA: lv_insert TYPE i,
-          lv_int TYPE i,
-          lo_tens TYPE REF TO zcl_abappgp_integer.
+          lv_int    TYPE i.
 
 
-    CASE iv_times MOD 4.
+    CASE iv_times MOD gv_length.
       WHEN 3.
         lv_int = 1000.
       WHEN 2.
@@ -1023,18 +1146,83 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDCASE.
 
     IF lv_int > 0.
-      CREATE OBJECT lo_tens
-        EXPORTING
-          iv_integer = lv_int.
-
-      multiply( lo_tens ).
+      multiply_int( lv_int ).
     ENDIF.
 
-    DO iv_times DIV 4 TIMES.
+    DO iv_times DIV gv_length TIMES.
       INSERT 0 INTO mt_split INDEX 1.
     ENDDO.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD multiply_int.
+
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+
+
+    CREATE OBJECT lo_integer
+      EXPORTING
+        iv_integer = iv_integer.
+
+    ro_result = multiply( lo_integer ).
+
+  ENDMETHOD.
+
+
+  METHOD multiply_karatsuba.
+
+* https://en.wikipedia.org/wiki/Karatsuba_algorithm
+
+    DATA: lv_m     TYPE i,
+          lo_low1  TYPE REF TO zcl_abappgp_integer,
+          lo_low2  TYPE REF TO zcl_abappgp_integer,
+          lo_high1 TYPE REF TO zcl_abappgp_integer,
+          lo_high2 TYPE REF TO zcl_abappgp_integer,
+          lo_z0    TYPE REF TO zcl_abappgp_integer,
+          lo_z1    TYPE REF TO zcl_abappgp_integer,
+          lo_z2    TYPE REF TO zcl_abappgp_integer.
+
+
+    ASSERT io_integer->is_positive( ) = abap_true.
+    ASSERT is_positive( ) = abap_true.
+
+    IF lines( mt_split ) < 2 OR lines( io_integer->mt_split ) < 2.
+      ro_integer = multiply( io_integer ).
+      RETURN.
+    ENDIF.
+
+    lv_m = nmax( val1 = lines( mt_split )
+                 val2 = lines( io_integer->mt_split ) ).
+
+    lv_m = lv_m DIV 2.
+
+    split_at( EXPORTING io_integer = me
+                        iv_at      = lv_m
+              IMPORTING eo_low     = lo_low1
+                        eo_high    = lo_high1 ).
+
+    split_at( EXPORTING io_integer = io_integer
+                        iv_at      = lv_m
+              IMPORTING eo_low     = lo_low2
+                        eo_high    = lo_high2 ).
+
+* z0 = karatsuba(low1,low2)
+    lo_z0 = lo_low1->clone( )->multiply_karatsuba( lo_low2 ).
+* z1 = karatsuba((low1+high1),(low2+high2))
+    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba( lo_low2->clone( )->add( lo_high2 ) ).
+* z2 = karatsuba(high1,high2)
+    lo_z2 = lo_high1->multiply_karatsuba( lo_high2 ).
+
+* return (z2*10^(2*m2))+((z1-z2-z0)*10^(m2))+(z0)
+    mt_split = lo_z2->mt_split.
+    multiply_10( 2 * lv_m * 4 ).
+    add( lo_z1->subtract( lo_z2 )->subtract( lo_z0 )->multiply_10( lv_m * 4 ) ).
+    add( lo_z0 ).
+
+    ro_integer = me.
 
   ENDMETHOD.
 

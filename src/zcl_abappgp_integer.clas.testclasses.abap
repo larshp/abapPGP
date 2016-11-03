@@ -1076,7 +1076,59 @@ CLASS ltcl_multiply_10 IMPLEMENTATION.
 
 ENDCLASS.
 
-CLASS ltcl_karatsuba DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+CLASS ltcl_divide_knuth DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      knuth1 FOR TESTING,
+      knuth2 FOR TESTING,
+      knuth3 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1 TYPE string
+                     iv_op2 TYPE string
+                     iv_exp TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_divide_knuth IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer,
+          lo_var2 TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
+    lo_var1->divide_knuth( lo_var2 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_var1->to_string( )
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD knuth1.
+    test( iv_op1 = '333344445555'
+          iv_op2 = '66667777'
+          iv_exp = '5000' ).
+  ENDMETHOD.
+
+  METHOD knuth2.
+    test( iv_op1 = '333344445555'
+          iv_op2 = '11117777'
+          iv_exp = '29983' ).
+  ENDMETHOD.
+
+  METHOD knuth3.
+    test( iv_op1 = '111111111111'
+          iv_op2 = '99999999'
+          iv_exp = '1111' ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltcl_multiply_karatsuba DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
     METHODS:
@@ -1096,7 +1148,7 @@ CLASS ltcl_karatsuba DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS F
 
 ENDCLASS.
 
-CLASS ltcl_karatsuba IMPLEMENTATION.
+CLASS ltcl_multiply_karatsuba IMPLEMENTATION.
 
   METHOD test.
 
@@ -1106,7 +1158,7 @@ CLASS ltcl_karatsuba IMPLEMENTATION.
 
     lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
     lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
-    lo_var1->karatsuba( lo_var2 ).
+    lo_var1->multiply_karatsuba( lo_var2 ).
     cl_abap_unit_assert=>assert_equals(
       act = lo_var1->to_string( )
       exp = iv_exp ).

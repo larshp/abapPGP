@@ -1,17 +1,14 @@
 REPORT zabappgp_test.
 * https://primes.utm.edu/lists/small/small.html
 
-
 START-OF-SELECTION.
-  GET TIME.
   PERFORM run.
-
 
 FORM test_prime USING iv_prime TYPE string.
 
-  DATA: lv_t1 TYPE timestamp,
-        lv_t2 TYPE timestamp,
-        lv_secs TYPE i,
+  DATA: lv_t1      TYPE timestamp,
+        lv_t2      TYPE timestamp,
+        lv_secs    TYPE i,
         lv_bool    TYPE abap_bool,
         lo_binary  TYPE REF TO zcl_abappgp_binary_integer,
         lv_length  TYPE i,
@@ -49,11 +46,12 @@ ENDFORM.
 
 FORM run.
 
-  PERFORM test_prime USING '44449'.
-  PERFORM test_prime USING '5915587277'.
-  PERFORM test_prime USING '48112959837082048697'.
-  PERFORM test_prime USING '671998030559713968361666935769'.
+*  PERFORM test_prime USING '44449'.
+*  PERFORM test_prime USING '5915587277'.
+*  PERFORM test_prime USING '48112959837082048697'.
+*  PERFORM test_prime USING '671998030559713968361666935769'.
   PERFORM test_prime USING '2425967623052370772757633156976982469681'. " SE30
+  return.
   PERFORM test_prime USING '22953686867719691230002707821868552601124472329079'.
   PERFORM test_prime USING '622288097498926496141095869268883999563096063592498055290461'.
   PERFORM test_prime USING '4669523849932130508876392554713407521319117239637943224980015676156491'.
