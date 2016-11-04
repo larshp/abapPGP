@@ -485,6 +485,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_j     TYPE i,
           lv_b     TYPE i,
           lv_shift TYPE i,
+          lv_m     TYPE i,
           lv_u_j   TYPE ty_split,
           lv_v_1   TYPE ty_split,
           lv_v_2   TYPE ty_split,
@@ -549,7 +550,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * D2 - Initialize j
     lv_j = lines( lo_u->mt_split ).
 
-    WHILE lv_j > 2.
+    lv_m = lines( lo_u->mt_split ) - lines( lo_v->mt_split ).
+    IF lv_m = 0.
+      lv_m = 1.
+    ENDIF.
+
+    DO lv_m TIMES.
 
 * D3 - Calculate q_hat
       READ TABLE lo_u->mt_split INDEX lv_j INTO lv_u_j.
@@ -584,15 +590,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
       IF lo_u->is_negative( ) = abap_true.
 *        WRITE: / 'negative! todo'.
-        BREAK-POINT.
+*        BREAK-POINT.
       ENDIF.
 *      WRITE: / 'D4, u:', lo_u->to_string( ).
 *      WRITE: /.
 
 * D5 - Test remainder
-      CREATE OBJECT lo_tmp
-        EXPORTING
-          iv_integer = lv_q_hat.
+      lo_tmp = zcl_abappgp_integer=>from_string( |{ lv_q_hat }| ).
       lo_q = lo_q->add( lo_tmp->multiply_10( lv_shift * 4 ) ).
 
       lv_shift = lv_shift - 1.
@@ -602,7 +606,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
 * D7 - Loop on j
       lv_j = lv_j - 1.
-    ENDWHILE.
+    ENDDO.
 
 * D8 - Unnormalize
 * todo, also return remainder?
@@ -1136,6 +1140,15 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_int    TYPE i.
 
 
+    ro_result = me.
+
+    IF iv_times = 0.
+      RETURN.
+    ELSEIF iv_times < 0.
+      ro_result = divide_by_10( abs( iv_times ) ).
+      RETURN.
+    ENDIF.
+
     CASE iv_times MOD gv_length.
       WHEN 3.
         lv_int = 1000.
@@ -1153,21 +1166,21 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       INSERT 0 INTO mt_split INDEX 1.
     ENDDO.
 
-    ro_result = me.
-
   ENDMETHOD.
 
 
   METHOD multiply_int.
 
-    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
+          lv_str     TYPE string.
 
 
-    CREATE OBJECT lo_integer
-      EXPORTING
-        iv_integer = iv_integer.
+    ASSERT iv_integer >= 0.
 
-    ro_result = multiply( lo_integer ).
+    lv_str = iv_integer.
+    CONDENSE lv_str.
+
+    ro_result = multiply( zcl_abappgp_integer=>from_string( lv_str ) ).
 
   ENDMETHOD.
 
