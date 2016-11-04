@@ -1093,7 +1093,8 @@ CLASS ltcl_divide_knuth DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLES
       knuth11 FOR TESTING,
       knuth12 FOR TESTING,
       knuth13 FOR TESTING,
-      knuth14 FOR TESTING.
+      knuth14 FOR TESTING,
+      knuth15 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_op1 TYPE string
@@ -1198,10 +1199,15 @@ CLASS ltcl_divide_knuth IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD knuth14.
-* todo
-*    test( iv_op1 = '62555604'
-*          iv_op2 = '57421151'
-*          iv_exp = '1' ).
+    test( iv_op1 = '62555604'
+          iv_op2 = '57421151'
+          iv_exp = '1' ).
+  ENDMETHOD.
+
+  METHOD knuth15.
+    test( iv_op1 = '58567883112735'
+          iv_op2 = '33659729'
+          iv_exp = '1739998' ).
   ENDMETHOD.
 
 ENDCLASS.

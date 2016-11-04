@@ -11,8 +11,8 @@ START-OF-SELECTION.
 
 FORM run1.
 
-  DATA(lo_u) = zcl_abappgp_integer=>from_string( '5060488832657916' ).
-  DATA(lo_v) = zcl_abappgp_integer=>from_string( '3804878826' ).
+  DATA(lo_u) = zcl_abappgp_integer=>from_string( '58567883112735' ).
+  DATA(lo_v) = zcl_abappgp_integer=>from_string( '33659729' ).
 
   lo_u = lo_u->divide_knuth( lo_v ).
   WRITE: / 'result:', lo_u->to_string( ).

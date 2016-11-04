@@ -289,8 +289,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD divide.
 
-    DATA: lv_m TYPE i,
-          lv_n TYPE i,
+* using binary search
+
+    DATA: lv_m          TYPE i,
+          lv_n          TYPE i,
           lv_iterations TYPE i,
           lo_tmp        TYPE REF TO zcl_abappgp_integer,
           lo_middle     TYPE REF TO zcl_abappgp_integer,
@@ -389,6 +391,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DO iv_times DIV gv_length TIMES.
       DELETE mt_split INDEX 1.
     ENDDO.
+
+*    IF lines( mt_split ) = 0.
+*      BREAK-POINT.
+*    ENDIF.
 
     ASSERT lines( mt_split ) > 0.
 
@@ -514,9 +520,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ELSEIF io_integer->is_eq( me ) = abap_true.
       split( '1' ).
       RETURN.
-    ENDIF.
-
-    IF lines( io_integer->mt_split ) = 1.
+    ELSEIF lines( io_integer->mt_split ) = 1.
       ro_result = divide_by_int( io_integer->mt_split[ 1 ] ).
       RETURN.
     ENDIF.
@@ -562,8 +566,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 *      ASSERT sy-subrc = 0.
       READ TABLE lo_u->mt_split INDEX lv_j - 1 INTO lv_u_j_1.
       ASSERT sy-subrc = 0.
+      CLEAR lv_u_j_2.
       READ TABLE lo_u->mt_split INDEX lv_j - 2 INTO lv_u_j_2.
-      ASSERT sy-subrc = 0.
+*      ASSERT sy-subrc = 0.
       READ TABLE lo_v->mt_split INDEX lines( lo_v->mt_split ) INTO lv_v_1.
       ASSERT sy-subrc = 0.
       READ TABLE lo_v->mt_split INDEX lines( lo_v->mt_split ) - 1 INTO lv_v_2.
@@ -577,13 +582,14 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
         lv_q_hat = lv_b.
       ELSE.
         lv_q_hat = ( lv_u_j * lv_b + lv_u_j_1 ) DIV lv_v_1.
-
-        WHILE lv_v_2 * lv_q_hat > ( lv_u_j * lv_b + lv_u_j_1 - lv_q_hat * lv_v_1 ) * lv_b + lv_u_j_2.
-*          WRITE: / 'adjust q_hat - 1'.
-          lv_q_hat = lv_q_hat - 1.
-        ENDWHILE.
-
       ENDIF.
+
+      WHILE lv_v_2 * lv_q_hat > ( lv_u_j * lv_b + lv_u_j_1 - lv_q_hat * lv_v_1 ) * lv_b + lv_u_j_2.
+*          WRITE: / 'adjust q_hat - 1'.
+        lv_q_hat = lv_q_hat - 1.
+      ENDWHILE.
+
+*      ENDIF.
 *      WRITE: / 'q_hat:', lv_q_hat.
 
 * D4 - Multiply and subtract

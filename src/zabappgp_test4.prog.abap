@@ -5,7 +5,7 @@ START-OF-SELECTION.
 
 FORM run.
 
-  DATA: lv_times TYPE i VALUE 50000,
+  DATA: lv_times TYPE i VALUE 100000,
         lv_str1  TYPE string,
         lv_str2  TYPE string.
 
