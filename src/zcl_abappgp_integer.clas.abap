@@ -492,10 +492,11 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_q_hat TYPE ty_split,
           lv_u_j_1 TYPE ty_split,
           lv_u_j_2 TYPE ty_split,
+          lv_negative TYPE abap_bool,
           lo_tmp   TYPE REF TO zcl_abappgp_integer,
           lo_v     TYPE REF TO zcl_abappgp_integer,
           lo_u     TYPE REF TO zcl_abappgp_integer,
-          lo_d     TYPE REF TO zcl_abappgp_integer,
+          lv_d     TYPE i,
           lo_q     TYPE REF TO zcl_abappgp_integer.
 
 
@@ -529,23 +530,21 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 *    WRITE: / 'Original':.
 *    WRITE: / to_string( ), 'DIV', io_integer->to_string( ).
 
-    lv_shift = lines( mt_split ) - lines( io_integer->mt_split ) - 1.
 
 * D1 - Normalize
     READ TABLE io_integer->mt_split INDEX lines( io_integer->mt_split ) INTO lv_v1.
-    CREATE OBJECT lo_d
-      EXPORTING
-        iv_integer = lv_b DIV ( lv_v1 + 1 ).
+    lv_d = lv_b DIV ( lv_v1 + 1 ).
 *    WRITE: / 'd:', lo_d->to_string( ).
 
-    IF lo_d->is_one( ) = abap_false.
-      lv_shift = lv_shift + 1.
-    ENDIF.
-
-    lo_u = multiply( lo_d ).
-    lo_v = io_integer->clone( )->multiply( lo_d ).
+*    IF lo_d->is_one( ) = abap_false.
+*      lv_shift = lv_shift + 1.
+*    ENDIF.
+    lo_u = multiply_int( lv_d ).
+    lo_v = io_integer->clone( )->multiply_int( lv_d ).
 *    WRITE: / 'After normalization:'.
 *    WRITE: / to_string( ), 'DIV', lo_v->to_string( ).
+
+    lv_shift = lines( lo_u->mt_split ) - lines( lo_v->mt_split ) - 1.
 
 * D2 - Initialize j
     lv_j = lines( lo_u->mt_split ).
@@ -574,7 +573,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 *      WRITE: / 'lv_v_1', lv_v_1.
 
       IF lv_u_j = lv_v_1.
-        lv_q_hat = lv_b - 1.
+        lv_q_hat = lv_b.
       ELSE.
         lv_q_hat = ( lv_u_j * lv_b + lv_u_j_1 ) DIV lv_v_1.
 
@@ -588,9 +587,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
 * D4 - Multiply and subtract
       lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
-      IF lo_u->is_negative( ) = abap_true.
+      IF lo_u->is_negative( ) = abap_true AND lv_shift >= 0.
 *        WRITE: / 'negative! todo'.
-*        BREAK-POINT.
+        lv_negative = abap_true.
+        BREAK-POINT.
+      ELSE.
+        lv_negative = abap_false.
       ENDIF.
 *      WRITE: / 'D4, u:', lo_u->to_string( ).
 *      WRITE: /.
@@ -602,7 +604,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lv_shift = lv_shift - 1.
 
 * D6 - Add back
+      IF lv_negative = abap_true.
 * todo
+      ENDIF.
 
 * D7 - Loop on j
       lv_j = lv_j - 1.
@@ -617,7 +621,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD FROM_HIGH_LENGTH.
+  METHOD from_high_length.
 
     DATA: lv_str TYPE string.
 
