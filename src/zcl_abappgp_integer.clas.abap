@@ -557,8 +557,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DO lv_m TIMES.
 
 * D3 - Calculate q_hat
+      CLEAR lv_u_j.
       READ TABLE lo_u->mt_split INDEX lv_j INTO lv_u_j.
-      ASSERT sy-subrc = 0.
+*      ASSERT sy-subrc = 0.
       READ TABLE lo_u->mt_split INDEX lv_j - 1 INTO lv_u_j_1.
       ASSERT sy-subrc = 0.
       READ TABLE lo_u->mt_split INDEX lv_j - 2 INTO lv_u_j_2.
@@ -589,10 +590,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
       IF lo_u->is_negative( ) = abap_true AND lv_shift >= 0.
 *        WRITE: / 'negative! todo'.
-        lv_negative = abap_true.
-        BREAK-POINT.
-      ELSE.
-        lv_negative = abap_false.
+* D6 - Add back
+        lv_q_hat = lv_q_hat - 1.
+        IF lv_shift > 0.
+          lo_u = lo_u->add( lo_v->clone( )->multiply_10( lv_shift * 4 ) ).
+*          BREAK-POINT.
+        ENDIF.
       ENDIF.
 *      WRITE: / 'D4, u:', lo_u->to_string( ).
 *      WRITE: /.
@@ -601,14 +604,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_tmp = zcl_abappgp_integer=>from_string( |{ lv_q_hat }| ).
       lo_q = lo_q->add( lo_tmp->multiply_10( lv_shift * 4 ) ).
 
-      lv_shift = lv_shift - 1.
-
 * D6 - Add back
-      IF lv_negative = abap_true.
+*      IF lv_negative = abap_true.
 * todo
-      ENDIF.
+*      ENDIF.
 
 * D7 - Loop on j
+      lv_shift = lv_shift - 1.
       lv_j = lv_j - 1.
     ENDDO.
 

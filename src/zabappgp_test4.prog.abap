@@ -5,14 +5,18 @@ START-OF-SELECTION.
 
 FORM run.
 
-  DATA: lv_times TYPE i VALUE 60000,
+  DATA: lv_times TYPE i VALUE 50000,
         lv_str1  TYPE string,
         lv_str2  TYPE string.
 
 
-  DATA(lo_random) = NEW zcl_abappgp_random(
-    io_low = zcl_abappgp_integer=>from_low_length( 5 )
-    io_high = zcl_abappgp_integer=>from_high_length( 16 ) ).
+  DATA(lo_random_high) = NEW zcl_abappgp_random(
+    io_low = zcl_abappgp_integer=>from_low_length( 14 )
+    io_high = zcl_abappgp_integer=>from_high_length( 14 ) ).
+
+  DATA(lo_random_low) = NEW zcl_abappgp_random(
+    io_low = zcl_abappgp_integer=>from_low_length( 8 )
+    io_high = zcl_abappgp_integer=>from_high_length( 8 ) ).
 
   DO lv_times TIMES.
     IF sy-index MOD 100 = 0.
@@ -23,8 +27,8 @@ FORM run.
         i_output_immediately = abap_true ).
     ENDIF.
 
-    DATA(lo_var1) = lo_random->random( ).
-    DATA(lo_var2) = lo_random->random( ).
+    DATA(lo_var1) = lo_random_high->random( ).
+    DATA(lo_var2) = lo_random_low->random( ).
 
     lv_str1 = lo_var1->to_string( ).
     lv_str2 = lo_var2->to_string( ).
