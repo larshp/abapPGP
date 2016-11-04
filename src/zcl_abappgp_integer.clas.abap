@@ -886,7 +886,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT NOT io_integer->mv_negative = abap_true.
 
-    lo_div = clone( )->divide( io_integer ).
+    lo_div = clone( )->divide_knuth( io_integer ).
 
     lo_mult = lo_div->clone( )->multiply( io_integer ).
 
@@ -1056,7 +1056,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     WHILE lo_nr->is_zero( ) = abap_false.
-      lo_q = lo_r->clone( )->divide( lo_nr ).
+      lo_q = lo_r->clone( )->divide_knuth( lo_nr ).
       lo_tmp = lo_nt->clone( ).
       lo_foo = lo_q->clone( )->multiply( lo_nt ).
       lo_nt = lo_t->clone( )->subtract( lo_foo ).
