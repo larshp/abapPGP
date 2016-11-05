@@ -59,6 +59,11 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
+  methods SHIFT_LEFT
+    importing
+      !IV_TIMES type I
+    returning
+      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
   methods SHIFT_RIGHT
     importing
       !IV_TIMES type I
@@ -75,6 +80,11 @@ public section.
   methods TO_STRING
     returning
       value(RV_INTEGER) type STRING .
+  methods MULTIPLY_KARATSUBA
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
 protected section.
 
   types TY_SPLIT type I .
@@ -82,13 +92,20 @@ protected section.
     ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
   data MT_SPLIT type TY_SPLIT_TT .
-  class-data GV_MAX type I value 8192. "#EC NOTEXT .
-  class-data GV_BITS type I value 13. "#EC NOTEXT .
+  class-data GV_MAX type I value 8192. "#EC NOTEXT .  . " .
+  class-data GV_BITS type I value 13. "#EC NOTEXT .  . " .
   class-data GO_MAX type ref to ZCL_ABAPPGP_INTEGER .
   class-data:
     gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
   methods REMOVE_LEADING_ZEROS .
+  class-methods SPLIT_AT
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+      !IV_AT type I
+    exporting
+      !EO_LOW type ref to ZCL_ABAPPGP_INTEGER2
+      !EO_HIGH type ref to ZCL_ABAPPGP_INTEGER2 .
 private section.
 ENDCLASS.
 
@@ -490,6 +507,60 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD multiply_karatsuba.
+
+* https://en.wikipedia.org/wiki/Karatsuba_algorithm
+* http://www.geeksforgeeks.org/divide-and-conquer-set-2-karatsuba-algorithm-for-fast-multiplication/
+
+    DATA: lv_m     TYPE i,
+          lo_low1  TYPE REF TO zcl_abappgp_integer2,
+          lo_low2  TYPE REF TO zcl_abappgp_integer2,
+          lo_high1 TYPE REF TO zcl_abappgp_integer2,
+          lo_high2 TYPE REF TO zcl_abappgp_integer2,
+          lo_z0    TYPE REF TO zcl_abappgp_integer2,
+          lo_z1    TYPE REF TO zcl_abappgp_integer2,
+          lo_z2    TYPE REF TO zcl_abappgp_integer2.
+
+
+    IF lines( mt_split ) < 2 OR lines( io_integer->mt_split ) < 2.
+      ro_integer = multiply( io_integer ).
+      RETURN.
+    ENDIF.
+
+    lv_m = nmax( val1 = lines( mt_split )
+                 val2 = lines( io_integer->mt_split ) ).
+
+    lv_m = lv_m DIV 2.
+
+    split_at( EXPORTING io_integer = me
+                        iv_at      = lv_m
+              IMPORTING eo_low     = lo_low1
+                        eo_high    = lo_high1 ).
+
+    split_at( EXPORTING io_integer = io_integer
+                        iv_at      = lv_m
+              IMPORTING eo_low     = lo_low2
+                        eo_high    = lo_high2 ).
+
+* z0 = karatsuba(low1,low2)
+    lo_z0 = lo_low1->clone( )->multiply_karatsuba( lo_low2 ).
+* z1 = karatsuba((low1+high1),(low2+high2))
+    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba(
+      lo_low2->clone( )->add( lo_high2 ) ).
+* z2 = karatsuba(high1,high2)
+    lo_z2 = lo_high1->multiply_karatsuba( lo_high2 ).
+
+* return (z2*10^(2*m2))+((z1-z2-z0)*10^(m2))+(z0)
+    mt_split = lo_z2->mt_split.
+    shift_left( 2 * lv_m * gv_bits ).
+    add( lo_z1->subtract( lo_z2 )->subtract( lo_z0 )->shift_left( lv_m * gv_bits ) ).
+    add( lo_z0 ).
+
+    ro_integer = me.
+
+  ENDMETHOD.
+
+
   METHOD remove_leading_zeros.
 
     DATA: lv_lines TYPE i,
@@ -510,6 +581,33 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
         EXIT.
       ENDIF.
     ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD shift_left.
+
+    DATA: lo_two      TYPE REF TO zcl_abappgp_integer2,
+          lv_append   TYPE i,
+          lv_multiply TYPE i.
+
+
+    CREATE OBJECT lo_two
+      EXPORTING
+        iv_integer = 2.
+
+    lv_append   = iv_times DIV gv_bits.
+    lv_multiply = iv_times MOD gv_bits.
+
+    DO lv_append TIMES.
+      INSERT 0 INTO mt_split INDEX 1.
+    ENDDO.
+
+    DO lv_multiply TIMES.
+      ro_result = multiply( lo_two ).
+    ENDDO.
+
+    ro_result = me.
 
   ENDMETHOD.
 
@@ -536,6 +634,34 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
     ENDDO.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD SPLIT_AT.
+
+    DATA: lv_split TYPE ty_split.
+
+
+    CREATE OBJECT eo_low.
+    CLEAR eo_low->mt_split.
+
+    CREATE OBJECT eo_high.
+    CLEAR eo_high->mt_split.
+
+    LOOP AT io_integer->mt_split INTO lv_split.
+      IF sy-tabix <= iv_at.
+        APPEND lv_split TO eo_low->mt_split.
+      ELSE.
+        APPEND lv_split TO eo_high->mt_split.
+      ENDIF.
+    ENDLOOP.
+
+    ASSERT lines( eo_low->mt_split ) > 0.
+
+    IF lines( eo_high->mt_split ) = 0.
+      APPEND 0 TO eo_high->mt_split.
+    ENDIF.
 
   ENDMETHOD.
 

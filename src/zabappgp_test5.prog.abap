@@ -5,54 +5,73 @@ START-OF-SELECTION.
 
 FORM run.
 
-  CONSTANTS: lc_output TYPE i VALUE 200.
-
-  DATA: lv_str    TYPE string,
-        lv_sent   TYPE abap_bool,
+  DATA: lv_sent   TYPE abap_bool,
         lv_tested TYPE i,
+        lo_one    TYPE REF TO zcl_abappgp_integer,
         lo_low    TYPE REF TO zcl_abappgp_integer,
         lo_high   TYPE REF TO zcl_abappgp_integer.
 
 
   zcl_abappgp_random=>bits_to_low_high(
     EXPORTING
-      iv_bits = '1024'
+      iv_bits = '512'
     IMPORTING
       eo_low  = lo_low
       eo_high = lo_high ).
 
+  CREATE OBJECT lo_one
+    EXPORTING
+      iv_integer = 1.
+
   DATA(lo_random) = NEW zcl_abappgp_random( io_low  = lo_low
                                             io_high = lo_high ).
 
-  DO.
+  DO 5 TIMES.
     lv_tested = sy-index.
     cl_progress_indicator=>progress_indicate(
       EXPORTING
         i_text          = |New Random { lv_tested }|
         i_processed     = 50
         i_total         = 100
-      IMPORTING
-        e_progress_sent = lv_sent ).
-    IF lv_sent = abap_true.
-      COMMIT WORK.
-    ENDIF.
+        i_output_immediately = abap_true
+*      IMPORTING
+*        e_progress_sent = lv_sent
+        ).
+*    IF lv_sent = abap_true.
+*      COMMIT WORK.
+*    ENDIF.
 
     DATA(lo_value) = lo_random->random( ).
+    IF lo_value->is_even( ) = abap_true.
+      lo_value = lo_value->add( lo_one ).
+    ENDIF.
+
     DATA(lv_prime) = zcl_abappgp_prime=>check(
       iv_iterations    = 60
       io_integer       = lo_value
       iv_show_progress = abap_true ).
     IF lv_prime = abap_true.
-      lv_str = lo_value->to_string( ).
-      WHILE strlen( lv_str ) > lc_output.
-        WRITE: / lv_str(lc_output).
-        lv_str = lv_str+lc_output.
-      ENDWHILE.
-      WRITE: / lv_str.
+      PERFORM output_integer USING lo_value.
       EXIT. " current loop
     ENDIF.
   ENDDO.
 
   WRITE: / 'Done, tested', lv_tested, 'numbers'.
+
+ENDFORM.
+
+FORM output_integer USING io_value TYPE REF TO zcl_abappgp_integer.
+
+  CONSTANTS: lc_output TYPE i VALUE 200.
+
+  DATA: lv_str TYPE string.
+
+
+  lv_str = io_value->to_string( ).
+  WHILE strlen( lv_str ) > lc_output.
+    WRITE: / lv_str(lc_output).
+    lv_str = lv_str+lc_output.
+  ENDWHILE.
+  WRITE: / lv_str.
 
 ENDFORM.

@@ -1,7 +1,54 @@
+CLASS ltcl_shift_left DEFINITION FOR TESTING
+    DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      shift1 FOR TESTING,
+      shift2 FOR TESTING,
+      shift3 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_str   TYPE string
+                     iv_exp   TYPE string
+                     iv_times TYPE i DEFAULT 1.
+
+ENDCLASS.       "ltcl_Get
+
+CLASS ltcl_shift_left IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lv_result TYPE string.
+
+
+    lv_result = zcl_abappgp_integer2=>from_string( iv_str
+      )->shift_left( iv_times )->to_string( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD shift1.
+    test( iv_str = '16'
+          iv_exp = '32' ).
+  ENDMETHOD.
+
+  METHOD shift2.
+    test( iv_str = '5'
+          iv_exp = '10' ).
+  ENDMETHOD.
+
+  METHOD shift3.
+    test( iv_str = '8192'
+          iv_exp = '16384' ).
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_shift_right DEFINITION FOR TESTING
-    DURATION SHORT
-    RISK LEVEL HARMLESS
-    FINAL.
+    DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
     METHODS:
@@ -12,9 +59,9 @@ CLASS ltcl_shift_right DEFINITION FOR TESTING
       shift5 FOR TESTING.
 
     METHODS:
-      test IMPORTING iv_str        TYPE string
-                     iv_times      TYPE i DEFAULT 1
-           RETURNING VALUE(rv_str) TYPE string.
+      test IMPORTING iv_str   TYPE string
+                     iv_exp   TYPE string
+                     iv_times TYPE i DEFAULT 1.
 
 ENDCLASS.       "ltcl_Get
 
@@ -22,75 +69,43 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary TYPE REF TO zcl_abappgp_integer2.
+    DATA: lv_result TYPE string.
 
 
-    lo_binary = zcl_abappgp_integer2=>from_string( iv_str ).
-    lo_binary->shift_right( iv_times ).
-    rv_str = lo_binary->to_string( ).
+    lv_result = zcl_abappgp_integer2=>from_string( iv_str
+      )->shift_right( iv_times )->to_string( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = iv_exp ).
 
   ENDMETHOD.
 
   METHOD shift1.
-
-    DATA: lv_result TYPE string.
-
-    lv_result = test( '16' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lv_result
-      exp = '8' ).
-
+    test( iv_str = '16'
+          iv_exp = '8' ).
   ENDMETHOD.
 
   METHOD shift2.
-
-    DATA: lv_result TYPE string.
-
-    lv_result = test( '5' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lv_result
-      exp = '2' ).
-
+    test( iv_str = '5'
+          iv_exp = '2' ).
   ENDMETHOD.
 
   METHOD shift3.
-
-    DATA: lv_result TYPE string.
-
-    lv_result = test( '8192' ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lv_result
-      exp = '4096' ).
-
+    test( iv_str = '8192'
+          iv_exp = '4096' ).
   ENDMETHOD.
 
   METHOD shift4.
-
-    DATA: lv_result TYPE string.
-
-    lv_result = test( iv_str   = '8192'
-                      iv_times = 13 ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lv_result
-      exp = '1' ).
-
+    test( iv_str   = '8192'
+          iv_exp = '1'
+          iv_times = 13 ).
   ENDMETHOD.
 
   METHOD shift5.
-
-    DATA: lv_result TYPE string.
-
-    lv_result = test( iv_str   = '8191'
-                      iv_times = 13 ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lv_result
-      exp = '0' ).
-
+    test( iv_str   = '8191'
+          iv_exp   = '0'
+          iv_times = 13 ).
   ENDMETHOD.
 
 ENDCLASS.
@@ -665,6 +680,102 @@ CLASS ltcl_add IMPLEMENTATION.
       act = lo_res->to_string( )
       exp = '111111111111111111112' ).
 
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltcl_multiply_karatsuba DEFINITION FOR TESTING
+    DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      karatsuba1 FOR TESTING,
+      karatsuba2 FOR TESTING,
+      karatsuba3 FOR TESTING,
+      karatsuba4 FOR TESTING,
+      karatsuba5 FOR TESTING,
+      karatsuba6 FOR TESTING,
+      karatsuba7 FOR TESTING,
+      karatsuba8 FOR TESTING,
+      karatsuba9 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_op1 TYPE string
+                     iv_op2 TYPE string
+                     iv_exp TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_multiply_karatsuba IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer2,
+          lo_var2 TYPE REF TO zcl_abappgp_integer2.
+
+
+    lo_var1 = zcl_abappgp_integer2=>from_string( iv_op1 ).
+    lo_var2 = zcl_abappgp_integer2=>from_string( iv_op2 ).
+    lo_var1->multiply_karatsuba( lo_var2 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_var1->to_string( )
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD karatsuba1.
+    test( iv_op1 = '1'
+          iv_op2 = '1'
+          iv_exp = '1' ).
+  ENDMETHOD.
+
+  METHOD karatsuba2.
+    test( iv_op1 = '11112222'
+          iv_op2 = '33334444'
+          iv_exp = '370419741974568' ).
+  ENDMETHOD.
+
+
+  METHOD karatsuba3.
+    test( iv_op1 = '1111'
+          iv_op2 = '1111'
+          iv_exp = '1234321' ).
+  ENDMETHOD.
+
+  METHOD karatsuba4.
+    test( iv_op1 = '9999'
+          iv_op2 = '9999'
+          iv_exp = '99980001' ).
+  ENDMETHOD.
+
+  METHOD karatsuba5.
+    test( iv_op1 = '500'
+          iv_op2 = '50000'
+          iv_exp = '25000000' ).
+  ENDMETHOD.
+
+  METHOD karatsuba6.
+    test( iv_op1 = '30558784'
+          iv_op2 = '44449'
+          iv_exp = '1358307390016' ).
+  ENDMETHOD.
+
+  METHOD karatsuba7.
+    test( iv_op1 = '100000'
+          iv_op2 = '0'
+          iv_exp = '0' ).
+  ENDMETHOD.
+
+  METHOD karatsuba8.
+    test( iv_op1 = '7777777777'
+          iv_op2 = '6666666666'
+          iv_exp = '51851851841481481482' ).
+  ENDMETHOD.
+
+  METHOD karatsuba9.
+    test( iv_op1 = '11117777777777'
+          iv_op2 = '22226666666666'
+          iv_exp = '247111140740716041481481482' ).
   ENDMETHOD.
 
 ENDCLASS.
