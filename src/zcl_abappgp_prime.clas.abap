@@ -7,26 +7,28 @@ public section.
   class-methods CHECK
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-      !IV_ITERATIONS type I
+      !IV_ITERATIONS type I default 60
       !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
     returning
       value(RV_BOOL) type ABAP_BOOL .
-protected section.
+PROTECTED SECTION.
 
-  types:
+  TYPES:
     ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
-  class-methods LOW_PRIMES
-    returning
-      value(RT_LOW) type TY_INTEGER_TT .
-  class-methods RABIN_MILLER
-    importing
-      !IO_N type ref to ZCL_ABAPPGP_INTEGER
-      !IV_ITERATIONS type I
-      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  PRIVATE SECTION.
+  CLASS-DATA gt_low TYPE ty_integer_tt.
+
+  CLASS-METHODS low_primes
+    RETURNING
+      VALUE(rt_low) TYPE ty_integer_tt .
+  CLASS-METHODS rabin_miller
+    IMPORTING
+      !io_n TYPE REF TO zcl_abappgp_integer
+      !iv_iterations TYPE i
+      !iv_show_progress TYPE abap_bool DEFAULT abap_false
+    RETURNING
+      VALUE(rv_bool) TYPE abap_bool .
+private section.
 ENDCLASS.
 
 
@@ -36,8 +38,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
   METHOD check.
 
-    DATA: lt_low     TYPE TABLE OF REF TO zcl_abappgp_integer,
-          lo_integer TYPE REF TO zcl_abappgp_integer,
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
           lo_copy    TYPE REF TO zcl_abappgp_integer.
 
 
@@ -46,9 +47,11 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    lt_low = low_primes( ).
+    IF lines( gt_low ) = 0.
+      gt_low = low_primes( ).
+    ENDIF.
 
-    LOOP AT lt_low INTO lo_integer.
+    LOOP AT gt_low INTO lo_integer.
       IF lo_integer->is_eq( io_integer ) = abap_true.
         rv_bool = abap_true.
         RETURN.
@@ -297,6 +300,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
           i_processed          = lv_index
           i_total              = iv_iterations
           i_output_immediately = abap_true ).
+        COMMIT WORK.
       ENDIF.
 
       lo_a = lo_random->random( ).

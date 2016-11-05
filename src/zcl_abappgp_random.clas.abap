@@ -1,21 +1,21 @@
-CLASS zcl_abappgp_random DEFINITION
-    PUBLIC
-    CREATE PUBLIC.
+class ZCL_ABAPPGP_RANDOM definition
+  public
+  create public .
 
-  PUBLIC SECTION.
-    CLASS-METHODS bits_to_low_high
-      IMPORTING
-        !iv_bits TYPE string
-      EXPORTING
-        !eo_low  TYPE REF TO zcl_abappgp_integer
-        !eo_high TYPE REF TO zcl_abappgp_integer.
-    METHODS constructor
-      IMPORTING
-        !io_low  TYPE REF TO zcl_abappgp_integer
-        !io_high TYPE REF TO zcl_abappgp_integer.
-    METHODS random
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer.
+public section.
+
+  class-methods FROM_BITS
+    importing
+      !IV_BITS type I
+    returning
+      value(RO_RANDOM) type ref to ZCL_ABAPPGP_RANDOM .
+  methods CONSTRUCTOR
+    importing
+      !IO_LOW type ref to ZCL_ABAPPGP_INTEGER
+      !IO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
+  methods RANDOM
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
 
   data MO_LOW type ref to ZCL_ABAPPGP_INTEGER .
@@ -34,12 +34,19 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
 
-  METHOD bits_to_low_high.
+  METHOD constructor.
 
-* todo, to be used for random keys
-* or not, it can easily be shorter than required number of bits?
+    mo_low = io_low.
+    mo_high = io_high.
+
+  ENDMETHOD.
+
+
+  METHOD from_bits.
 
     DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
+          lo_low      TYPE REF TO zcl_abappgp_integer,
+          lo_high     TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_integer.
 
 
@@ -47,26 +54,25 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
       EXPORTING
         iv_integer = 1.
 
-    lo_exponent = zcl_abappgp_integer=>from_string( iv_bits ).
+    CREATE OBJECT lo_exponent
+      EXPORTING
+        iv_integer = iv_bits.
 
-    CREATE OBJECT eo_high
+    CREATE OBJECT lo_high
       EXPORTING
         iv_integer = 2.
-    eo_high->power( lo_exponent ).
+    lo_high->power( lo_exponent ).
 
     lo_exponent->subtract( lo_one ).
-    CREATE OBJECT eo_low
+    CREATE OBJECT lo_low
       EXPORTING
         iv_integer = 2.
-    eo_low->power( lo_exponent ).
+    lo_low->power( lo_exponent ).
 
-  ENDMETHOD.
-
-
-  METHOD constructor.
-
-    mo_low = io_low.
-    mo_high = io_high.
+    CREATE OBJECT ro_random
+      EXPORTING
+        io_low  = lo_low
+        io_high = lo_high.
 
   ENDMETHOD.
 

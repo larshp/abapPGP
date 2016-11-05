@@ -792,16 +792,16 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_one.
 
-    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
+    DATA: lv_value LIKE LINE OF mt_split.
 
 
     IF lines( mt_split ) <> 1 OR mv_negative = abap_true.
       RETURN.
     ENDIF.
 
-    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.     "#EC CI_SUBRC
+    READ TABLE mt_split INDEX 1 INTO lv_value.            "#EC CI_SUBRC
 
-    rv_bool = boolc( <lv_value> = 1 ).
+    rv_bool = boolc( lv_value = 1 ).
 
   ENDMETHOD.
 

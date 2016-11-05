@@ -15,7 +15,7 @@ FORM run.
 
   zcl_abappgp_random=>bits_to_low_high(
     EXPORTING
-      iv_bits = '512'
+      iv_bits = '800'
     IMPORTING
       eo_low  = lo_low
       eo_high = lo_high ).
@@ -37,18 +37,15 @@ FORM run.
 
   DO. " 5 TIMES.
     lv_tested = sy-index.
-*    cl_progress_indicator=>progress_indicate(
-*      EXPORTING
-*        i_text          = |New Random { lv_tested }|
-*        i_processed     = 50
-*        i_total         = 100
-*        i_output_immediately = abap_true
-*      IMPORTING
-*        e_progress_sent = lv_sent
-*        ).
-*    IF lv_sent = abap_true.
-*      COMMIT WORK.
-*    ENDIF.
+    IF lv_tested MOD 10 = 0.
+      cl_progress_indicator=>progress_indicate(
+        EXPORTING
+          i_text          = |New Random, { lv_tested } tested|
+          i_processed     = 50
+          i_total         = 100
+          i_output_immediately = abap_true ).
+      COMMIT WORK.
+    ENDIF.
 
     DATA(lv_prime) = zcl_abappgp_prime=>check(
       iv_iterations    = 60

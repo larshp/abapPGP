@@ -121,12 +121,13 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
 
     lo_tmp->MULTIPLY_KARATSUBA( mo_modulus2 ).
 
-    lo_reduced = lo_product->clone( )->add( lo_tmp )->shift_right( mv_bits ).
+* ->clone( )
+    lo_reduced = lo_product->add( lo_tmp )->shift_right( mv_bits ).
 
     IF lo_reduced->is_gt( mo_modulus2 ) = abap_true.
       lo_reduced->subtract( mo_modulus2 ).
     ENDIF.
-    ASSERT NOT lo_reduced->is_gt( mo_modulus2 ) = abap_true.
+*    ASSERT NOT lo_reduced->is_gt( mo_modulus2 ) = abap_true.
 
     CREATE OBJECT ro_result
       EXPORTING

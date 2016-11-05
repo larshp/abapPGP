@@ -399,13 +399,11 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
     rv_bool = abap_false.
 
-    DO lines( mt_split ) TIMES.
-      lv_index = lines( mt_split ) - sy-index + 1.
+    DO lv_length1 TIMES.
+      lv_index = lv_length1 - sy-index + 1.
 
       READ TABLE mt_split INDEX lv_index INTO lv_op1.
-      ASSERT sy-subrc = 0.
       READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2.
-      ASSERT sy-subrc = 0.
 
       IF lv_op1 > lv_op2.
         rv_bool = abap_true.
@@ -548,7 +546,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
     lo_z0 = lo_low1->clone( )->multiply_karatsuba( lo_low2 ).
 * z1 = karatsuba((low1+high1),(low2+high2))
     lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba(
-      lo_low2->clone( )->add( lo_high2 ) ).
+      lo_low2->add( lo_high2 ) ).
 * z2 = karatsuba(high1,high2)
     lo_z2 = lo_high1->multiply_karatsuba( lo_high2 ).
 
