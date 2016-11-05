@@ -318,7 +318,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     IF lines( io_integer->mt_split ) = 1.
-      READ TABLE io_integer->mt_split INDEX 1 INTO lv_split.
+      READ TABLE io_integer->mt_split INDEX 1 INTO lv_split. "#EC CI_SUBRC
       ro_result = divide_by_int( lv_split ).
       RETURN.
     ENDIF.
@@ -425,7 +425,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DO lines( mt_split ) TIMES.
       lv_index = lv_index - 1.
 
-      READ TABLE mt_split INDEX lv_index INTO lv_value.
+      READ TABLE mt_split INDEX lv_index INTO lv_value.   "#EC CI_SUBRC
 
       lv_value = lv_value + lv_carry * gv_max.
       lv_carry = lv_value MOD 2.
@@ -435,7 +435,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDDO.
 
 * remove leading zero, note: there can only be one when dividing with 2
-    READ TABLE mt_split INTO lv_value INDEX lines( mt_split ).
+    READ TABLE mt_split INTO lv_value INDEX lines( mt_split ). "#EC CI_SUBRC
     IF lv_value = 0 AND lines( mt_split ) > 1.
       DELETE mt_split INDEX lines( mt_split ).
     ENDIF.
@@ -466,7 +466,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DO lines( mt_split ) TIMES.
       lv_index = lv_index - 1.
 
-      READ TABLE mt_split INDEX lv_index INTO lv_value.
+      READ TABLE mt_split INDEX lv_index INTO lv_value.   "#EC CI_SUBRC
 
       lv_value = lv_value + lv_carry * gv_max.
       lv_carry = lv_value MOD iv_integer.
@@ -518,7 +518,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       split( '1' ).
       RETURN.
     ELSEIF lines( io_integer->mt_split ) = 1.
-      READ TABLE io_integer->mt_split INDEX 1 INTO lv_split.
+      READ TABLE io_integer->mt_split INDEX 1 INTO lv_split. "#EC CI_SUBRC
       ro_result = divide_by_int( lv_split ).
       RETURN.
     ENDIF.
@@ -530,7 +530,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lv_b = gv_max.
 
 * D1 - Normalize
-    READ TABLE io_integer->mt_split INDEX lines( io_integer->mt_split ) INTO lv_v1.
+    READ TABLE io_integer->mt_split INDEX lines( io_integer->mt_split ) INTO lv_v1. "#EC CI_SUBRC
     lv_d = lv_b DIV ( lv_v1 + 1 ).
 
     lo_u = multiply_int( lv_d ).
@@ -566,12 +566,14 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
         lv_q_hat = ( lv_u_j * lv_b + lv_u_j_1 ) DIV lv_v_1.
       ENDIF.
 
-      WHILE lv_v_2 * lv_q_hat > ( lv_u_j * lv_b + lv_u_j_1 - lv_q_hat * lv_v_1 ) * lv_b + lv_u_j_2.
+      WHILE lv_v_2 * lv_q_hat > ( lv_u_j * lv_b + lv_u_j_1 - lv_q_hat * lv_v_1 ) *
+          lv_b + lv_u_j_2.
         lv_q_hat = lv_q_hat - 1.
       ENDWHILE.
 
 * D4 - Multiply and subtract
-      lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
+      lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat
+        )->multiply_10( lv_shift * 4 ) ).
       IF lo_u->is_negative( ) = abap_true AND lv_shift >= 0.
 * D6 - Add back
         lv_q_hat = lv_q_hat - 1.
@@ -736,8 +738,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DO lv_lines TIMES.
       lv_index = lv_lines - sy-index + 1.
 
-      READ TABLE mt_split INDEX lv_index INTO lv_op1.
-      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2.
+      READ TABLE mt_split INDEX lv_index INTO lv_op1.     "#EC CI_SUBRC
+      READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2. "#EC CI_SUBRC
 
       IF lv_op1 > lv_op2.
         rv_bool = abap_true.
@@ -797,7 +799,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.
+    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.     "#EC CI_SUBRC
 
     rv_bool = boolc( <lv_value> = 1 ).
 
@@ -822,7 +824,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.
+    READ TABLE mt_split INDEX 1 ASSIGNING <lv_value>.     "#EC CI_SUBRC
 
     rv_bool = boolc( <lv_value> = 2 ).
 
@@ -838,7 +840,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    READ TABLE mt_split INDEX 1 INTO lv_value.
+    READ TABLE mt_split INDEX 1 INTO lv_value.            "#EC CI_SUBRC
 
     rv_bool = boolc( lv_value = 0 ).
 
@@ -971,7 +973,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DATA: lv_value TYPE ty_split.
 
 * only the first digit is relevant for calculating MOD2
-    READ TABLE mt_split INDEX 1 INTO lv_value.
+    READ TABLE mt_split INDEX 1 INTO lv_value.            "#EC CI_SUBRC
 
     rv_result = lv_value MOD 2.
 
@@ -1202,7 +1204,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * z0 = karatsuba(low1,low2)
     lo_z0 = lo_low1->clone( )->multiply_karatsuba( lo_low2 ).
 * z1 = karatsuba((low1+high1),(low2+high2))
-    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba( lo_low2->clone( )->add( lo_high2 ) ).
+    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba(
+      lo_low2->clone( )->add( lo_high2 ) ).
 * z2 = karatsuba(high1,high2)
     lo_z2 = lo_high1->multiply_karatsuba( lo_high2 ).
 
@@ -1259,7 +1262,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DO.
       lv_lines = lv_lines - 1.
 
-      READ TABLE mt_split INTO lv_value INDEX lv_lines.
+      READ TABLE mt_split INTO lv_value INDEX lv_lines.   "#EC CI_SUBRC
 
       IF lv_value = 0 AND lv_lines <> 1.
         DELETE mt_split INDEX lv_lines.

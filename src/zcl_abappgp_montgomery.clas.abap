@@ -99,7 +99,8 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
     mo_reciprocal = mo_reducer->clone( )->mod_inverse( io_modulus ).
 
     mo_factor = zcl_abappgp_integer2=>from_integer(
-      mo_reducer->clone( )->multiply( mo_reciprocal )->subtract( lo_one )->divide_knuth( io_modulus ) ).
+      mo_reducer->clone( )->multiply( mo_reciprocal )->subtract(
+      lo_one )->divide_knuth( io_modulus ) ).
 
   ENDMETHOD.
 
