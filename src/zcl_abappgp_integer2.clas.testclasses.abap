@@ -716,7 +716,8 @@ CLASS ltcl_multiply_karatsuba IMPLEMENTATION.
 
     lo_var1 = zcl_abappgp_integer2=>from_string( iv_op1 ).
     lo_var2 = zcl_abappgp_integer2=>from_string( iv_op2 ).
-    lo_var1->multiply_karatsuba( lo_var2 ).
+    lo_var1->multiply_karatsuba( io_integer  = lo_var2
+                                 iv_fallback = 2 ).
     cl_abap_unit_assert=>assert_equals(
       act = lo_var1->to_string( )
       exp = iv_exp ).

@@ -115,11 +115,11 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
 *    ASSERT NOT io_x->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
 *    ASSERT NOT io_y->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
 
-    lo_product = io_x->get_integer( )->clone( )->multiply( io_y->get_integer( ) ).
+    lo_product = io_x->get_integer( )->clone( )->MULTIPLY_KARATSUBA( io_y->get_integer( ) ).
 
-    lo_tmp = lo_product->clone( )->and( mo_mask )->multiply( mo_factor )->and( mo_mask ).
+    lo_tmp = lo_product->clone( )->and( mo_mask )->MULTIPLY_KARATSUBA( mo_factor )->and( mo_mask ).
 
-    lo_tmp->multiply( mo_modulus2 ).
+    lo_tmp->MULTIPLY_KARATSUBA( mo_modulus2 ).
 
     lo_reduced = lo_product->clone( )->add( lo_tmp )->shift_right( mv_bits ).
 

@@ -83,6 +83,7 @@ public section.
   methods MULTIPLY_KARATSUBA
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
+      !IV_FALLBACK type I default 20
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
 protected section.
@@ -522,7 +523,8 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
           lo_z2    TYPE REF TO zcl_abappgp_integer2.
 
 
-    IF lines( mt_split ) < 2 OR lines( io_integer->mt_split ) < 2.
+    IF lines( mt_split ) < iv_fallback
+        OR lines( io_integer->mt_split ) < iv_fallback.
       ro_integer = multiply( io_integer ).
       RETURN.
     ENDIF.
@@ -553,8 +555,10 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 * return (z2*10^(2*m2))+((z1-z2-z0)*10^(m2))+(z0)
     mt_split = lo_z2->mt_split.
     shift_left( 2 * lv_m * gv_bits ).
-    add( lo_z1->subtract( lo_z2 )->subtract( lo_z0 )->shift_left( lv_m * gv_bits ) ).
     add( lo_z0 ).
+    add( lo_z1->shift_left( lv_m * gv_bits ) ).
+    subtract( lo_z2->shift_left( lv_m * gv_bits ) ).
+    subtract( lo_z0->shift_left( lv_m * gv_bits ) ).
 
     ro_integer = me.
 

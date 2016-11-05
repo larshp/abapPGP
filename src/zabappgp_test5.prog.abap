@@ -8,6 +8,7 @@ FORM run.
   DATA: lv_sent   TYPE abap_bool,
         lv_tested TYPE i,
         lo_one    TYPE REF TO zcl_abappgp_integer,
+        lo_two    TYPE REF TO zcl_abappgp_integer,
         lo_low    TYPE REF TO zcl_abappgp_integer,
         lo_high   TYPE REF TO zcl_abappgp_integer.
 
@@ -23,28 +24,31 @@ FORM run.
     EXPORTING
       iv_integer = 1.
 
+  CREATE OBJECT lo_two
+    EXPORTING
+      iv_integer = 2.
+
   DATA(lo_random) = NEW zcl_abappgp_random( io_low  = lo_low
                                             io_high = lo_high ).
+  DATA(lo_value) = lo_random->random( ).
+  IF lo_value->is_even( ) = abap_true.
+    lo_value = lo_value->add( lo_one ).
+  ENDIF.
 
-  DO 5 TIMES.
+  DO. " 5 TIMES.
     lv_tested = sy-index.
-    cl_progress_indicator=>progress_indicate(
-      EXPORTING
-        i_text          = |New Random { lv_tested }|
-        i_processed     = 50
-        i_total         = 100
-        i_output_immediately = abap_true
+*    cl_progress_indicator=>progress_indicate(
+*      EXPORTING
+*        i_text          = |New Random { lv_tested }|
+*        i_processed     = 50
+*        i_total         = 100
+*        i_output_immediately = abap_true
 *      IMPORTING
 *        e_progress_sent = lv_sent
-        ).
+*        ).
 *    IF lv_sent = abap_true.
 *      COMMIT WORK.
 *    ENDIF.
-
-    DATA(lo_value) = lo_random->random( ).
-    IF lo_value->is_even( ) = abap_true.
-      lo_value = lo_value->add( lo_one ).
-    ENDIF.
 
     DATA(lv_prime) = zcl_abappgp_prime=>check(
       iv_iterations    = 60
@@ -54,6 +58,8 @@ FORM run.
       PERFORM output_integer USING lo_value.
       EXIT. " current loop
     ENDIF.
+
+    lo_value->add( lo_two ).
   ENDDO.
 
   WRITE: / 'Done, tested', lv_tested, 'numbers'.
