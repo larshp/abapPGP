@@ -2,12 +2,12 @@ REPORT zabappgp_test3.
 
 START-OF-SELECTION.
   PERFORM run1.
-*  WRITE: /.
-*  PERFORM run2.
-*  WRITE: /.
-*  PERFORM run3.
-*  WRITE: /.
-*  PERFORM run4.
+  WRITE: /.
+  PERFORM run2.
+  WRITE: /.
+  PERFORM run3.
+  WRITE: /.
+  PERFORM run4.
 
 FORM run1.
 

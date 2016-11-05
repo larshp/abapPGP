@@ -294,6 +294,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     DATA: lv_m          TYPE i,
           lv_n          TYPE i,
           lv_iterations TYPE i,
+          lv_split      TYPE ty_split,
           lo_tmp        TYPE REF TO zcl_abappgp_integer,
           lo_middle     TYPE REF TO zcl_abappgp_integer,
           lo_guess      TYPE REF TO zcl_abappgp_integer,
@@ -317,7 +318,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     IF lines( io_integer->mt_split ) = 1.
-      ro_result = divide_by_int( io_integer->mt_split[ 1 ] ).
+      READ TABLE io_integer->mt_split INDEX 1 INTO lv_split.
+      ro_result = divide_by_int( lv_split ).
       RETURN.
     ENDIF.
 
@@ -384,17 +386,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD divide_by_10.
 
-    DATA: lv_insert TYPE i,
-          lv_int    TYPE i.
+    DATA: lv_int TYPE i.
 
 
     DO iv_times DIV gv_length TIMES.
       DELETE mt_split INDEX 1.
     ENDDO.
-
-*    IF lines( mt_split ) = 0.
-*      BREAK-POINT.
-*    ENDIF.
 
     ASSERT lines( mt_split ) > 0.
 
@@ -498,7 +495,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
           lv_q_hat TYPE ty_split,
           lv_u_j_1 TYPE ty_split,
           lv_u_j_2 TYPE ty_split,
-          lv_negative TYPE abap_bool,
+          lv_split TYPE ty_split,
           lo_tmp   TYPE REF TO zcl_abappgp_integer,
           lo_v     TYPE REF TO zcl_abappgp_integer,
           lo_u     TYPE REF TO zcl_abappgp_integer,
@@ -521,7 +518,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       split( '1' ).
       RETURN.
     ELSEIF lines( io_integer->mt_split ) = 1.
-      ro_result = divide_by_int( io_integer->mt_split[ 1 ] ).
+      READ TABLE io_integer->mt_split INDEX 1 INTO lv_split.
+      ro_result = divide_by_int( lv_split ).
       RETURN.
     ENDIF.
 
@@ -531,22 +529,12 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     lv_b = gv_max.
 
-*    WRITE: / 'Original':.
-*    WRITE: / to_string( ), 'DIV', io_integer->to_string( ).
-
-
 * D1 - Normalize
     READ TABLE io_integer->mt_split INDEX lines( io_integer->mt_split ) INTO lv_v1.
     lv_d = lv_b DIV ( lv_v1 + 1 ).
-*    WRITE: / 'd:', lo_d->to_string( ).
 
-*    IF lo_d->is_one( ) = abap_false.
-*      lv_shift = lv_shift + 1.
-*    ENDIF.
     lo_u = multiply_int( lv_d ).
     lo_v = io_integer->clone( )->multiply_int( lv_d ).
-*    WRITE: / 'After normalization:'.
-*    WRITE: / to_string( ), 'DIV', lo_v->to_string( ).
 
     lv_shift = lines( lo_u->mt_split ) - lines( lo_v->mt_split ) - 1.
 
@@ -563,20 +551,14 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * D3 - Calculate q_hat
       CLEAR lv_u_j.
       READ TABLE lo_u->mt_split INDEX lv_j INTO lv_u_j.
-*      ASSERT sy-subrc = 0.
       READ TABLE lo_u->mt_split INDEX lv_j - 1 INTO lv_u_j_1.
       ASSERT sy-subrc = 0.
       CLEAR lv_u_j_2.
       READ TABLE lo_u->mt_split INDEX lv_j - 2 INTO lv_u_j_2.
-*      ASSERT sy-subrc = 0.
       READ TABLE lo_v->mt_split INDEX lines( lo_v->mt_split ) INTO lv_v_1.
       ASSERT sy-subrc = 0.
       READ TABLE lo_v->mt_split INDEX lines( lo_v->mt_split ) - 1 INTO lv_v_2.
       ASSERT sy-subrc = 0.
-
-*      WRITE: / 'lv_u_j', lv_u_j.
-*      WRITE: / 'lv_u_j_1', lv_u_j_1.
-*      WRITE: / 'lv_v_1', lv_v_1.
 
       IF lv_u_j = lv_v_1.
         lv_q_hat = lv_b.
@@ -585,35 +567,22 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
       WHILE lv_v_2 * lv_q_hat > ( lv_u_j * lv_b + lv_u_j_1 - lv_q_hat * lv_v_1 ) * lv_b + lv_u_j_2.
-*          WRITE: / 'adjust q_hat - 1'.
         lv_q_hat = lv_q_hat - 1.
       ENDWHILE.
-
-*      ENDIF.
-*      WRITE: / 'q_hat:', lv_q_hat.
 
 * D4 - Multiply and subtract
       lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
       IF lo_u->is_negative( ) = abap_true AND lv_shift >= 0.
-*        WRITE: / 'negative! todo'.
 * D6 - Add back
         lv_q_hat = lv_q_hat - 1.
         IF lv_shift > 0.
           lo_u = lo_u->add( lo_v->clone( )->multiply_10( lv_shift * 4 ) ).
-*          BREAK-POINT.
         ENDIF.
       ENDIF.
-*      WRITE: / 'D4, u:', lo_u->to_string( ).
-*      WRITE: /.
 
 * D5 - Test remainder
       lo_tmp = zcl_abappgp_integer=>from_string( |{ lv_q_hat }| ).
       lo_q = lo_q->add( lo_tmp->multiply_10( lv_shift * 4 ) ).
-
-* D6 - Add back
-*      IF lv_negative = abap_true.
-* todo
-*      ENDIF.
 
 * D7 - Loop on j
       lv_shift = lv_shift - 1.
@@ -768,9 +737,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lv_index = lv_lines - sy-index + 1.
 
       READ TABLE mt_split INDEX lv_index INTO lv_op1.
-*      ASSERT sy-subrc = 0.
       READ TABLE io_integer->mt_split INDEX lv_index INTO lv_op2.
-*      ASSERT sy-subrc = 0.
 
       IF lv_op1 > lv_op2.
         rv_bool = abap_true.
@@ -1148,8 +1115,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD multiply_10.
 
-    DATA: lv_insert TYPE i,
-          lv_int    TYPE i.
+    DATA: lv_int TYPE i.
 
 
     ro_result = me.
@@ -1183,8 +1149,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD multiply_int.
 
-    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
-          lv_str     TYPE string.
+    DATA: lv_str TYPE string.
 
 
     ASSERT iv_integer >= 0.

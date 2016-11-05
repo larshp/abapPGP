@@ -32,7 +32,9 @@ CLASS ltcl_prime IMPLEMENTATION.
 
     lo_integer = zcl_abappgp_integer=>from_string( iv_str ).
 
-    lv_bool = zcl_abappgp_prime=>check( lo_integer ).
+    lv_bool = zcl_abappgp_prime=>check(
+      iv_iterations = 10
+      io_integer    = lo_integer ).
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_bool

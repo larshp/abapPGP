@@ -1,29 +1,31 @@
-CLASS zcl_abappgp_prime DEFINITION
-    PUBLIC
-    CREATE PUBLIC.
+class ZCL_ABAPPGP_PRIME definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS check
-      IMPORTING
-        !io_integer       TYPE REF TO zcl_abappgp_integer
-        !iv_show_progress TYPE abap_bool DEFAULT abap_false
-      RETURNING
-        VALUE(rv_bool)    TYPE abap_bool.
-  PROTECTED SECTION.
+  class-methods CHECK
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
+      !IV_ITERATIONS type I
+      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
+protected section.
 
-    TYPES:
-      ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY.
+  types:
+    ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
-    CLASS-METHODS low_primes
-      RETURNING
-        VALUE(rt_low) TYPE ty_integer_tt.
-    CLASS-METHODS rabin_miller
-      IMPORTING
-        !io_n             TYPE REF TO zcl_abappgp_integer
-        !iv_show_progress TYPE abap_bool DEFAULT abap_false
-      RETURNING
-        VALUE(rv_bool)    TYPE abap_bool.
+  class-methods LOW_PRIMES
+    returning
+      value(RT_LOW) type TY_INTEGER_TT .
+  class-methods RABIN_MILLER
+    importing
+      !IO_N type ref to ZCL_ABAPPGP_INTEGER
+      !IV_ITERATIONS type I
+      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
+    returning
+      value(RV_BOOL) type ABAP_BOOL .
   PRIVATE SECTION.
 ENDCLASS.
 
@@ -61,6 +63,7 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
     rv_bool = rabin_miller(
       io_n             = io_integer
+      iv_iterations    = iv_iterations
       iv_show_progress = iv_show_progress ).
 
   ENDMETHOD.
@@ -251,17 +254,12 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
   METHOD rabin_miller.
 
-    CONSTANTS: lc_k TYPE i VALUE 10.
-
     DATA: lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_two      TYPE REF TO zcl_abappgp_integer,
           lo_tmp      TYPE REF TO zcl_abappgp_integer,
-          lo_tmp2     TYPE REF TO zcl_abappgp_integer,
-* todo, perhaps it is wrong to define lv_s as i?
-          lv_s        TYPE i,
+          lv_s        TYPE i, " todo, perhaps it is wrong to define lv_s as i?
           lo_d        TYPE REF TO zcl_abappgp_integer,
           lo_a        TYPE REF TO zcl_abappgp_integer,
-          lo_v        TYPE REF TO zcl_abappgp_integer,
           lo_x        TYPE REF TO zcl_abappgp_integer,
           lv_continue TYPE abap_bool,
           lv_index    TYPE i,
@@ -290,21 +288,19 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
         io_low  = lo_two
         io_high = lo_tmp.
 
-    DO lc_k TIMES.
+    DO iv_iterations TIMES.
       lv_index = sy-index.
 
-      cl_progress_indicator=>progress_indicate(
-        i_text               = |Running { lv_index }/{ lc_k }|
-        i_processed          = lv_index
-        i_total              = lc_k
-        i_output_immediately = abap_true ).
+      IF lv_index <> 1 AND iv_show_progress = abap_true.
+        cl_progress_indicator=>progress_indicate(
+          i_text               = |Running { lv_index }/{ iv_iterations }|
+          i_processed          = lv_index
+          i_total              = iv_iterations
+          i_output_immediately = abap_true ).
+      ENDIF.
 
       lo_a = lo_random->random( ).
       ASSERT lo_a->is_one( ) = abap_false.
-
-*      DATA(lo_a_copy) = lo_a->clone( ).
-*      DATA(lo_d_copy) = lo_d->clone( ).
-*      DATA(lo_n_copy) = io_n->clone( ).
 
       lo_x = lo_a->modular_pow_montgomery( io_exponent = lo_d
                                            io_modulus  = io_n ).
