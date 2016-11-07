@@ -9,10 +9,6 @@ FORM run.
         lo_one    TYPE REF TO zcl_abappgp_integer,
         lo_two    TYPE REF TO zcl_abappgp_integer.
 
-  DATA: lv_t1      TYPE timestamp,
-        lv_t2      TYPE timestamp,
-        lv_secs    TYPE i.
-
 
   CREATE OBJECT lo_one
     EXPORTING

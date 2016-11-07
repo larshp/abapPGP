@@ -61,21 +61,7 @@
      <ID>R</ID>
      <KEY/>
      <ENTRY>TEST</ENTRY>
-     <LENGTH>24</LENGTH>
-     <SPLIT/>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_BITS</KEY>
-     <ENTRY>Bit length</ENTRY>
-     <LENGTH>18</LENGTH>
-     <SPLIT/>
-    </item>
-    <item>
-     <ID>S</ID>
-     <KEY>P_PNUM</KEY>
-     <ENTRY>Number of primes</ENTRY>
-     <LENGTH>24</LENGTH>
+     <LENGTH>4</LENGTH>
      <SPLIT/>
     </item>
    </TPOOL>
