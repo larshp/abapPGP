@@ -855,6 +855,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ASSERT NOT io_integer->mv_negative = abap_true.
 
+* todo, new protected divide method that returns both quotient and remainder
     lo_div = clone( )->divide_knuth( io_integer ).
 
     lo_mult = lo_div->clone( )->multiply( io_integer ).

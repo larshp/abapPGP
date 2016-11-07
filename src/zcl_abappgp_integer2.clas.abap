@@ -93,11 +93,12 @@ protected section.
     ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
   data MT_SPLIT type TY_SPLIT_TT .
-  class-data GV_MAX type I value 8192. "#EC NOTEXT .  . " .
-  class-data GV_BITS type I value 13. "#EC NOTEXT .  . " .
+  class-data GV_MAX type I value 8192. "#EC NOTEXT .  .  . " .
+  class-data GV_BITS type I value 13. "#EC NOTEXT .  .  . " .
   class-data GO_MAX type ref to ZCL_ABAPPGP_INTEGER .
   class-data:
     gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
+  class-data GO_TWO type ref to ZCL_ABAPPGP_INTEGER2 .
 
   methods REMOVE_LEADING_ZEROS .
   class-methods SPLIT_AT
@@ -210,6 +211,11 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
         iv_integer = gv_max.
 
     APPEND go_max TO gt_powers.
+
+
+    CREATE OBJECT go_two
+      EXPORTING
+        iv_integer = 2.
 
   ENDMETHOD.
 
@@ -555,9 +561,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
     shift_left( 2 * lv_m * gv_bits ).
     add( lo_z0 ).
     add( lo_z1->shift_left( lv_m * gv_bits ) ).
-    subtract( lo_z2->shift_left( lv_m * gv_bits ) ).
-    subtract( lo_z0->shift_left( lv_m * gv_bits ) ).
-
+    subtract( lo_z2->add( lo_z0 )->shift_left( lv_m * gv_bits ) ).
     ro_integer = me.
 
   ENDMETHOD.
@@ -589,24 +593,19 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD shift_left.
 
-    DATA: lo_two      TYPE REF TO zcl_abappgp_integer2,
-          lv_append   TYPE i,
+    DATA: lv_append   TYPE i,
           lv_multiply TYPE i.
 
-
-    CREATE OBJECT lo_two
-      EXPORTING
-        iv_integer = 2.
 
     lv_append   = iv_times DIV gv_bits.
     lv_multiply = iv_times MOD gv_bits.
 
-    DO lv_append TIMES.
-      INSERT 0 INTO mt_split INDEX 1.
+    DO lv_multiply TIMES.
+      ro_result = multiply( go_two ).
     ENDDO.
 
-    DO lv_multiply TIMES.
-      ro_result = multiply( lo_two ).
+    DO lv_append TIMES.
+      INSERT 0 INTO mt_split INDEX 1.
     ENDDO.
 
     ro_result = me.
@@ -640,7 +639,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD SPLIT_AT.
+  METHOD split_at.
 
     DATA: lv_split TYPE ty_split.
 
