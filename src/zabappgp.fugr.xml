@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>abapPGP function modules</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZABAPPGPTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZABAPPGP</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_ABAPPGP_CHECK_PRIME</FUNCNAME>
+     <INCLUDE>LZABAPPGPU01</INCLUDE>
+     <GLOBAL_FLAG/>
+     <REMOTE_CALL>R</REMOTE_CALL>
+     <UPDATE_TASK/>
+     <SHORT_TEXT>Check if integer is prime or not</SHORT_TEXT>
+     <REMOTE_BASXML/>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_INTEGER</PARAMETER>
+       <DBFIELD/>
+       <DEFAULT/>
+       <TYPES/>
+       <OPTIONAL/>
+       <REFERENCE/>
+       <CHANGING/>
+       <TYP>STRING</TYP>
+       <CLASS/>
+       <REF_CLASS/>
+       <LINE_OF/>
+       <TABLE_OF/>
+      </RSIMP>
+     </IMPORT>
+     <CHANGING/>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>EV_PRIME</PARAMETER>
+       <DBFIELD/>
+       <TYPES/>
+       <REFERENCE/>
+       <TYP>FLAG</TYP>
+       <CLASS/>
+       <REF_CLASS/>
+       <LINE_OF/>
+       <TABLE_OF/>
+      </RSEXP>
+     </EXPORT>
+     <TABLES/>
+     <EXCEPTION/>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>IV_INTEGER</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT/>
+       <INDEX> 001</INDEX>
+      </RSFDO>
+      <RSFDO>
+       <PARAMETER>EV_PRIME</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>General Flag</STEXT>
+       <INDEX> 002</INDEX>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+   <DYNPROS/>
+   <CUA>
+    <ADM>
+     <ACTCODE/>
+     <MENCODE/>
+     <PFKCODE/>
+     <DEFAULTACT/>
+     <DEFAULTPFK/>
+     <MOD_LANGU/>
+    </ADM>
+    <STA/>
+    <FUN/>
+    <MEN/>
+    <MTX/>
+    <ACT/>
+    <BUT/>
+    <PFK/>
+    <SET/>
+    <DOC/>
+    <TIT/>
+    <BIV/>
+   </CUA>
+  </asx:values>
+ </asx:abap>
+</abapGit>
