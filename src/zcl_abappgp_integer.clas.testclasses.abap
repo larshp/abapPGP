@@ -4,7 +4,8 @@ CLASS ltcl_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
     METHODS:
       gcd1 FOR TESTING,
       gcd2 FOR TESTING,
-      gcd3 FOR TESTING.
+      gcd3 FOR TESTING,
+      gcd4 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_a   TYPE string
@@ -16,7 +17,20 @@ ENDCLASS.
 CLASS ltcl_gcd IMPLEMENTATION.
 
   METHOD test.
-* todo
+
+    DATA: lo_a TYPE REF TO zcl_abappgp_integer,
+          lo_b TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_a = zcl_abappgp_integer=>from_string( iv_a ).
+    lo_b = zcl_abappgp_integer=>from_string( iv_b ).
+
+    lo_a = lo_a->gcd( lo_b ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_a->to_string( )
+      exp = iv_exp ).
+
   ENDMETHOD.
 
   METHOD gcd1.
@@ -34,6 +48,12 @@ CLASS ltcl_gcd IMPLEMENTATION.
   METHOD gcd3.
     test( iv_a   = '17'
           iv_b   = '3120'
+          iv_exp = '1' ).
+  ENDMETHOD.
+
+  METHOD gcd4.
+    test( iv_a   = '1'
+          iv_b   = '1'
           iv_exp = '1' ).
   ENDMETHOD.
 
