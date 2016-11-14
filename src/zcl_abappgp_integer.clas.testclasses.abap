@@ -1,3 +1,45 @@
+CLASS ltcl_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      gcd1 FOR TESTING,
+      gcd2 FOR TESTING,
+      gcd3 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_a   TYPE string
+                     iv_b   TYPE string
+                     iv_exp TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_gcd IMPLEMENTATION.
+
+  METHOD test.
+* todo
+  ENDMETHOD.
+
+  METHOD gcd1.
+    test( iv_a   = '5'
+          iv_b   = '108'
+          iv_exp = '1' ).
+  ENDMETHOD.
+
+  METHOD gcd2.
+    test( iv_a   = '4'
+          iv_b   = '108'
+          iv_exp = '4' ).
+  ENDMETHOD.
+
+  METHOD gcd3.
+    test( iv_a   = '17'
+          iv_b   = '3120'
+          iv_exp = '1' ).
+  ENDMETHOD.
+
+ENDCLASS.
+
+
 CLASS ltcl_mod_inverse DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
@@ -613,9 +655,9 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide_generic.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer,
-          lv_op1 TYPE string,
-          lv_op2 TYPE string,
+    DATA: lo_res      TYPE REF TO zcl_abappgp_integer,
+          lv_op1      TYPE string,
+          lv_op2      TYPE string,
           lv_expected TYPE i.
 
 

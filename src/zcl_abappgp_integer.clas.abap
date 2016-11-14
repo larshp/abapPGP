@@ -56,6 +56,11 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods GCD
+    importing
+      !IO_INPUT type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   methods GET_STRING_LENGTH
     returning
       value(RV_LENGTH) type I .
@@ -643,6 +648,39 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     CREATE OBJECT ro_integer.
     ro_integer->split( iv_integer ).
+
+  ENDMETHOD.
+
+
+  METHOD gcd.
+* https://en.wikipedia.org/wiki/Euclidean_algorithm
+
+    DATA: lo_b TYPE REF TO zcl_abappgp_integer,
+          lo_a TYPE REF TO zcl_abappgp_integer,
+          lo_t TYPE REF TO zcl_abappgp_integer.
+
+
+    ASSERT io_input->is_positive( ) = abap_true.
+    ASSERT is_positive( ) = abap_true.
+
+    lo_b = io_input->clone( ).
+    lo_a = clone( ).
+
+    WHILE lo_b->is_zero( ) = abap_false.
+      lo_t = lo_b->clone( ).
+      lo_b = lo_a->clone( )->mod( lo_b ).
+      lo_a = lo_t.
+    ENDWHILE.
+
+    mt_split = lo_a->mt_split.
+
+    ro_integer = me.
+
+*    while b ≠ 0
+*       t := b;
+*       b := a mod b;
+*       a := t;
+*    return a;
 
   ENDMETHOD.
 
