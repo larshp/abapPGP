@@ -10,7 +10,6 @@ FORM run.
   DATA: lv_max  TYPE i,
         lv_free TYPE i.
 
-
   CALL FUNCTION 'SPBT_INITIALIZE'
     EXPORTING
       group_name                     = p_gname
