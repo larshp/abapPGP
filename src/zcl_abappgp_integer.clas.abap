@@ -7,6 +7,16 @@ class ZCL_ABAPPGP_INTEGER definition
 public section.
 
   class-methods CLASS_CONSTRUCTOR .
+  class-methods EXTENDED_GCD
+    importing
+      !IO_A type ref to ZCL_ABAPPGP_INTEGER
+      !IO_B type ref to ZCL_ABAPPGP_INTEGER
+    exporting
+      !EO_COEFF1 type ref to ZCL_ABAPPGP_INTEGER
+      !EO_COEFF2 type ref to ZCL_ABAPPGP_INTEGER
+      !EO_GCD type ref to ZCL_ABAPPGP_INTEGER
+      !EO_QUO1 type ref to ZCL_ABAPPGP_INTEGER
+      !EO_QUO2 type ref to ZCL_ABAPPGP_INTEGER .
   class-methods FROM_HIGH_LENGTH
     importing
       !IV_COUNT type I
@@ -19,7 +29,7 @@ public section.
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   class-methods FROM_STRING
     importing
-      !IV_INTEGER type STRING
+      !IV_INTEGER type CLIKE
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   methods ADD
@@ -605,6 +615,59 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD extended_gcd.
+* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+
+    DATA: lo_s        TYPE REF TO zcl_abappgp_integer,
+          lo_t        TYPE REF TO zcl_abappgp_integer,
+          lo_r        TYPE REF TO zcl_abappgp_integer,
+          lo_old_s    TYPE REF TO zcl_abappgp_integer,
+          lo_old_t    TYPE REF TO zcl_abappgp_integer,
+          lo_old_r    TYPE REF TO zcl_abappgp_integer,
+          lo_prov     TYPE REF TO zcl_abappgp_integer,
+          lo_quotient TYPE REF TO zcl_abappgp_integer.
+
+
+    CREATE OBJECT lo_s
+      EXPORTING
+        iv_integer = 0.
+    CREATE OBJECT lo_t
+      EXPORTING
+        iv_integer = 1.
+    lo_r = io_b->clone( ).
+    CREATE OBJECT lo_old_s
+      EXPORTING
+        iv_integer = 1.
+    CREATE OBJECT lo_old_t
+      EXPORTING
+        iv_integer = 0.
+    lo_old_r = io_a->clone( ).
+
+    WHILE lo_r->is_zero( ) = abap_false.
+      lo_quotient = lo_old_r->clone( )->divide_knuth( lo_r ).
+
+      lo_prov = lo_r->clone( ).
+      lo_r = lo_old_r->subtract( lo_quotient->clone( )->multiply( lo_prov ) ).
+      lo_old_r = lo_prov.
+
+      lo_prov = lo_s->clone( ).
+      lo_s = lo_old_s->subtract( lo_quotient->clone( )->multiply( lo_prov ) ).
+      lo_old_s = lo_prov.
+
+      lo_prov = lo_t->clone( ).
+      lo_t = lo_old_t->subtract( lo_quotient->clone( )->multiply( lo_prov ) ).
+      lo_old_t = lo_prov.
+    ENDWHILE.
+
+    eo_coeff1 = lo_old_s.
+    eo_coeff2 = lo_old_t.
+    eo_gcd    = lo_old_r.
+    eo_quo1   = lo_t.
+    eo_quo2   = lo_s.
+
+  ENDMETHOD.
+
+
   METHOD from_high_length.
 
     DATA: lv_str TYPE string.
@@ -641,13 +704,18 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD from_string.
 
-    ASSERT iv_integer CO '-1234567890'.
-    IF strlen( iv_integer ) > 1.
-      ASSERT NOT iv_integer(1) = '0'.
+    DATA: lv_str TYPE string.
+
+
+    lv_str = iv_integer.
+
+    ASSERT lv_str CO '-1234567890'.
+    IF strlen( lv_str ) > 1.
+      ASSERT NOT lv_str(1) = '0'.
     ENDIF.
 
     CREATE OBJECT ro_integer.
-    ro_integer->split( iv_integer ).
+    ro_integer->split( lv_str ).
 
   ENDMETHOD.
 

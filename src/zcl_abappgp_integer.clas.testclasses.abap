@@ -1,3 +1,79 @@
+CLASS ltcl_extended_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      test1 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_a      TYPE string
+                     iv_b      TYPE string
+                     iv_coeff1 TYPE string
+                     iv_coeff2 TYPE string
+                     iv_gcd    TYPE string
+                     iv_quo1   TYPE string
+                     iv_quo2   TYPE string.
+
+ENDCLASS.
+
+CLASS ltcl_extended_gcd IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lo_a      TYPE REF TO zcl_abappgp_integer,
+          lo_b      TYPE REF TO zcl_abappgp_integer,
+          lo_coeff1 TYPE REF TO zcl_abappgp_integer,
+          lo_coeff2 TYPE REF TO zcl_abappgp_integer,
+          lo_gcd    TYPE REF TO zcl_abappgp_integer,
+          lo_quo1   TYPE REF TO zcl_abappgp_integer,
+          lo_quo2   TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_a = zcl_abappgp_integer=>from_string( iv_a ).
+    lo_b = zcl_abappgp_integer=>from_string( iv_b ).
+
+    zcl_abappgp_integer=>extended_gcd(
+      EXPORTING
+        io_a      = lo_a
+        io_b      = lo_b
+      IMPORTING
+        eo_coeff1 = lo_coeff1
+        eo_coeff2 = lo_coeff2
+        eo_gcd    = lo_gcd
+        eo_quo1   = lo_quo1
+        eo_quo2   = lo_quo2 ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_coeff1->to_string( )
+      exp = iv_coeff1 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_coeff2->to_string( )
+      exp = iv_coeff2 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_gcd->to_string( )
+      exp = iv_gcd ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_quo1->to_string( )
+      exp = iv_quo1 ).
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_quo2->to_string( )
+      exp = iv_quo2 ).
+
+  ENDMETHOD.
+
+  METHOD test1.
+
+    test( iv_a      = '240'
+          iv_b      = '46'
+          iv_coeff1 = '-9'
+          iv_coeff2 = '47'
+          iv_gcd    = '2'
+          iv_quo1   = '-120'
+          iv_quo2   = '23' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
