@@ -11,6 +11,7 @@ FORM run.
   DATA: lo_one    TYPE REF TO zcl_abappgp_integer,
         lo_prime1 TYPE REF TO zcl_abappgp_integer,
         lo_prime2 TYPE REF TO zcl_abappgp_integer,
+        lo_d      TYPE REF TO zcl_abappgp_integer,
         lo_n      TYPE REF TO zcl_abappgp_integer,
         lo_e      TYPE REF TO zcl_abappgp_integer,
         lo_m      TYPE REF TO zcl_abappgp_integer.
@@ -31,6 +32,17 @@ FORM run.
   WRITE: / 'n:', lo_n->to_string( ).
   WRITE: / 'm:', lo_m->to_string( ).
   WRITE: / 'e:', lo_e->to_string( ).
+
+  zcl_abappgp_integer=>extended_gcd(
+    EXPORTING
+      io_a      = lo_e
+      io_b      = lo_m
+    IMPORTING
+      eo_coeff1 = lo_d ).
+  IF lo_d->is_negative( ) = abap_true.
+    lo_d = lo_d->add( lo_m ).
+  ENDIF.
+  WRITE: / 'd:', lo_d->to_string( ).
 
 ENDFORM.
 
