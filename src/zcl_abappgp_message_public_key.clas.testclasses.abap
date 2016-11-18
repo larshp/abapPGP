@@ -1,4 +1,3 @@
-
 CLASS ltcl_test DEFINITION FOR TESTING
   DURATION SHORT
   RISK LEVEL HARMLESS FINAL.
@@ -43,7 +42,7 @@ CLASS ltcl_test IMPLEMENTATION.
       INTO lv_public
       SEPARATED BY cl_abap_char_utilities=>newline.
 
-    zcl_abappgp_key=>from_string( lv_public ).
+    zcl_abappgp_message_public_key=>from_string( lv_public ).
 
 * todo
 
