@@ -93,7 +93,7 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
 
     WHILE io_stream->get_length( ) > 0.
       lv_tag = packet_header( io_stream ).
-      lo_data = io_stream->eat_stream( zcl_abappgp_convert=>read_length( io_stream ) ).
+      lo_data = io_stream->eat_stream( io_stream->eat_length( ) ).
 
       CASE lv_tag.
         WHEN zif_abappgp_constants=>c_tag-public_key_enc.

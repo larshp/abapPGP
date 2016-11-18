@@ -20,16 +20,6 @@ public section.
       !IV_BITS type STRING
     returning
       value(RV_INT) type I .
-  class-methods READ_LENGTH
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RV_LENGTH) type I .
-  class-methods READ_MPI
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   class-methods STRING_TO_UTF8
     importing
       !IV_DATA type STRING
@@ -127,50 +117,6 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
       lv_bits = lv_bits+1.
       lv_multi = lv_multi * 2.
     ENDWHILE.
-
-  ENDMETHOD.
-
-
-  METHOD read_length.
-* https://tools.ietf.org/html/rfc4880#section-4.2.2
-
-* todo, move to stream
-
-    DATA: lv_octet TYPE x LENGTH 1,
-          lv_bits  TYPE string.
-
-
-    lv_octet = io_stream->eat_octet( ).
-    lv_bits = zcl_abappgp_convert=>to_bits( lv_octet ).
-    rv_length = zcl_abappgp_convert=>bits_to_integer( lv_bits ).
-
-    IF rv_length > 191.
-      BREAK-POINT.
-    ENDIF.
-
-  ENDMETHOD.
-
-
-  METHOD read_mpi.
-
-* todo, move to stream
-
-    DATA: lv_length TYPE i,
-          lv_octets TYPE i.
-
-
-    lv_length = bits_to_integer(
-      to_bits(
-      io_stream->eat_octets( 2 ) ) ).
-
-    lv_octets = lv_length DIV 8.
-    IF lv_length MOD 8 <> 0.
-      lv_octets = lv_octets + 1.
-    ENDIF.
-
-    ro_integer = bits_to_big_integer(
-      to_bits(
-      io_stream->eat_octets( lv_octets ) ) ).
 
   ENDMETHOD.
 

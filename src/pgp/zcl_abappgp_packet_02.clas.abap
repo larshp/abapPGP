@@ -69,7 +69,7 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
 
     WHILE io_stream->get_length( ) > 0.
-      lv_length = zcl_abappgp_convert=>read_length( io_stream ) - 1.
+      lv_length = io_stream->eat_length( ) - 1.
       lv_sub_type = zcl_abappgp_convert=>bits_to_integer(
         zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ) ).
       lo_data = io_stream->eat_stream( lv_length ).
@@ -177,7 +177,7 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
     lv_left = io_stream->eat_octets( 2 ).
 
 * todo, one or more MPI, algorithm specific
-    lo_integer = zcl_abappgp_convert=>read_mpi( io_stream ).
+    lo_integer = io_stream->eat_mpi( ).
 
     BREAK-POINT.
 
