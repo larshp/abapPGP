@@ -9,7 +9,8 @@ public section.
   aliases FROM_STREAM
     for ZIF_ABAPPGP_PACKET~FROM_STREAM .
 
-  types TY_SUBPACKETS type standard table of ref to zif_abappgp_subpacket with default key .
+  types:
+    TY_SUBPACKETS type standard table of ref to zif_abappgp_subpacket with default key .
 protected section.
 
   types TY_SUB_TYPE type I .
@@ -143,6 +144,13 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD zif_abappgp_packet~dump.
+
+    BREAK-POINT.
+
+  ENDMETHOD.
+
+
   METHOD zif_abappgp_packet~from_stream.
 
     DATA: lv_version   TYPE x LENGTH 1,
@@ -184,9 +192,16 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~GET_TAG.
+  METHOD zif_abappgp_packet~get_name.
 
-    BREAK-POINT.
+    rv_name = 'Signature Packet'.
+
+  ENDMETHOD.
+
+
+  METHOD zif_abappgp_packet~get_tag.
+
+    rv_tag = zif_abappgp_constants=>c_tag-signature.
 
   ENDMETHOD.
 

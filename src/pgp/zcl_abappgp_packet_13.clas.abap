@@ -45,9 +45,16 @@ CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~GET_TAG.
+  METHOD zif_abappgp_packet~get_name.
 
-    BREAK-POINT.
+    rv_name = 'User ID Packet'.
+
+  ENDMETHOD.
+
+
+  METHOD zif_abappgp_packet~get_tag.
+
+    rv_tag = zif_abappgp_constants=>c_tag-user_id.
 
   ENDMETHOD.
 

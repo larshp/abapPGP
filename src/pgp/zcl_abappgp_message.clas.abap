@@ -1,6 +1,6 @@
 class ZCL_ABAPPGP_MESSAGE definition
   public
-  final
+  abstract
   create public .
 
 public section.
@@ -142,12 +142,10 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
 
   METHOD packet_header.
 
-    DATA: lv_octet TYPE x LENGTH 1,
-          lv_bits  TYPE string.
+    DATA: lv_bits  TYPE string.
 
 
-    lv_octet = io_stream->eat_octet( ).
-    lv_bits = zcl_abappgp_convert=>to_bits( lv_octet ).
+    lv_bits = zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ).
     ASSERT lv_bits(2) = '11'.
     lv_bits = lv_bits+2.
     rv_tag = determine_tag( lv_bits ).

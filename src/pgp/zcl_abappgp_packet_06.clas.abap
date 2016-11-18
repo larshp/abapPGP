@@ -11,12 +11,18 @@ public section.
 
   methods CONSTRUCTOR
     importing
-      !IV_VERSION type XSEQUENCE
-      !IV_TIME type XSEQUENCE
-      !IV_ALGORITHM type XSEQUENCE
+      !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
+      !IV_TIME type I
+      !IV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
       !IO_N type ref to ZCL_ABAPPGP_INTEGER
       !IO_E type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
+
+  data MO_E type ref to ZCL_ABAPPGP_INTEGER .
+  data MO_N type ref to ZCL_ABAPPGP_INTEGER .
+  data MV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB .
+  data MV_TIME type I .
+  data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
 private section.
 ENDCLASS.
 
@@ -25,11 +31,20 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
 
 
-  METHOD CONSTRUCTOR.
+  METHOD constructor.
 
-* todo, change types of IV_VERSION + IV_TIME + IV_ALGORITHM ?
+    mo_e         = io_e.
+    mo_n         = io_n.
+    mv_algorithm = iv_algorithm.
+    mv_time      = iv_time.
+    mv_version   = iv_version.
 
-* todo
+  ENDMETHOD.
+
+
+  METHOD zif_abappgp_packet~dump.
+
+    BREAK-POINT.
 
   ENDMETHOD.
 
@@ -38,22 +53,21 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
 
     DATA: lv_version   TYPE x LENGTH 1,
           lv_algorithm TYPE x LENGTH 1,
-          lv_time      TYPE x LENGTH 4,
+          lv_time      TYPE i,
           lo_n         TYPE REF TO zcl_abappgp_integer,
           lo_e         TYPE REF TO zcl_abappgp_integer.
 
 
     lv_version = io_stream->eat_octet( ).
-    ASSERT lv_version = '04'.
+    ASSERT lv_version = zif_abappgp_constants=>c_version-version04.
 
     lv_time = io_stream->eat_octets( 4 ).
 
     lv_algorithm = io_stream->eat_octet( ).
-    ASSERT lv_algorithm = zif_abappgp_constants=>c_algorithm-rsa.
+    ASSERT lv_algorithm = zif_abappgp_constants=>c_algorithm_pub-rsa.
 
-    lo_n = zcl_abappgp_convert=>read_mpi( io_stream ).
-
-    lo_e = zcl_abappgp_convert=>read_mpi( io_stream ).
+    lo_n = io_stream->eat_mpi( ).
+    lo_e = io_stream->eat_mpi( ).
 
     CREATE OBJECT ri_packet
       TYPE zcl_abappgp_packet_06
@@ -67,9 +81,16 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~GET_TAG.
+  METHOD zif_abappgp_packet~get_name.
 
-    BREAK-POINT.
+    rv_name = 'Public-Key Packet'.
+
+  ENDMETHOD.
+
+
+  METHOD zif_abappgp_packet~get_tag.
+
+    rv_tag = zif_abappgp_constants=>c_tag-public_key.
 
   ENDMETHOD.
 

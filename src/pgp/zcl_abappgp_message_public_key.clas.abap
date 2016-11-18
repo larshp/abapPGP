@@ -1,5 +1,6 @@
 class ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY definition
   public
+  inheriting from ZCL_ABAPPGP_MESSAGE
   create public .
 
 public section.
@@ -50,7 +51,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY IMPLEMENTATION.
   METHOD from_string.
 
     DATA: lo_stream  TYPE REF TO zcl_abappgp_stream,
-          lt_packets TYPE zcl_abappgp_message=>ty_packet_list,
+          lt_packets TYPE ty_packet_list,
           lv_bin     TYPE xstring.
 
 
@@ -60,7 +61,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY IMPLEMENTATION.
       EXPORTING
         iv_data = lv_bin.
 
-    lt_packets = zcl_abappgp_message=>from_stream( lo_stream ).
+    lt_packets = from_stream( lo_stream ).
 
 * todo, return value?
 

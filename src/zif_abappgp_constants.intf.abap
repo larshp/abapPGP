@@ -2,13 +2,22 @@ INTERFACE zif_abappgp_constants
   PUBLIC .
 
 
-  TYPES ty_algorithm TYPE x LENGTH 1.
+  TYPES ty_algorithm_pub TYPE x LENGTH 1.
+  TYPES ty_algorithm_sym TYPE x LENGTH 1.
+  TYPES ty_version TYPE x LENGTH 1.
   TYPES ty_tag TYPE i .
 
   CONSTANTS:
-    BEGIN OF c_algorithm,
-      rsa TYPE ty_algorithm VALUE '01',
-    END OF c_algorithm .
+    BEGIN OF c_algorithm_pub,
+      rsa TYPE ty_algorithm_pub VALUE '01',
+    END OF c_algorithm_pub.
+
+  CONSTANTS:
+    BEGIN OF c_version,
+      version03 TYPE ty_algorithm_pub VALUE '03',
+      version04 TYPE ty_algorithm_pub VALUE '04',
+    END OF c_version.
+
   CONSTANTS:
     BEGIN OF c_tag,
       public_key_enc         TYPE ty_tag VALUE 1,
