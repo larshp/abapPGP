@@ -1,3 +1,94 @@
+CLASS ltcl_from_hex DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      test01 FOR TESTING,
+      test02 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_exp TYPE string
+                     iv_hex TYPE xstring.
+
+ENDCLASS.
+
+CLASS ltcl_from_hex IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lv_hex TYPE xstring,
+          lo_int TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_int = zcl_abappgp_integer=>from_hex( iv_hex ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_int->to_string( )
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD test01.
+
+    test( iv_exp = '65537'
+          iv_hex = '010001' ).
+
+  ENDMETHOD.
+
+  METHOD test02.
+
+    test( iv_exp = '8070450532247928831'
+          iv_hex = '6FFFFFFFFFFFFFFF' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+CLASS ltcl_to_hex DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      test01 FOR TESTING,
+      test02 FOR TESTING.
+
+    METHODS:
+      test IMPORTING iv_int TYPE string
+                     iv_exp TYPE xstring.
+
+ENDCLASS.
+
+CLASS ltcl_to_hex IMPLEMENTATION.
+
+  METHOD test.
+
+    DATA: lv_hex TYPE xstring,
+          lo_int TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_int = zcl_abappgp_integer=>from_string( iv_int ).
+    lv_hex = lo_int->to_hex( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_hex
+      exp = iv_exp ).
+
+  ENDMETHOD.
+
+  METHOD test01.
+
+    test( iv_int = '65537'
+          iv_exp = '010001' ).
+
+  ENDMETHOD.
+
+  METHOD test02.
+
+    test( iv_int = '8070450532247928831'
+          iv_exp = '6FFFFFFFFFFFFFFF' ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_extended_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.

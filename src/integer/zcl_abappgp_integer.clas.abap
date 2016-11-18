@@ -17,6 +17,11 @@ public section.
       !EO_GCD type ref to ZCL_ABAPPGP_INTEGER
       !EO_QUO1 type ref to ZCL_ABAPPGP_INTEGER
       !EO_QUO2 type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods FROM_HEX
+    importing
+      !IV_HEX type XSEQUENCE
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
   class-methods FROM_HIGH_LENGTH
     importing
       !IV_COUNT type I
@@ -175,6 +180,12 @@ public section.
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
+  methods TO_HEX
+    returning
+      value(RV_HEX) type XSTRING .
+  methods TO_INTEGER
+    returning
+      value(RV_INTEGER) type I .
   methods TO_STRING
     returning
       value(RV_INTEGER) type STRING .
@@ -664,6 +675,41 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     eo_gcd    = lo_old_r.
     eo_quo1   = lo_t.
     eo_quo2   = lo_s.
+
+  ENDMETHOD.
+
+
+  METHOD from_hex.
+
+    DATA: lv_offset TYPE i,
+          lv_int    TYPE i,
+          lo_multi  TYPE REF TO zcl_abappgp_integer,
+          lo_add    TYPE REF TO zcl_abappgp_integer,
+          lv_hex    TYPE x LENGTH 1.
+
+
+    CREATE OBJECT ro_integer
+      EXPORTING
+        iv_integer = 0.
+
+    CREATE OBJECT lo_multi
+      EXPORTING
+        iv_integer = 1.
+
+    DO xstrlen( iv_hex ) TIMES.
+      lv_offset = xstrlen( iv_hex ) - sy-index.
+      lv_hex = iv_hex+lv_offset(1).
+      lv_int = lv_hex.
+
+      CREATE OBJECT lo_add
+        EXPORTING
+          iv_integer = lv_int.
+      lo_add = lo_add->multiply( lo_multi ).
+
+      ro_integer = ro_integer->add( lo_add ).
+
+      lo_multi = lo_multi->multiply_int( 256 ).
+    ENDDO.
 
   ENDMETHOD.
 
@@ -1519,6 +1565,40 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     ro_result = me.
+
+  ENDMETHOD.
+
+
+  METHOD to_hex.
+
+    DATA: lo_this TYPE REF TO zcl_abappgp_integer,
+          lo_max  TYPE REF TO zcl_abappgp_integer,
+          lo_tmp  TYPE REF TO zcl_abappgp_integer,
+          lv_hex  TYPE x LENGTH 1.
+
+
+    CREATE OBJECT lo_max
+      EXPORTING
+        iv_integer = 256.
+
+    lo_this = clone( ).
+
+    WHILE lo_this->is_zero( ) = abap_false.
+      lv_hex = lo_this->clone( )->mod( lo_max )->to_integer( ).
+      lo_this = lo_this->divide_knuth( lo_max ).
+      CONCATENATE lv_hex rv_hex INTO rv_hex IN BYTE MODE.
+    ENDWHILE.
+
+  ENDMETHOD.
+
+
+  METHOD to_integer.
+
+    ASSERT is_positive( ) = abap_true.
+    ASSERT lines( mt_split ) = 1.
+
+    READ TABLE mt_split INDEX 1 INTO rv_integer.
+    ASSERT sy-subrc = 0.
 
   ENDMETHOD.
 
