@@ -29,12 +29,7 @@ protected section.
     importing
       !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
     returning
-      value(RV_TAG) type zif_abappgp_constants=>TY_TAG .
-  class-methods PACKET_LENGTH
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RV_LENGTH) type I .
+      value(RV_TAG) type ZIF_ABAPPGP_CONSTANTS=>TY_TAG .
 private section.
 ENDCLASS.
 
@@ -91,19 +86,56 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
 
   METHOD from_stream.
 
-    DATA: lv_tag    TYPE zif_abappgp_constants=>ty_tag,
-          lv_length TYPE i.
+    DATA: lo_data TYPE REF TO zcl_abappgp_stream,
+          lv_tag  TYPE zif_abappgp_constants=>ty_tag,
+          li_pkt  TYPE REF TO zif_abappgp_packet.
 
 
-    lv_tag = packet_header( io_stream ).
-    lv_length = packet_length( io_stream ).
+    WHILE io_stream->get_length( ) > 0.
+      lv_tag = packet_header( io_stream ).
+      lo_data = io_stream->eat_stream( zcl_abappgp_convert=>read_length( io_stream ) ).
 
-    CASE lv_tag.
-      WHEN zif_abappgp_constants=>c_tag-public_key.
-        APPEND zcl_abappgp_packet_public_key=>zif_abappgp_packet~from_stream( io_stream ) TO rt_packets.
-      WHEN OTHERS.
-        BREAK-POINT.
-    ENDCASE.
+      CASE lv_tag.
+        WHEN zif_abappgp_constants=>c_tag-public_key_enc.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-signature.
+          li_pkt = zcl_abappgp_packet_02=>from_stream( lo_data ).
+        WHEN zif_abappgp_constants=>c_tag-symmetric_key_enc.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-one_pass.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-secret_key.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-public_key.
+          li_pkt = zcl_abappgp_packet_06=>from_stream( lo_data ).
+        WHEN zif_abappgp_constants=>c_tag-secret_subkey.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-compressed_data.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-symmetrical_enc.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-marker.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-literal.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-trust.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-user_id.
+          li_pkt = zcl_abappgp_packet_13=>from_stream( lo_data ).
+        WHEN zif_abappgp_constants=>c_tag-public_subkey.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-user_attribute.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-symmetrical_inte.
+          BREAK-POINT.
+        WHEN zif_abappgp_constants=>c_tag-modification_detection.
+          BREAK-POINT.
+        WHEN OTHERS.
+          ASSERT 0 = 1.
+      ENDCASE.
+
+      APPEND li_pkt TO rt_packets.
+    ENDWHILE.
 
   ENDMETHOD.
 
@@ -119,24 +151,6 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
     ASSERT lv_bits(2) = '11'.
     lv_bits = lv_bits+2.
     rv_tag = determine_tag( lv_bits ).
-
-  ENDMETHOD.
-
-
-  METHOD packet_length.
-* https://tools.ietf.org/html/rfc4880#section-4.2.2
-
-    DATA: lv_octet TYPE x LENGTH 1,
-          lv_bits  TYPE string.
-
-
-    lv_octet = io_stream->eat_octet( ).
-    lv_bits = zcl_abappgp_convert=>to_bits( lv_octet ).
-    rv_length = zcl_abappgp_convert=>bits_to_integer( lv_bits ).
-
-    IF rv_length > 191.
-      BREAK-POINT.
-    ENDIF.
 
   ENDMETHOD.
 

@@ -1,4 +1,4 @@
-interface ZIF_ABAPPGP_PACKET
+interface ZIF_ABAPPGP_SUBPACKET
   public .
 
 
@@ -6,11 +6,11 @@ interface ZIF_ABAPPGP_PACKET
     importing
       !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
     returning
-      value(RI_PACKET) type ref to ZIF_ABAPPGP_PACKET .
+      value(RI_PACKET) type ref to ZIF_ABAPPGP_SUBPACKET .
   methods TO_STREAM
     returning
       value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
-  methods GET_TAG
+  methods GET_TYPE
     returning
       value(RV_TAG) type ZIF_ABAPPGP_CONSTANTS=>TY_TAG .
 endinterface.

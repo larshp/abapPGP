@@ -20,17 +20,33 @@ public section.
       !IV_BITS type STRING
     returning
       value(RV_INT) type I .
-  class-methods TO_BITS
+  class-methods READ_LENGTH
     importing
-      !IV_DATA type XSEQUENCE
+      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
     returning
-      value(RV_BITS) type STRING .
+      value(RV_LENGTH) type I .
   class-methods READ_MPI
     importing
       !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods STRING_TO_UTF8
+    importing
+      !IV_DATA type STRING
+    returning
+      value(RV_DATA) type XSTRING .
+  class-methods TO_BITS
+    importing
+      !IV_DATA type XSEQUENCE
+    returning
+      value(RV_BITS) type STRING .
+  class-methods UTF8_TO_STRING
+    importing
+      !IV_DATA type XSTRING
+    returning
+      value(RV_DATA) type STRING .
 protected section.
+private section.
 ENDCLASS.
 
 
@@ -115,9 +131,29 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD read_length.
+* https://tools.ietf.org/html/rfc4880#section-4.2.2
+
+* todo, move to stream
+
+    DATA: lv_octet TYPE x LENGTH 1,
+          lv_bits  TYPE string.
+
+
+    lv_octet = io_stream->eat_octet( ).
+    lv_bits = zcl_abappgp_convert=>to_bits( lv_octet ).
+    rv_length = zcl_abappgp_convert=>bits_to_integer( lv_bits ).
+
+    IF rv_length > 191.
+      BREAK-POINT.
+    ENDIF.
+
+  ENDMETHOD.
+
+
   METHOD read_mpi.
 
-* todo, move this method to somewhere else?
+* todo, move to stream
 
     DATA: lv_length TYPE i,
           lv_octets TYPE i.
@@ -139,6 +175,26 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD string_to_utf8.
+
+    DATA: lo_obj TYPE REF TO cl_abap_conv_out_ce.
+
+
+    TRY.
+        lo_obj = cl_abap_conv_out_ce=>create( encoding = 'UTF-8' ).
+
+        lo_obj->convert( EXPORTING data = iv_data
+                         IMPORTING buffer = rv_data ).
+
+      CATCH cx_parameter_invalid_range
+            cx_sy_codepage_converter_init
+            cx_sy_conversion_codepage
+            cx_parameter_invalid_type.                  "#EC NO_HANDLER
+    ENDTRY.
+
+  ENDMETHOD.
+
+
   METHOD to_bits.
 
     DATA: lv_char   TYPE c LENGTH 1,
@@ -151,6 +207,30 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
       GET BIT sy-index OF iv_data INTO lv_char.
       CONCATENATE rv_bits lv_char INTO rv_bits.
     ENDDO.
+
+  ENDMETHOD.
+
+
+  METHOD utf8_to_string.
+
+    DATA: lv_len TYPE i,
+          lo_obj TYPE REF TO cl_abap_conv_in_ce.
+
+
+    TRY.
+        lo_obj = cl_abap_conv_in_ce=>create(
+            input    = iv_data
+            encoding = 'UTF-8' ).
+        lv_len = xstrlen( iv_data ).
+
+        lo_obj->read( EXPORTING n    = lv_len
+                      IMPORTING data = rv_data ).
+
+      CATCH cx_parameter_invalid_range
+            cx_sy_codepage_converter_init
+            cx_sy_conversion_codepage
+            cx_parameter_invalid_type.                  "#EC NO_HANDLER
+    ENDTRY.
 
   ENDMETHOD.
 ENDCLASS.
