@@ -8,6 +8,10 @@ public section.
 
   aliases FROM_STREAM
     for ZIF_ABAPPGP_PACKET~FROM_STREAM .
+  aliases GET_NAME
+    for ZIF_ABAPPGP_PACKET~GET_NAME .
+  aliases GET_TAG
+    for ZIF_ABAPPGP_PACKET~GET_TAG .
 
   types:
     TY_SUBPACKETS type standard table of ref to zif_abappgp_subpacket with default key .
@@ -146,7 +150,7 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~dump.
 
-    BREAK-POINT.
+    rv_dump = |{ get_name( ) }(tag { get_tag( ) })\n\ttodo\n|.
 
   ENDMETHOD.
 
@@ -187,7 +191,8 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 * todo, one or more MPI, algorithm specific
     lo_integer = io_stream->eat_mpi( ).
 
-    BREAK-POINT.
+    CREATE OBJECT ri_packet
+      TYPE zcl_abappgp_packet_02.
 
   ENDMETHOD.
 

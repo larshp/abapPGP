@@ -15,4 +15,14 @@ ENDCLASS.
 
 
 CLASS ZCL_ABAPPGP_SUBPACKET_04 IMPLEMENTATION.
+
+
+  METHOD zif_abappgp_subpacket~from_stream.
+
+* todo
+
+    CREATE OBJECT ri_packet
+      TYPE zcl_abappgp_subpacket_04.
+
+  ENDMETHOD.
 ENDCLASS.

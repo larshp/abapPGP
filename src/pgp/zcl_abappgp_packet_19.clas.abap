@@ -8,6 +8,10 @@ public section.
 
   aliases FROM_STREAM
     for ZIF_ABAPPGP_PACKET~FROM_STREAM .
+  aliases GET_NAME
+    for ZIF_ABAPPGP_PACKET~GET_NAME .
+  aliases GET_TAG
+    for ZIF_ABAPPGP_PACKET~GET_TAG .
 protected section.
 private section.
 ENDCLASS.
@@ -17,16 +21,19 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_PACKET_19 IMPLEMENTATION.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~DUMP.
+  METHOD zif_abappgp_packet~dump.
 
-    BREAK-POINT.
+    rv_dump = |{ get_name( ) }(tag { get_tag( ) })\n\ttodo\n|.
 
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~FROM_STREAM.
+  METHOD zif_abappgp_packet~from_stream.
 
-    BREAK-POINT.
+* todo
+
+    CREATE OBJECT ri_packet
+      TYPE zcl_abappgp_packet_19.
 
   ENDMETHOD.
 

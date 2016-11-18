@@ -7,6 +7,7 @@ public section.
 
   types:
     TY_PACKET_LIST type standard table of ref to zif_abappgp_packet with default key .
+protected section.
 
   class-methods FROM_STREAM
     importing
@@ -18,8 +19,6 @@ public section.
       !IT_PACKETS type TY_PACKET_LIST
     returning
       value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
-protected section.
-
   class-methods DETERMINE_TAG
     importing
       !IV_STRING type STRING
@@ -97,39 +96,39 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
 
       CASE lv_tag.
         WHEN zif_abappgp_constants=>c_tag-public_key_enc.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_01=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-signature.
           li_pkt = zcl_abappgp_packet_02=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-symmetric_key_enc.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_03=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-one_pass.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_04=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-secret_key.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_05=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-public_key.
           li_pkt = zcl_abappgp_packet_06=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-secret_subkey.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_07=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-compressed_data.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_08=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-symmetrical_enc.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_09=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-marker.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_10=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-literal.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_11=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-trust.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_12=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-user_id.
           li_pkt = zcl_abappgp_packet_13=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-public_subkey.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_14=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-user_attribute.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_17=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-symmetrical_inte.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_18=>from_stream( lo_data ).
         WHEN zif_abappgp_constants=>c_tag-modification_detection.
-          BREAK-POINT.
+          li_pkt = zcl_abappgp_packet_19=>from_stream( lo_data ).
         WHEN OTHERS.
           ASSERT 0 = 1.
       ENDCASE.

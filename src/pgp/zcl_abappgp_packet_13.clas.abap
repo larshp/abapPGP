@@ -8,6 +8,10 @@ public section.
 
   aliases FROM_STREAM
     for ZIF_ABAPPGP_PACKET~FROM_STREAM .
+  aliases GET_NAME
+    for ZIF_ABAPPGP_PACKET~GET_NAME .
+  aliases GET_TAG
+    for ZIF_ABAPPGP_PACKET~GET_TAG .
 
   methods CONSTRUCTOR
     importing
@@ -26,6 +30,13 @@ CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
   METHOD CONSTRUCTOR.
 
     mv_user = iv_user.
+
+  ENDMETHOD.
+
+
+  METHOD zif_abappgp_packet~dump.
+
+    rv_dump = |{ get_name( ) }(tag { get_tag( ) })\n\ttodo\n|.
 
   ENDMETHOD.
 

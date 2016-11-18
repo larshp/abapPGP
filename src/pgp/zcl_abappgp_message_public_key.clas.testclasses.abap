@@ -14,7 +14,8 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD public.
 
-    DATA: lv_public TYPE string.
+    DATA: lv_public  TYPE string,
+          lo_message TYPE REF TO zcl_abappgp_message_public_key.
 
 
     CONCATENATE
@@ -42,8 +43,9 @@ CLASS ltcl_test IMPLEMENTATION.
       INTO lv_public
       SEPARATED BY cl_abap_char_utilities=>newline.
 
-    zcl_abappgp_message_public_key=>from_string( lv_public ).
+    lo_message = zcl_abappgp_message_public_key=>from_string( lv_public ).
 
+    DATA(lv_str) = lo_message->dump( ).
 * todo
 
   ENDMETHOD.

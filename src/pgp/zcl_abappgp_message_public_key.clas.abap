@@ -7,11 +7,18 @@ public section.
 
   class-methods FROM_STRING
     importing
-      !IV_STRING type STRING .
-  methods TO_STRING
+      !IV_STRING type STRING
+    returning
+      value(RO_MESSAGE) type ref to ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY .
+  methods CONSTRUCTOR
+    importing
+      !IT_PACKET_LIST type TY_PACKET_LIST .
+  methods DUMP
     returning
       value(RV_STRING) type STRING .
 protected section.
+
+  data MT_PACKET_LIST type TY_PACKET_LIST .
 
   class-methods FIND_ENCODED_DATA
     importing
@@ -24,6 +31,27 @@ ENDCLASS.
 
 
 CLASS ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY IMPLEMENTATION.
+
+
+  METHOD constructor.
+
+    super->constructor( ).
+
+    mt_packet_list = it_packet_list.
+
+  ENDMETHOD.
+
+
+  METHOD dump.
+
+    DATA: li_packet LIKE LINE OF mt_packet_list.
+
+
+    LOOP AT mt_packet_list INTO li_packet.
+      rv_string = rv_string && li_packet->dump( ).
+    ENDLOOP.
+
+  ENDMETHOD.
 
 
   METHOD find_encoded_data.
@@ -63,14 +91,9 @@ CLASS ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY IMPLEMENTATION.
 
     lt_packets = from_stream( lo_stream ).
 
-* todo, return value?
-
-  ENDMETHOD.
-
-
-  METHOD to_string.
-
-* todo
+    CREATE OBJECT ro_message
+      EXPORTING
+        it_packet_list = lt_packets.
 
   ENDMETHOD.
 ENDCLASS.
