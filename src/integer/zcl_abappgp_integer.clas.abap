@@ -790,12 +790,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     ro_integer = me.
 
-*    while b ≠ 0
-*       t := b;
-*       b := a mod b;
-*       a := t;
-*    return a;
-
   ENDMETHOD.
 
 

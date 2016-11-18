@@ -40,13 +40,13 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
         iv_integer = 1.
 
     ro_coprime = zcl_abappgp_integer=>from_string( '65537' ).
-    IF ro_coprime->is_gt( io_input ).
+    IF ro_coprime->is_gt( io_input ) = abap_true.
       ro_coprime = zcl_abappgp_integer=>from_string( '2' ).
     ENDIF.
 
     DO 99999 TIMES.
       lo_result = io_input->clone( )->gcd( ro_coprime ).
-      IF lo_result->is_one( ).
+      IF lo_result->is_one( ) = abap_true.
         RETURN.
       ENDIF.
       ro_coprime = ro_coprime->add( lo_one ).

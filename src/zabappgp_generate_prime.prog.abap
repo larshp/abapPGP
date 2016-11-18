@@ -38,11 +38,10 @@ FORM run.
       lv_tested = sy-index.
       IF lv_tested MOD 10 = 0.
         cl_progress_indicator=>progress_indicate(
-          EXPORTING
-            i_text          = |New Random, { lv_tested } tested|
-            i_processed     = 50
-            i_total         = 100
-            i_output_immediately = abap_true ).
+          i_text          = |New Random, { lv_tested } tested|
+          i_processed     = 50
+          i_total         = 100
+          i_output_immediately = abap_true ).
         COMMIT WORK.
       ENDIF.
 
