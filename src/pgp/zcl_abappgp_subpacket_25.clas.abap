@@ -14,7 +14,13 @@ public section.
     for ZIF_ABAPPGP_SUBPACKET~GET_TYPE .
   aliases TO_STREAM
     for ZIF_ABAPPGP_SUBPACKET~TO_STREAM .
+
+  methods CONSTRUCTOR
+    importing
+      !IV_FLAG type ABAP_BOOL .
 protected section.
+
+  data MV_FLAG type ABAP_BOOL .
 private section.
 ENDCLASS.
 
@@ -23,19 +29,42 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_SUBPACKET_25 IMPLEMENTATION.
 
 
+  METHOD constructor.
+
+    mv_flag = iv_flag.
+
+  ENDMETHOD.
+
+
   METHOD zif_abappgp_subpacket~dump.
 
-    rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })({ to_stream( )->get_length( ) } bytes)\n\t\ttodo\n|.
+    rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })({
+      to_stream( )->get_length( ) } bytes)\n\t\tFlag\t\t{
+      mv_flag }\n|.
 
   ENDMETHOD.
 
 
   METHOD zif_abappgp_subpacket~from_stream.
 
-* todo
+    DATA: lv_value TYPE x LENGTH 1,
+          lv_flag  TYPE abap_bool.
+
+
+    lv_value = io_stream->eat_octet( ).
+    CASE lv_value.
+      WHEN '00'.
+        lv_flag = abap_false.
+      WHEN '01'.
+        lv_flag = abap_true.
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
 
     CREATE OBJECT ri_packet
-      TYPE zcl_abappgp_subpacket_25.
+      TYPE zcl_abappgp_subpacket_25
+      EXPORTING
+        iv_flag = lv_flag.
 
   ENDMETHOD.
 
@@ -57,7 +86,11 @@ CLASS ZCL_ABAPPGP_SUBPACKET_25 IMPLEMENTATION.
   METHOD zif_abappgp_subpacket~to_stream.
 
     CREATE OBJECT ro_stream.
-* todo
+    IF mv_flag = abap_true.
+      ro_stream->write_octet( '01' ).
+    ELSE.
+      ro_stream->write_octet( '00' ).
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.

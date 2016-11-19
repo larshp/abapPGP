@@ -14,7 +14,13 @@ public section.
     for ZIF_ABAPPGP_SUBPACKET~GET_TYPE .
   aliases TO_STREAM
     for ZIF_ABAPPGP_SUBPACKET~TO_STREAM .
+
+  methods CONSTRUCTOR
+    importing
+      !IV_KEY type XSTRING .
 protected section.
+
+  data MV_KEY type XSTRING .
 private section.
 ENDCLASS.
 
@@ -23,19 +29,30 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_SUBPACKET_16 IMPLEMENTATION.
 
 
+  METHOD constructor.
+
+    ASSERT xstrlen( iv_key ) = 8.
+
+    mv_key = iv_key.
+
+  ENDMETHOD.
+
+
   METHOD zif_abappgp_subpacket~dump.
 
-    rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })({ to_stream( )->get_length( ) } bytes)\n\t\ttodo\n|.
+    rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })({
+      to_stream( )->get_length( ) } bytes)\n\t\tKey\t\t{
+      mv_key }\n|.
 
   ENDMETHOD.
 
 
   METHOD zif_abappgp_subpacket~from_stream.
 
-* todo
-
     CREATE OBJECT ri_packet
-      TYPE zcl_abappgp_subpacket_16.
+      TYPE zcl_abappgp_subpacket_16
+      EXPORTING
+        iv_key = io_stream->get_data( ).
 
   ENDMETHOD.
 
@@ -57,7 +74,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_16 IMPLEMENTATION.
   METHOD zif_abappgp_subpacket~to_stream.
 
     CREATE OBJECT ro_stream.
-* todo
+    ro_stream->write_octets( mv_key ).
 
   ENDMETHOD.
 ENDCLASS.

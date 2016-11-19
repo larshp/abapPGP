@@ -10,7 +10,7 @@ CLASS ltcl_test IMPLEMENTATION.
   METHOD test.
 
     zcl_abappgp_unit_test=>subpacket_identity(
-      iv_data = 'A'
+      iv_data = '01'
       iv_type = zif_abappgp_constants=>c_sub_type-features ).
 
   ENDMETHOD.

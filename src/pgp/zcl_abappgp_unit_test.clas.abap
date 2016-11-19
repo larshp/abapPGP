@@ -28,8 +28,11 @@ CLASS ZCL_ABAPPGP_UNIT_TEST IMPLEMENTATION.
 
   METHOD packet_identity.
 
-    DATA: lv_result TYPE xstring.
+    DATA: lv_result TYPE xstring,
+          lv_data   TYPE xstring.
 
+
+    lv_data = io_data->get_data( ).
 
     ri_pkt = zcl_abappgp_packet_factory=>create(
       io_data = io_data
@@ -39,7 +42,7 @@ CLASS ZCL_ABAPPGP_UNIT_TEST IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
-      exp = io_data->get_data( ) ).
+      exp = lv_data ).
 
   ENDMETHOD.
 

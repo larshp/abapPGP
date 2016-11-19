@@ -10,6 +10,8 @@ INTERFACE zif_abappgp_constants
   TYPES ty_tag TYPE i .
   TYPES ty_sub_type TYPE i .
 
+  TYPES ty_algorithms TYPE STANDARD TABLE OF ty_algorithm_pub WITH DEFAULT KEY.
+
   CONSTANTS:
     BEGIN OF c_algorithm_pub,
       rsa TYPE ty_algorithm_pub VALUE '01',

@@ -30,27 +30,27 @@ public section.
       !IT_UNHASHED type TY_SUBPACKETS
       !IV_LEFT type XSEQUENCE
       !IT_INTEGERS type TY_INTEGERS .
-PROTECTED SECTION.
+protected section.
 
-  DATA: mv_version   TYPE zif_abappgp_constants=>ty_version,
-        mv_signature TYPE zif_abappgp_constants=>ty_signature,
-        mv_pk_algo   TYPE zif_abappgp_constants=>ty_algorithm_pub,
-        mv_hash_algo TYPE zif_abappgp_constants=>ty_algorithm_hash,
-        mt_hashed    TYPE ty_subpackets,
-        mt_unhashed  TYPE ty_subpackets,
-        mv_left      TYPE x LENGTH 2,
-        mt_integers  TYPE ty_integers.
+  data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
+  data MV_SIGNATURE type ZIF_ABAPPGP_CONSTANTS=>TY_SIGNATURE .
+  data MV_PK_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB .
+  data MV_HASH_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH .
+  data MT_HASHED type TY_SUBPACKETS .
+  data MT_UNHASHED type TY_SUBPACKETS .
+  data:
+    mv_left      TYPE x LENGTH 2 .
+  data MT_INTEGERS type TY_INTEGERS .
 
-  CLASS-METHODS hashed_subpackets
-    IMPORTING
-      !io_stream           TYPE REF TO zcl_abappgp_stream
-    RETURNING
-      VALUE(rt_subpackets) TYPE ty_subpackets .
-  CLASS-METHODS unhashed_subpackets
-    IMPORTING
-      !io_stream           TYPE REF TO zcl_abappgp_stream
-    RETURNING
-      VALUE(rt_subpackets) TYPE ty_subpackets .
+  class-methods WRITE_SUBPACKETS
+    importing
+      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
+      !IT_PACKETS type TY_SUBPACKETS .
+  class-methods EAT_SUBPACKETS
+    importing
+      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
+    returning
+      value(RT_SUBPACKETS) type TY_SUBPACKETS .
 private section.
 ENDCLASS.
 
@@ -73,12 +73,12 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD hashed_subpackets.
+  METHOD eat_subpackets.
 
     DATA: lv_length   TYPE i,
           lv_data     TYPE xstring,
           li_sub      TYPE REF TO zif_abappgp_subpacket,
-          lv_sub_type TYPE ZIF_ABAPPGP_CONSTANTS=>TY_SUB_TYPE.
+          lv_sub_type TYPE zif_abappgp_constants=>ty_sub_type.
 
 
     WHILE io_stream->get_length( ) > 0.
@@ -98,9 +98,26 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD unhashed_subpackets.
+  METHOD write_subpackets.
 
-    BREAK-POINT.
+    DATA: li_subpacket TYPE REF TO zif_abappgp_subpacket,
+          lv_length    TYPE x LENGTH 1,
+          lv_type      TYPE x LENGTH 1,
+          lv_count     TYPE x LENGTH 2,
+          lo_sub       TYPE REF TO zcl_abappgp_stream.
+
+
+    CREATE OBJECT lo_sub.
+    LOOP AT it_packets INTO li_subpacket.
+      lv_length = li_subpacket->to_stream( )->get_length( ) + 1.
+      lo_sub->write_octet( lv_length ).
+      lv_type = li_subpacket->get_type( ).
+      lo_sub->write_octet( lv_type ).
+      lo_sub->write_stream( li_subpacket->to_stream( ) ).
+    ENDLOOP.
+    lv_count = lo_sub->get_length( ).
+    io_stream->write_octets( lv_count ).
+    io_stream->write_stream( lo_sub ).
 
   ENDMETHOD.
 
@@ -152,21 +169,19 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
 
     lv_version = io_stream->eat_octet( ).
-    ASSERT lv_version = '04'.
+    ASSERT lv_version = zif_abappgp_constants=>c_version-version04.
     lv_signature = io_stream->eat_octet( ).
     lv_pk_algo = io_stream->eat_octet( ).
     lv_hash_algo = io_stream->eat_octet( ).
 
-    lv_count = zcl_abappgp_convert=>bits_to_integer(
-      zcl_abappgp_convert=>to_bits( io_stream->eat_octets( 2 ) ) ).
+    lv_count = io_stream->eat_octets( 2 ).
     IF lv_count > 0.
-      lt_hashed = hashed_subpackets( io_stream->eat_stream( lv_count ) ).
+      lt_hashed = eat_subpackets( io_stream->eat_stream( lv_count ) ).
     ENDIF.
 
-    lv_count = zcl_abappgp_convert=>bits_to_integer(
-      zcl_abappgp_convert=>to_bits( io_stream->eat_octets( 2 ) ) ).
+    lv_count = io_stream->eat_octets( 2 ).
     IF lv_count > 0.
-      lt_unhashed = unhashed_subpackets( io_stream->eat_stream( lv_count ) ).
+      lt_unhashed = eat_subpackets( io_stream->eat_stream( lv_count ) ).
     ENDIF.
 
     lv_left = io_stream->eat_octets( 2 ).
@@ -205,9 +220,26 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~to_stream.
 
-* todo
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+
 
     CREATE OBJECT ro_stream.
+    ro_stream->write_octet( mv_version ).
+    ro_stream->write_octet( mv_signature ).
+    ro_stream->write_octet( mv_pk_algo ).
+    ro_stream->write_octet( mv_hash_algo ).
+
+    write_subpackets( io_stream  = ro_stream
+                      it_packets = mt_hashed ).
+
+    write_subpackets( io_stream  = ro_stream
+                      it_packets = mt_unhashed ).
+
+    ro_stream->write_octets( mv_left ).
+
+    LOOP AT mt_integers INTO lo_integer.
+      ro_stream->write_mpi( lo_integer ).
+    ENDLOOP.
 
   ENDMETHOD.
 ENDCLASS.

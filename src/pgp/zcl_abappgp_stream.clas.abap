@@ -45,6 +45,9 @@ public section.
   methods WRITE_OCTETS
     importing
       !IV_OCTETS type XSEQUENCE .
+  methods WRITE_STREAM
+    importing
+      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM .
   methods WRITE_TIME
     importing
       !IV_TIME type I .
@@ -181,6 +184,13 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
   METHOD write_octets.
 
     CONCATENATE mv_data iv_octets INTO mv_data IN BYTE MODE.
+
+  ENDMETHOD.
+
+
+  METHOD write_stream.
+
+    write_octets( io_stream->get_data( ) ).
 
   ENDMETHOD.
 
