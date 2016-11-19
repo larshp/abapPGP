@@ -14,10 +14,10 @@ CLASS ltcl_test IMPLEMENTATION.
 
 
     CREATE OBJECT lo_stream.
-    lo_stream->write_octets( '466F6F203C666F6F406261722E636F6D3E' ).
+    lo_stream->write_octets( 'AA' ).
 
     zcl_abappgp_unit_test=>packet_identity( io_data = lo_stream
-      iv_tag = zif_abappgp_constants=>c_tag-user_id ).
+      iv_tag = zif_abappgp_constants=>c_tag-secret_subkey ).
 
   ENDMETHOD.
 

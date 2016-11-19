@@ -94,44 +94,8 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
       lv_tag = packet_header( io_stream ).
       lo_data = io_stream->eat_stream( io_stream->eat_length( ) ).
 
-      CASE lv_tag.
-        WHEN zif_abappgp_constants=>c_tag-public_key_enc.
-          li_pkt = zcl_abappgp_packet_01=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-signature.
-          li_pkt = zcl_abappgp_packet_02=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-symmetric_key_enc.
-          li_pkt = zcl_abappgp_packet_03=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-one_pass.
-          li_pkt = zcl_abappgp_packet_04=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-secret_key.
-          li_pkt = zcl_abappgp_packet_05=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-public_key.
-          li_pkt = zcl_abappgp_packet_06=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-secret_subkey.
-          li_pkt = zcl_abappgp_packet_07=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-compressed_data.
-          li_pkt = zcl_abappgp_packet_08=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-symmetrical_enc.
-          li_pkt = zcl_abappgp_packet_09=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-marker.
-          li_pkt = zcl_abappgp_packet_10=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-literal.
-          li_pkt = zcl_abappgp_packet_11=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-trust.
-          li_pkt = zcl_abappgp_packet_12=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-user_id.
-          li_pkt = zcl_abappgp_packet_13=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-public_subkey.
-          li_pkt = zcl_abappgp_packet_14=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-user_attribute.
-          li_pkt = zcl_abappgp_packet_17=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-symmetrical_inte.
-          li_pkt = zcl_abappgp_packet_18=>from_stream( lo_data ).
-        WHEN zif_abappgp_constants=>c_tag-modification_detection.
-          li_pkt = zcl_abappgp_packet_19=>from_stream( lo_data ).
-        WHEN OTHERS.
-          ASSERT 0 = 1.
-      ENDCASE.
+      li_pkt = zcl_abappgp_packet_factory=>create( io_data = lo_data
+                                                   iv_tag  = lv_tag ).
 
       APPEND li_pkt TO rt_packets.
     ENDWHILE.
