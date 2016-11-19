@@ -17,54 +17,60 @@ public section.
 
   types:
     TY_SUBPACKETS type standard table of ref to zif_abappgp_subpacket with default key .
-protected section.
+  types:
+    TY_integers type standard table of ref to zcl_abappgp_integer with default key .
 
-  types TY_SUB_TYPE type I .
-
-  constants:
-    BEGIN OF c_sub_type,
-               signature_creation_time   TYPE ty_sub_type VALUE 2,
-               signature_expiration_time TYPE ty_sub_type VALUE 3,
-               exportable_certification  TYPE ty_sub_type VALUE 4,
-               trust_signature           TYPE ty_sub_type VALUE 5,
-               regular_expression        TYPE ty_sub_type VALUE 6,
-               revocable                 TYPE ty_sub_type VALUE 7,
-               key_expiration_time       TYPE ty_sub_type VALUE 9,
-               placeholder_for_backward  TYPE ty_sub_type VALUE 10,
-               preferred_symmetric       TYPE ty_sub_type VALUE 11,
-               revocation_key            TYPE ty_sub_type VALUE 12,
-               issuer                    TYPE ty_sub_type VALUE 16,
-               notation_data             TYPE ty_sub_type VALUE 20,
-               preferred_hash_algorithms TYPE ty_sub_type VALUE 21,
-               preferred_compression     TYPE ty_sub_type VALUE 22,
-               key_server_preferences    TYPE ty_sub_type VALUE 23,
-               preferred_key_server      TYPE ty_sub_type VALUE 24,
-               primary_user_id           TYPE ty_sub_type VALUE 25,
-               policy_uri                TYPE ty_sub_type VALUE 26,
-               key_flags                 TYPE ty_sub_type VALUE 27,
-               signers_user_id           TYPE ty_sub_type VALUE 28,
-               reason_for_revocation     TYPE ty_sub_type VALUE 29,
-               features                  TYPE ty_sub_type VALUE 30,
-               signature_target          TYPE ty_sub_type VALUE 31,
-               embedded_signature        TYPE ty_sub_type VALUE 32,
-             END OF c_sub_type .
-
-  class-methods HASHED_SUBPACKETS
+  methods CONSTRUCTOR
     importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RT_SUBPACKETS) type TY_SUBPACKETS .
-  class-methods UNHASHED_SUBPACKETS
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RT_SUBPACKETS) type TY_SUBPACKETS .
+      !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
+      !IV_SIGNATURE type ZIF_ABAPPGP_CONSTANTS=>TY_SIGNATURE
+      !IV_PK_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
+      !IV_HASH_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH
+      !IT_HASHED type TY_SUBPACKETS
+      !IT_UNHASHED type TY_SUBPACKETS
+      !IV_LEFT type XSEQUENCE
+      !IT_INTEGERS type TY_INTEGERS .
+PROTECTED SECTION.
+
+  DATA: mv_version   TYPE zif_abappgp_constants=>ty_version,
+        mv_signature TYPE zif_abappgp_constants=>ty_signature,
+        mv_pk_algo   TYPE zif_abappgp_constants=>ty_algorithm_pub,
+        mv_hash_algo TYPE zif_abappgp_constants=>ty_algorithm_hash,
+        mt_hashed    TYPE ty_subpackets,
+        mt_unhashed  TYPE ty_subpackets,
+        mv_left      TYPE x LENGTH 2,
+        mt_integers  TYPE ty_integers.
+
+  CLASS-METHODS hashed_subpackets
+    IMPORTING
+      !io_stream           TYPE REF TO zcl_abappgp_stream
+    RETURNING
+      VALUE(rt_subpackets) TYPE ty_subpackets .
+  CLASS-METHODS unhashed_subpackets
+    IMPORTING
+      !io_stream           TYPE REF TO zcl_abappgp_stream
+    RETURNING
+      VALUE(rt_subpackets) TYPE ty_subpackets .
 private section.
 ENDCLASS.
 
 
 
 CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
+
+
+  METHOD constructor.
+
+    mv_version   = iv_version.
+    mv_signature = iv_signature.
+    mv_pk_algo   = iv_pk_algo.
+    mv_hash_algo = iv_hash_algo.
+    mt_hashed    = it_hashed.
+    mt_unhashed  = it_unhashed.
+    mv_left      = iv_left.
+    mt_integers  = it_integers.
+
+  ENDMETHOD.
 
 
   METHOD hashed_subpackets.
@@ -82,53 +88,53 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
       lo_data = io_stream->eat_stream( lv_length ).
 
       CASE lv_sub_type.
-        WHEN c_sub_type-signature_creation_time.
+        WHEN zif_abappgp_constants=>c_sub_type-signature_creation_time.
           li_sub = zcl_abappgp_subpacket_02=>from_stream( lo_data ).
-        WHEN c_sub_type-signature_expiration_time.
+        WHEN zif_abappgp_constants=>c_sub_type-signature_expiration_time.
           li_sub = zcl_abappgp_subpacket_03=>from_stream( lo_data ).
-        WHEN c_sub_type-exportable_certification.
+        WHEN zif_abappgp_constants=>c_sub_type-exportable_certification.
           li_sub = zcl_abappgp_subpacket_04=>from_stream( lo_data ).
-        WHEN c_sub_type-trust_signature.
+        WHEN zif_abappgp_constants=>c_sub_type-trust_signature.
           li_sub = zcl_abappgp_subpacket_05=>from_stream( lo_data ).
-        WHEN c_sub_type-regular_expression.
+        WHEN zif_abappgp_constants=>c_sub_type-regular_expression.
           li_sub = zcl_abappgp_subpacket_06=>from_stream( lo_data ).
-        WHEN c_sub_type-revocable.
+        WHEN zif_abappgp_constants=>c_sub_type-revocable.
           li_sub = zcl_abappgp_subpacket_07=>from_stream( lo_data ).
-        WHEN c_sub_type-key_expiration_time.
+        WHEN zif_abappgp_constants=>c_sub_type-key_expiration_time.
           li_sub = zcl_abappgp_subpacket_09=>from_stream( lo_data ).
-        WHEN c_sub_type-placeholder_for_backward.
+        WHEN zif_abappgp_constants=>c_sub_type-placeholder_for_backward.
           li_sub = zcl_abappgp_subpacket_10=>from_stream( lo_data ).
-        WHEN c_sub_type-preferred_symmetric.
+        WHEN zif_abappgp_constants=>c_sub_type-preferred_symmetric.
           li_sub = zcl_abappgp_subpacket_11=>from_stream( lo_data ).
-        WHEN c_sub_type-revocation_key.
+        WHEN zif_abappgp_constants=>c_sub_type-revocation_key.
           li_sub = zcl_abappgp_subpacket_12=>from_stream( lo_data ).
-        WHEN c_sub_type-issuer.
+        WHEN zif_abappgp_constants=>c_sub_type-issuer.
           li_sub = zcl_abappgp_subpacket_16=>from_stream( lo_data ).
-        WHEN c_sub_type-notation_data.
+        WHEN zif_abappgp_constants=>c_sub_type-notation_data.
           li_sub = zcl_abappgp_subpacket_20=>from_stream( lo_data ).
-        WHEN c_sub_type-preferred_hash_algorithms.
+        WHEN zif_abappgp_constants=>c_sub_type-preferred_hash_algorithms.
           li_sub = zcl_abappgp_subpacket_21=>from_stream( lo_data ).
-        WHEN c_sub_type-preferred_compression.
+        WHEN zif_abappgp_constants=>c_sub_type-preferred_compression.
           li_sub = zcl_abappgp_subpacket_22=>from_stream( lo_data ).
-        WHEN c_sub_type-key_server_preferences.
+        WHEN zif_abappgp_constants=>c_sub_type-key_server_preferences.
           li_sub = zcl_abappgp_subpacket_23=>from_stream( lo_data ).
-        WHEN c_sub_type-preferred_key_server.
+        WHEN zif_abappgp_constants=>c_sub_type-preferred_key_server.
           li_sub = zcl_abappgp_subpacket_24=>from_stream( lo_data ).
-        WHEN c_sub_type-primary_user_id.
+        WHEN zif_abappgp_constants=>c_sub_type-primary_user_id.
           li_sub = zcl_abappgp_subpacket_25=>from_stream( lo_data ).
-        WHEN c_sub_type-policy_uri.
+        WHEN zif_abappgp_constants=>c_sub_type-policy_uri.
           li_sub = zcl_abappgp_subpacket_26=>from_stream( lo_data ).
-        WHEN c_sub_type-key_flags.
+        WHEN zif_abappgp_constants=>c_sub_type-key_flags.
           li_sub = zcl_abappgp_subpacket_27=>from_stream( lo_data ).
-        WHEN c_sub_type-signers_user_id.
+        WHEN zif_abappgp_constants=>c_sub_type-signers_user_id.
           li_sub = zcl_abappgp_subpacket_28=>from_stream( lo_data ).
-        WHEN c_sub_type-reason_for_revocation.
+        WHEN zif_abappgp_constants=>c_sub_type-reason_for_revocation.
           li_sub = zcl_abappgp_subpacket_29=>from_stream( lo_data ).
-        WHEN c_sub_type-features.
+        WHEN zif_abappgp_constants=>c_sub_type-features.
           li_sub = zcl_abappgp_subpacket_30=>from_stream( lo_data ).
-        WHEN c_sub_type-signature_target.
+        WHEN zif_abappgp_constants=>c_sub_type-signature_target.
           li_sub = zcl_abappgp_subpacket_31=>from_stream( lo_data ).
-        WHEN c_sub_type-embedded_signature.
+        WHEN zif_abappgp_constants=>c_sub_type-embedded_signature.
           li_sub = zcl_abappgp_subpacket_32=>from_stream( lo_data ).
         WHEN OTHERS.
           ASSERT 0 = 1.
@@ -152,7 +158,33 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~dump.
 
-    rv_dump = |{ get_name( ) }(tag { get_tag( ) })({ to_stream( )->get_length( ) } bytes)\n\ttodo\n|.
+    DATA: lo_integer TYPE REF TO zcl_abappgp_integer,
+          li_sub     TYPE REF TO zif_abappgp_subpacket.
+
+
+    rv_dump = |{ get_name( ) }(tag { get_tag( ) })({ to_stream( )->get_length( )
+      } bytes)\n\tVersion\t{
+      mv_version
+      }\n\tSignature\t{
+      mv_signature
+      }\n\tPub\t\t{
+      mv_pk_algo
+      }\n\tHash\t\t{
+      mv_hash_algo }\n|.
+
+    LOOP AT mt_hashed INTO li_sub.
+      rv_dump = |{ rv_dump }{ li_sub->dump( ) }|.
+    ENDLOOP.
+
+    LOOP AT mt_unhashed INTO li_sub.
+      rv_dump = |{ rv_dump }{ li_sub->dump( ) }|.
+    ENDLOOP.
+
+    rv_dump = |{ rv_dump }\tLeft\t\t{ mv_left }\n|.
+
+    LOOP AT mt_integers INTO lo_integer.
+      rv_dump = |{ rv_dump }\tInteger\t{ lo_integer->get_binary_length( ) } bits\n|.
+    ENDLOOP.
 
   ENDMETHOD.
 
@@ -162,11 +194,11 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
     DATA: lv_version   TYPE x LENGTH 1,
           lv_signature TYPE x LENGTH 1,
           lv_pk_algo   TYPE x LENGTH 1,
-          lv_left      TYPE x LENGTH 2,
           lv_hash_algo TYPE x LENGTH 1,
           lt_hashed    TYPE ty_subpackets,
           lt_unhashed  TYPE ty_subpackets,
-          lo_integer   TYPE REF TO zcl_abappgp_integer,
+          lv_left      TYPE x LENGTH 2,
+          lt_integers  TYPE ty_integers,
           lv_count     TYPE i.
 
 
@@ -191,10 +223,19 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
     lv_left = io_stream->eat_octets( 2 ).
 
 * todo, one or more MPI, algorithm specific
-    lo_integer = io_stream->eat_mpi( ).
+    APPEND io_stream->eat_mpi( ) TO lt_integers.
 
     CREATE OBJECT ri_packet
-      TYPE zcl_abappgp_packet_02.
+      TYPE zcl_abappgp_packet_02
+      EXPORTING
+        iv_version   = lv_version
+        iv_signature = lv_signature
+        iv_pk_algo   = lv_pk_algo
+        iv_hash_algo = lv_hash_algo
+        it_hashed    = lt_hashed
+        it_unhashed  = lt_unhashed
+        iv_left      = lv_left
+        it_integers  = lt_integers.
 
   ENDMETHOD.
 

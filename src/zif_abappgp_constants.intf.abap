@@ -3,9 +3,12 @@ INTERFACE zif_abappgp_constants
 
 
   TYPES ty_algorithm_pub TYPE x LENGTH 1.
+  TYPES ty_algorithm_hash TYPE x LENGTH 1.
+  TYPES ty_signature TYPE x LENGTH 1.
   TYPES ty_algorithm_sym TYPE x LENGTH 1.
   TYPES ty_version TYPE x LENGTH 1.
   TYPES ty_tag TYPE i .
+  TYPES ty_sub_type TYPE i .
 
   CONSTANTS:
     BEGIN OF c_algorithm_pub,
@@ -38,4 +41,33 @@ INTERFACE zif_abappgp_constants
       symmetrical_inte       TYPE ty_tag VALUE 18,
       modification_detection TYPE ty_tag VALUE 19,
     END OF c_tag .
+
+  CONSTANTS:
+    BEGIN OF c_sub_type,
+      signature_creation_time   TYPE ty_sub_type VALUE 2,
+      signature_expiration_time TYPE ty_sub_type VALUE 3,
+      exportable_certification  TYPE ty_sub_type VALUE 4,
+      trust_signature           TYPE ty_sub_type VALUE 5,
+      regular_expression        TYPE ty_sub_type VALUE 6,
+      revocable                 TYPE ty_sub_type VALUE 7,
+      key_expiration_time       TYPE ty_sub_type VALUE 9,
+      placeholder_for_backward  TYPE ty_sub_type VALUE 10,
+      preferred_symmetric       TYPE ty_sub_type VALUE 11,
+      revocation_key            TYPE ty_sub_type VALUE 12,
+      issuer                    TYPE ty_sub_type VALUE 16,
+      notation_data             TYPE ty_sub_type VALUE 20,
+      preferred_hash_algorithms TYPE ty_sub_type VALUE 21,
+      preferred_compression     TYPE ty_sub_type VALUE 22,
+      key_server_preferences    TYPE ty_sub_type VALUE 23,
+      preferred_key_server      TYPE ty_sub_type VALUE 24,
+      primary_user_id           TYPE ty_sub_type VALUE 25,
+      policy_uri                TYPE ty_sub_type VALUE 26,
+      key_flags                 TYPE ty_sub_type VALUE 27,
+      signers_user_id           TYPE ty_sub_type VALUE 28,
+      reason_for_revocation     TYPE ty_sub_type VALUE 29,
+      features                  TYPE ty_sub_type VALUE 30,
+      signature_target          TYPE ty_sub_type VALUE 31,
+      embedded_signature        TYPE ty_sub_type VALUE 32,
+    END OF c_sub_type .
+
 ENDINTERFACE.
