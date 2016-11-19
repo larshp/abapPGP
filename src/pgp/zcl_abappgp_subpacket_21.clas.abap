@@ -25,7 +25,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_21 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~dump.
 
-    rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })\n\t\ttodo\n|.
+    rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })({ to_stream( )->get_length( ) } bytes)\n\t\ttodo\n|.
 
   ENDMETHOD.
 
@@ -50,6 +50,14 @@ CLASS ZCL_ABAPPGP_SUBPACKET_21 IMPLEMENTATION.
   METHOD zif_abappgp_subpacket~get_type.
 
     rv_type = zif_abappgp_constants=>c_sub_type-preferred_hash_algorithms.
+
+  ENDMETHOD.
+
+
+  METHOD zif_abappgp_subpacket~to_stream.
+
+    CREATE OBJECT ro_stream.
+* todo
 
   ENDMETHOD.
 ENDCLASS.
