@@ -29,7 +29,7 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
 
 
-  METHOD CONSTRUCTOR.
+  METHOD constructor.
 
     mv_user = iv_user.
 
@@ -38,7 +38,8 @@ CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~dump.
 
-    rv_dump = |{ get_name( ) }(tag { get_tag( ) })({ to_stream( )->get_length( ) } bytes)\n\ttodo\n|.
+    rv_dump = |{ get_name( ) }(tag { get_tag( ) })({ to_stream( )->get_length( )
+      } bytes)\n\tUser\t\t{ mv_user }\n|.
 
   ENDMETHOD.
 
@@ -74,9 +75,8 @@ CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~to_stream.
 
-* todo
-
     CREATE OBJECT ro_stream.
+    ro_stream->write_octets( zcl_abappgp_convert=>string_to_utf8( mv_user ) ).
 
   ENDMETHOD.
 ENDCLASS.
