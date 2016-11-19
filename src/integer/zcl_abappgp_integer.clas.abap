@@ -76,6 +76,9 @@ public section.
       !IO_INPUT type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods GET_BINARY_LENGTH
+    returning
+      value(RV_LENGTH) type I .
   methods GET_STRING_LENGTH
     returning
       value(RV_LENGTH) type I .
@@ -789,6 +792,13 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     mt_split = lo_a->mt_split.
 
     ro_integer = me.
+
+  ENDMETHOD.
+
+
+  METHOD GET_BINARY_LENGTH.
+
+    rv_length = zcl_abappgp_integer2=>from_integer( me )->get_binary_length( ).
 
   ENDMETHOD.
 

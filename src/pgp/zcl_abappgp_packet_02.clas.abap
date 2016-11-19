@@ -12,6 +12,8 @@ public section.
     for ZIF_ABAPPGP_PACKET~GET_NAME .
   aliases GET_TAG
     for ZIF_ABAPPGP_PACKET~GET_TAG .
+  aliases TO_STREAM
+    for ZIF_ABAPPGP_PACKET~TO_STREAM .
 
   types:
     TY_SUBPACKETS type standard table of ref to zif_abappgp_subpacket with default key .
@@ -150,7 +152,7 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~dump.
 
-    rv_dump = |{ get_name( ) }(tag { get_tag( ) })\n\ttodo\n|.
+    rv_dump = |{ get_name( ) }(tag { get_tag( ) })({ to_stream( )->get_length( ) } bytes)\n\ttodo\n|.
 
   ENDMETHOD.
 
@@ -211,9 +213,11 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~TO_STREAM.
+  METHOD zif_abappgp_packet~to_stream.
 
-    BREAK-POINT.
+* todo
+
+    CREATE OBJECT ro_stream.
 
   ENDMETHOD.
 ENDCLASS.

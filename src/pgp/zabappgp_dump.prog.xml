@@ -239,6 +239,21 @@
       <SFW_SWITCHID/>
       <SFW_SHOWHIDE/>
      </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>SAMPLE</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TYPE/>
+      <MODIF/>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_PHYSICAL_SAMPLE</TEXT_NAME>
+      <ICON_ID>@GW@</ICON_ID>
+      <FUN_TEXT>Sample</FUN_TEXT>
+      <ICON_TEXT>Sample</ICON_TEXT>
+      <INFO_TEXT/>
+      <PATH/>
+      <SFW_SWITCHID/>
+      <SFW_SHOWHIDE/>
+     </RSMPE_FUNT>
     </FUN>
     <MEN/>
     <MTX/>
@@ -249,6 +264,12 @@
       <CODE>0001</CODE>
       <NO>01</NO>
       <PFNO>08</PFNO>
+     </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000001</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>02</NO>
+      <PFNO>09</PFNO>
      </RSMPE_BUT>
     </BUT>
     <PFK>
@@ -264,6 +285,12 @@
       <FUNCODE>DUMP</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000001</CODE>
+      <PFNO>09</PFNO>
+      <FUNCODE>SAMPLE</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
     </PFK>
     <SET>
      <RSMPE_STAF>
@@ -273,6 +300,10 @@
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
       <FUNCTION>DUMP</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_2000</STATUS>
+      <FUNCTION>SAMPLE</FUNCTION>
      </RSMPE_STAF>
     </SET>
     <DOC>

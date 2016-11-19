@@ -7,7 +7,7 @@ public section.
 
   methods CONSTRUCTOR
     importing
-      !IV_DATA type XSTRING .
+      !IV_DATA type XSTRING optional .
   methods EAT_LENGTH
     returning
       value(RV_LENGTH) type I .
@@ -27,12 +27,27 @@ public section.
       !IV_OCTETS type I
     returning
       value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
+  methods EAT_TIME
+    returning
+      value(RV_TIME) type I .
   methods GET_DATA
     returning
       value(RV_DATA) type XSTRING .
   methods GET_LENGTH
     returning
       value(RV_LENGTH) type I .
+  methods WRITE_MPI
+    importing
+      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER .
+  methods WRITE_OCTET
+    importing
+      !IV_OCTET type XSEQUENCE .
+  methods WRITE_OCTETS
+    importing
+      !IV_OCTETS type XSEQUENCE .
+  methods WRITE_TIME
+    importing
+      !IV_TIME type I .
 protected section.
 
   data MV_DATA type XSTRING .
@@ -75,9 +90,7 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
           lv_octets TYPE i.
 
 
-    lv_length = zcl_abappgp_convert=>bits_to_integer(
-      zcl_abappgp_convert=>to_bits(
-      eat_octets( 2 ) ) ).
+    lv_length = eat_octets( 2 ).
 
     lv_octets = lv_length DIV 8.
     IF lv_length MOD 8 <> 0.
@@ -121,6 +134,13 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD eat_time.
+
+    rv_time = eat_octets( 4 ).
+
+  ENDMETHOD.
+
+
   METHOD get_data.
 
     rv_data = mv_data.
@@ -131,6 +151,47 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
   METHOD get_length.
 
     rv_length = xstrlen( mv_data ).
+
+  ENDMETHOD.
+
+
+  METHOD write_mpi.
+
+    DATA: lv_hex    TYPE xstring,
+          lv_length TYPE x LENGTH 2.
+
+
+    lv_length = io_integer->get_binary_length( ).
+    lv_hex = io_integer->to_hex( ).
+
+    CONCATENATE mv_data lv_length lv_hex INTO mv_data IN BYTE MODE.
+
+  ENDMETHOD.
+
+
+  METHOD write_octet.
+
+    ASSERT xstrlen( iv_octet ) >= 1.
+
+    CONCATENATE mv_data iv_octet(1) INTO mv_data IN BYTE MODE.
+
+  ENDMETHOD.
+
+
+  METHOD write_octets.
+
+    CONCATENATE mv_data iv_octets INTO mv_data IN BYTE MODE.
+
+  ENDMETHOD.
+
+
+  METHOD write_time.
+
+    DATA: lv_hex TYPE x LENGTH 4.
+
+    lv_hex = iv_time.
+
+    CONCATENATE mv_data lv_hex INTO mv_data IN BYTE MODE.
 
   ENDMETHOD.
 ENDCLASS.

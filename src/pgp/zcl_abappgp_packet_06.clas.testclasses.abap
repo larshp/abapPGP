@@ -24,7 +24,8 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_packet TYPE REF TO zcl_abappgp_packet_06,
+    DATA: li_packet TYPE REF TO zif_abappgp_packet,
+          lv_result TYPE xstring,
           lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
@@ -40,7 +41,13 @@ CLASS ltcl_test IMPLEMENTATION.
       EXPORTING
         iv_data = mv_data.
 
-    lo_packet ?= zcl_abappgp_packet_06=>from_stream( lo_stream ).
+    li_packet = zcl_abappgp_packet_06=>from_stream( lo_stream ).
+
+    lv_result = li_packet->to_stream( )->get_data( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = mv_data ).
 
   ENDMETHOD.
 

@@ -61,7 +61,10 @@ CLASS ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY IMPLEMENTATION.
           lv_string TYPE string.
 
 
-    SPLIT iv_string AT cl_abap_char_utilities=>newline INTO TABLE lt_string.
+    lv_string = iv_string.
+    REPLACE ALL OCCURRENCES OF cl_abap_char_utilities=>cr_lf IN lv_string
+      WITH cl_abap_char_utilities=>newline.
+    SPLIT lv_string AT cl_abap_char_utilities=>newline INTO TABLE lt_string.
 
     LOOP AT lt_string INTO lv_string.
       IF sy-tabix = lines( lt_string ) OR sy-tabix = lines( lt_string ) - 1.

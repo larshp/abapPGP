@@ -12,6 +12,8 @@ public section.
     for ZIF_ABAPPGP_PACKET~GET_NAME .
   aliases GET_TAG
     for ZIF_ABAPPGP_PACKET~GET_TAG .
+  aliases TO_STREAM
+    for ZIF_ABAPPGP_PACKET~TO_STREAM .
 
   methods CONSTRUCTOR
     importing
@@ -48,7 +50,14 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~dump.
 
-    rv_dump = |{ get_name( ) }(tag { get_tag( ) })\n\ttodo\n|.
+    rv_dump = |{ get_name( )
+      }(tag { get_tag( )
+      })({ to_stream( )->get_length( ) } bytes)\n\tVersion\t{
+      mv_version }\n\tTime\t\t{
+      zcl_abappgp_time=>format_unix( mv_time ) }\n\tAlgorithm\t{
+      mv_algorithm }\n\tRSA n\t\t{
+      mo_n->get_binary_length( ) } bits\n\tRSA e\t\t{
+      mo_e->get_binary_length( ) } bits\n|.
 
   ENDMETHOD.
 
@@ -65,7 +74,7 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
     lv_version = io_stream->eat_octet( ).
     ASSERT lv_version = zif_abappgp_constants=>c_version-version04.
 
-    lv_time = io_stream->eat_octets( 4 ).
+    lv_time = io_stream->eat_time( ).
 
     lv_algorithm = io_stream->eat_octet( ).
     ASSERT lv_algorithm = zif_abappgp_constants=>c_algorithm_pub-rsa.
@@ -99,9 +108,14 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~TO_STREAM.
+  METHOD zif_abappgp_packet~to_stream.
 
-    BREAK-POINT.
+    CREATE OBJECT ro_stream.
+    ro_stream->write_octet( mv_version ).
+    ro_stream->write_time( mv_time ).
+    ro_stream->write_octet( mv_algorithm ).
+    ro_stream->write_mpi( mo_n ).
+    ro_stream->write_mpi( mo_e ).
 
   ENDMETHOD.
 ENDCLASS.
