@@ -25,7 +25,7 @@ CLASS ltcl_build_key IMPLEMENTATION.
 
     cl_abap_unit_assert=>assert_not_initial( lv_key ).
 
-    lv_exp = '6AAF4172CF8B4CE14E979E64208D71AA14BDF7A9382D37CE4BB7B5F55EB5A9D'.
+    lv_exp = '6AAF4172CF8B4CE14E979E642008D71AA14BDF7A9382D37CE4BB7B5F55EB5A9D'.
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_key
