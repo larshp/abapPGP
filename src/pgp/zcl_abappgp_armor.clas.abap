@@ -55,6 +55,7 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
     ASSERT NOT iv_data IS INITIAL.
     ASSERT NOT iv_checksum IS INITIAL.
     ASSERT NOT iv_armor_tail IS INITIAL.
+    ASSERT iv_checksum(1) = '='.
 
     mv_armor_header = iv_armor_header.
     mt_headers      = it_headers.
