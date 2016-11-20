@@ -3,10 +3,10 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <VSEOCLASS>
-    <CLSNAME>ZCL_ABAPPGP_MESSAGE_PUBLIC_KEY</CLSNAME>
+    <CLSNAME>ZCL_ABAPPGP_MESSAGE_03</CLSNAME>
     <VERSION>1</VERSION>
     <LANGU>E</LANGU>
-    <DESCRIPT>Message - Public Key</DESCRIPT>
+    <DESCRIPT>Private Key</DESCRIPT>
     <UUID/>
     <CATEGORY>00</CATEGORY>
     <EXPOSURE>2</EXPOSURE>

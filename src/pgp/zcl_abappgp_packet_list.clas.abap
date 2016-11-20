@@ -1,24 +1,21 @@
-class ZCL_ABAPPGP_MESSAGE definition
+class ZCL_ABAPPGP_PACKET_LIST definition
   public
-  abstract
   create public .
 
 public section.
-
-  types:
-    TY_PACKET_LIST type standard table of ref to zif_abappgp_packet with default key .
-protected section.
 
   class-methods FROM_STREAM
     importing
       !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
     returning
-      value(RT_PACKETS) type TY_PACKET_LIST .
+      value(RT_PACKETS) type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
   class-methods TO_STREAM
     importing
-      !IT_PACKETS type TY_PACKET_LIST
+      !IT_PACKETS type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST
     returning
       value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
+protected section.
+
   class-methods DETERMINE_TAG
     importing
       !IV_STRING type STRING
@@ -34,10 +31,10 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
+CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
 
-  METHOD determine_tag.
+  METHOD DETERMINE_TAG.
 
     ASSERT strlen( iv_string ) = 6.
 
@@ -103,7 +100,7 @@ CLASS ZCL_ABAPPGP_MESSAGE IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD packet_header.
+  METHOD PACKET_HEADER.
 
     DATA: lv_bits  TYPE string.
 

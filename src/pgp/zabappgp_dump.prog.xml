@@ -254,6 +254,36 @@
       <SFW_SWITCHID/>
       <SFW_SHOWHIDE/>
      </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>SAMPLE01</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TYPE/>
+      <MODIF/>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_PHYSICAL_SAMPLE</TEXT_NAME>
+      <ICON_ID>@GW@</ICON_ID>
+      <FUN_TEXT>Sample 1</FUN_TEXT>
+      <ICON_TEXT>Sample 1</ICON_TEXT>
+      <INFO_TEXT/>
+      <PATH/>
+      <SFW_SWITCHID/>
+      <SFW_SHOWHIDE/>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>SAMPLE02</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TYPE/>
+      <MODIF/>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_PHYSICAL_SAMPLE</TEXT_NAME>
+      <ICON_ID>@GW@</ICON_ID>
+      <FUN_TEXT>Sample 2</FUN_TEXT>
+      <ICON_TEXT>Sample 2</ICON_TEXT>
+      <INFO_TEXT/>
+      <PATH/>
+      <SFW_SWITCHID/>
+      <SFW_SHOWHIDE/>
+     </RSMPE_FUNT>
     </FUN>
     <MEN/>
     <MTX/>
@@ -269,7 +299,13 @@
       <PFK_CODE>000001</PFK_CODE>
       <CODE>0001</CODE>
       <NO>02</NO>
-      <PFNO>09</PFNO>
+      <PFNO>13</PFNO>
+     </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000001</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>03</NO>
+      <PFNO>14</PFNO>
      </RSMPE_BUT>
     </BUT>
     <PFK>
@@ -291,6 +327,18 @@
       <FUNCODE>SAMPLE</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000001</CODE>
+      <PFNO>13</PFNO>
+      <FUNCODE>SAMPLE01</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000001</CODE>
+      <PFNO>14</PFNO>
+      <FUNCODE>SAMPLE02</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
     </PFK>
     <SET>
      <RSMPE_STAF>
@@ -304,6 +352,14 @@
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
       <FUNCTION>SAMPLE</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_2000</STATUS>
+      <FUNCTION>SAMPLE01</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_2000</STATUS>
+      <FUNCTION>SAMPLE02</FUNCTION>
      </RSMPE_STAF>
     </SET>
     <DOC>
