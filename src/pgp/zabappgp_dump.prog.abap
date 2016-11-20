@@ -88,9 +88,10 @@ FORM dump.
   go_left->get_textstream( IMPORTING text = lv_text ).
   cl_gui_cfw=>flush( ).
 
-  lv_dump = zcl_abappgp_message_factory=>create( lv_text )->dump( ).
-
-  go_right->set_textstream( lv_dump ).
+  IF strlen( lv_text ) > 0.
+    lv_dump = zcl_abappgp_message_factory=>create( lv_text )->dump( ).
+    go_right->set_textstream( lv_dump ).
+  ENDIF.
 
 ENDFORM.
 

@@ -22,6 +22,9 @@ public section.
       !IV_COUNT type I
     returning
       value(RV_OCTETS) type XSTRING .
+  methods EAT_S2K
+    returning
+      value(RO_S2K) type ref to ZCL_ABAPPGP_STRING_TO_KEY .
   methods EAT_STREAM
     importing
       !IV_OCTETS type I
@@ -48,6 +51,9 @@ public section.
   methods WRITE_OCTETS
     importing
       !IV_OCTETS type XSEQUENCE .
+  methods WRITE_S2K
+    importing
+      !IO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY .
   methods WRITE_STREAM
     importing
       !IO_STREAM type ref to ZCL_ABAPPGP_STREAM .
@@ -123,6 +129,13 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
     rv_octets = mv_data(iv_count).
 
     mv_data = mv_data+iv_count.
+
+  ENDMETHOD.
+
+
+  METHOD eat_s2k.
+
+    ro_s2k = zcl_abappgp_string_to_key=>from_stream( me ).
 
   ENDMETHOD.
 
@@ -213,6 +226,13 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
   METHOD write_octets.
 
     CONCATENATE mv_data iv_octets INTO mv_data IN BYTE MODE.
+
+  ENDMETHOD.
+
+
+  METHOD write_s2k.
+
+    write_stream( io_s2k->to_stream( ) ).
 
   ENDMETHOD.
 

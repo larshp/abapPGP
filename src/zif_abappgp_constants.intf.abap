@@ -1,9 +1,10 @@
 INTERFACE zif_abappgp_constants PUBLIC.
 
   TYPES ty_algorithm_pub TYPE x LENGTH 1.
+  TYPES ty_algorithm_sym TYPE x LENGTH 1.
   TYPES ty_algorithm_hash TYPE x LENGTH 1.
   TYPES ty_signature TYPE x LENGTH 1.
-  TYPES ty_algorithm_sym TYPE x LENGTH 1.
+  TYPES ty_s2k_type TYPE x LENGTH 1.
   TYPES ty_version TYPE x LENGTH 1.
   TYPES ty_tag TYPE i .
   TYPES ty_sub_type TYPE i .
@@ -16,6 +17,24 @@ INTERFACE zif_abappgp_constants PUBLIC.
     BEGIN OF c_algorithm_pub,
       rsa TYPE ty_algorithm_pub VALUE '01',
     END OF c_algorithm_pub.
+
+  CONSTANTS: BEGIN OF c_s2k_type,
+               simple          TYPE ty_s2k_type VALUE '00',
+               salted          TYPE ty_s2k_type VALUE '01',
+               iterated_salted TYPE ty_s2k_type VALUE '03',
+             END OF c_s2k_type.
+
+  CONSTANTS:
+    BEGIN OF c_algorithm_sym,
+      idea      TYPE ty_algorithm_sym VALUE '01',
+      tripledes TYPE ty_algorithm_sym VALUE '02',
+      cast5     TYPE ty_algorithm_sym VALUE '03',
+      blowfish  TYPE ty_algorithm_sym VALUE '04',
+      aes128    TYPE ty_algorithm_sym VALUE '07',
+      aes192    TYPE ty_algorithm_sym VALUE '08',
+      aes256    TYPE ty_algorithm_sym VALUE '09',
+      twofish   TYPE ty_algorithm_sym VALUE '10',
+    END OF c_algorithm_sym.
 
   CONSTANTS:
     BEGIN OF c_version,
