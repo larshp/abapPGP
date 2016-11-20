@@ -24,6 +24,16 @@ INTERFACE zif_abappgp_constants PUBLIC.
                iterated_salted TYPE ty_s2k_type VALUE '03',
              END OF c_s2k_type.
 
+  CONSTANTS: BEGIN OF c_algorithm_hash,
+               md5    TYPE ty_algorithm_hash VALUE '01',
+               sha1   TYPE ty_algorithm_hash VALUE '02',
+               ripe   TYPE ty_algorithm_hash VALUE '03',
+               sha256 TYPE ty_algorithm_hash VALUE '08',
+               sha384 TYPE ty_algorithm_hash VALUE '09',
+               sha512 TYPE ty_algorithm_hash VALUE '10',
+               sha224 TYPE ty_algorithm_hash VALUE '11',
+             END OF c_algorithm_hash.
+
   CONSTANTS:
     BEGIN OF c_algorithm_sym,
       idea      TYPE ty_algorithm_sym VALUE '01',

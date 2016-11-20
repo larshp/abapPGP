@@ -21,6 +21,11 @@ public section.
   methods TO_STREAM
     returning
       value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
+  methods BUILD_KEY
+    importing
+      !IV_PASSWORD type STRING
+    returning
+      value(RV_KEY) type XSTRING .
 protected section.
 
   data MV_TYPE type ZIF_ABAPPGP_CONSTANTS=>TY_S2K_TYPE .
@@ -35,14 +40,50 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_STRING_TO_KEY IMPLEMENTATION.
 
 
+  METHOD build_key.
+
+    DATA: lv_length TYPE i,
+          lv_pass   TYPE xstring,
+          lv_input  TYPE xstring.
+
+
+    ASSERT mv_type = zif_abappgp_constants=>c_s2k_type-iterated_salted.
+    ASSERT mv_hash = zif_abappgp_constants=>c_algorithm_hash-sha256.
+
+    lv_pass = zcl_abappgp_convert=>string_to_utf8( iv_password ).
+
+    CASE mv_count.
+      WHEN '96'.
+        lv_length = 65536.
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+    WHILE xstrlen( lv_input ) < lv_length.
+      CONCATENATE lv_input mv_salt lv_pass INTO lv_input IN BYTE MODE.
+    ENDWHILE.
+    lv_input = lv_input(lv_length).
+
+    CASE mv_hash.
+      WHEN zif_abappgp_constants=>c_algorithm_hash-sha256.
+        rv_key = zcl_abappgp_hash=>sha256( lv_input ).
+      WHEN OTHERS.
+        ASSERT 0 = 1.
+    ENDCASE.
+
+  ENDMETHOD.
+
+
   METHOD constructor.
 * https://tools.ietf.org/html/rfc4880#section-3.7
 
-* todo, refactor to 1 class per type?
+* todo, refactor to 1 class per type s2k?
 
     ASSERT iv_type = zif_abappgp_constants=>c_s2k_type-simple
       OR iv_type = zif_abappgp_constants=>c_s2k_type-salted
       OR iv_type = zif_abappgp_constants=>c_s2k_type-iterated_salted.
+
+    ASSERT iv_hash = zif_abappgp_constants=>c_algorithm_hash-sha256.
 
     mv_type  = iv_type.
     mv_hash  = iv_hash.
