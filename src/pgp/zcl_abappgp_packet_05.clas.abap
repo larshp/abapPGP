@@ -23,7 +23,9 @@ public section.
       !IO_N type ref to ZCL_ABAPPGP_INTEGER
       !IO_E type ref to ZCL_ABAPPGP_INTEGER
       !IV_SYM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_SYM
-      !IO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY .
+      !IO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY
+      !IV_IVECTOR type XSTRING
+      !IV_ENCRYPTED type XSTRING .
 protected section.
 
   data MO_E type ref to ZCL_ABAPPGP_INTEGER .
@@ -33,6 +35,8 @@ protected section.
   data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
   data MV_SYM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_SYM .
   data MO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY .
+  data MV_IVECTOR type XSTRING .
+  data MV_ENCRYPTED type XSTRING .
 private section.
 ENDCLASS.
 
@@ -50,8 +54,8 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
     mv_version   = iv_version.
     mv_sym       = iv_sym.
     mo_s2k       = io_s2k.
-
-* todo
+    mv_ivector   = iv_ivector.
+    mv_encrypted = iv_encrypted.
 
   ENDMETHOD.
 
@@ -67,21 +71,34 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
       mo_n->get_binary_length( ) } bits\n\tRSA e\t\t{
       mo_e->get_binary_length( ) } bits\n\tSym\t\t{
       mv_sym }\n{
-      mo_s2k->dump( ) }\ttodo\n|.
+      mo_s2k->dump( ) }\tIVector\t{
+      mv_ivector }\n|.
+
+    rv_dump = |{ rv_dump }\tEnc RSA d\n|.
+
+    rv_dump = |{ rv_dump }\tEnc RSA p\n|.
+
+    rv_dump = |{ rv_dump }\tEnc RSA q\n|.
+
+    rv_dump = |{ rv_dump }\tEnc RSA u\n|.
+
+    rv_dump = |{ rv_dump }\tEnc SHA1\n|.
 
   ENDMETHOD.
 
 
   METHOD zif_abappgp_packet~from_stream.
 
-    DATA: lv_version TYPE zif_abappgp_constants=>ty_version,
-          lv_pub     TYPE zif_abappgp_constants=>ty_algorithm_pub,
-          lv_sym     TYPE zif_abappgp_constants=>ty_algorithm_sym,
-          lv_time    TYPE i,
-          lv_usage   TYPE x LENGTH 1,
-          lo_s2k     TYPE REF TO zcl_abappgp_string_to_key,
-          lo_n       TYPE REF TO zcl_abappgp_integer,
-          lo_e       TYPE REF TO zcl_abappgp_integer.
+    DATA: lv_version   TYPE zif_abappgp_constants=>ty_version,
+          lv_pub       TYPE zif_abappgp_constants=>ty_algorithm_pub,
+          lv_sym       TYPE zif_abappgp_constants=>ty_algorithm_sym,
+          lv_time      TYPE i,
+          lv_usage     TYPE x LENGTH 1,
+          lv_ivector   TYPE xstring,
+          lv_encrypted TYPE xstring,
+          lo_s2k       TYPE REF TO zcl_abappgp_string_to_key,
+          lo_n         TYPE REF TO zcl_abappgp_integer,
+          lo_e         TYPE REF TO zcl_abappgp_integer.
 
 
     lv_version = io_stream->eat_octet( ).
@@ -99,13 +116,11 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
     IF lv_usage = 'FF' OR lv_usage = 'FE'.
       lv_sym = io_stream->eat_octet( ).
       ASSERT lv_sym = zif_abappgp_constants=>c_algorithm_sym-aes256.
-
       lo_s2k = io_stream->eat_s2k( ).
-
-* todo, IV
+      lv_ivector = io_stream->eat_octets( 16 ).
     ENDIF.
 
-* todo
+    lv_encrypted = io_stream->get_data( ).
 
     CREATE OBJECT ri_packet
       TYPE zcl_abappgp_packet_05
@@ -116,7 +131,9 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
         io_n         = lo_n
         io_e         = lo_e
         iv_sym       = lv_sym
-        io_s2k       = lo_s2k.
+        io_s2k       = lo_s2k
+        iv_ivector   = lv_ivector
+        iv_encrypted = lv_encrypted.
 
   ENDMETHOD.
 
@@ -143,7 +160,11 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
     ro_stream->write_octet( mv_algorithm ).
     ro_stream->write_mpi( mo_n ).
     ro_stream->write_mpi( mo_e ).
-* todo
+    ro_stream->write_octet( 'FE' ).
+    ro_stream->write_octet( mv_sym ).
+    ro_stream->write_stream( mo_s2k->to_stream( ) ).
+    ro_stream->write_octets( mv_ivector ).
+    ro_stream->write_octets( mv_encrypted ).
 
   ENDMETHOD.
 ENDCLASS.

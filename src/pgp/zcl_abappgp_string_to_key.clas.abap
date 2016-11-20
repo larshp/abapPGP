@@ -65,8 +65,8 @@ CLASS ZCL_ABAPPGP_STRING_TO_KEY IMPLEMENTATION.
         ASSERT 0 = 1.
       WHEN zif_abappgp_constants=>c_s2k_type-iterated_salted.
         rv_dump = |{ rv_dump }\t\tHash alg\t{
-          mv_hash }\n\t\tSalt\t{
-          mv_salt }\n\t\tCount\t{ mv_count }\n|.
+          mv_hash }\n\t\tSalt\t\t{
+          mv_salt }\n\t\tCount\t\t{ mv_count }\n|.
       WHEN OTHERS.
         ASSERT 0 = 1.
     ENDCASE.
