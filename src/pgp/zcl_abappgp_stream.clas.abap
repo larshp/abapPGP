@@ -36,6 +36,9 @@ public section.
   methods GET_LENGTH
     returning
       value(RV_LENGTH) type I .
+  methods WRITE_LENGTH
+    importing
+      !IV_LENGTH type I .
   methods WRITE_MPI
     importing
       !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER .
@@ -72,16 +75,17 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
   METHOD eat_length.
 * https://tools.ietf.org/html/rfc4880#section-4.2.2
 
-    DATA: lv_octet TYPE x LENGTH 1,
-          lv_bits  TYPE string.
+    rv_length = eat_octet( ).
 
-
-    lv_octet = eat_octet( ).
-    lv_bits = zcl_abappgp_convert=>to_bits( lv_octet ).
-    rv_length = zcl_abappgp_convert=>bits_to_integer( lv_bits ).
-
-    IF rv_length > 191.
-      BREAK-POINT.
+    IF rv_length <= 191.
+      RETURN.
+    ELSEIF rv_length <= 223.
+      rv_length = ( rv_length - 192 ) * 256 + eat_octet( ) + 192.
+    ELSEIF rv_length = 255.
+      ASSERT eat_octet( ) = '00'. " will overflow in ABAP integer, as it is signed
+      rv_length = eat_octet( ) * 65536 + eat_octet( ) * 256 +  eat_octet( ).
+    ELSE.
+      ASSERT 0 = 1.
     ENDIF.
 
   ENDMETHOD.
@@ -154,6 +158,31 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
   METHOD get_length.
 
     rv_length = xstrlen( mv_data ).
+
+  ENDMETHOD.
+
+
+  METHOD write_length.
+
+    DATA: lv_octet  TYPE x LENGTH 1,
+          lv_octet4 TYPE x LENGTH 4.
+
+
+    ASSERT iv_length > 0.
+
+    IF iv_length <= 191.
+      lv_octet = iv_length.
+      write_octet( lv_octet ).
+    ELSEIF iv_length <= 8383.
+      lv_octet = ( iv_length DIV 256 ) + 192 - 1.
+      write_octet( lv_octet ).
+      lv_octet = ( iv_length - 192 ) MOD 256.
+      write_octet( lv_octet ).
+    ELSE.
+      write_octet( 'FF' ).
+      lv_octet4 = iv_length.
+      write_octets( lv_octet4 ).
+    ENDIF.
 
   ENDMETHOD.
 
