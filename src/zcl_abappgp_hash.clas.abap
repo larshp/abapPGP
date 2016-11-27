@@ -56,14 +56,15 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
       lv_byte = iv_data+lv_index(1).
 
       lv_tmp = rv_hash.
-      SHIFT lv_tmp BY 16 PLACES RIGHT IN BYTE MODE.
+      SHIFT lv_tmp BY 2 PLACES RIGHT IN BYTE MODE.
       lv_tmp = ( lv_tmp BIT-XOR lv_byte ) BIT-AND lc_ff.
       lv_index = lv_tmp + 1.
 
       READ TABLE lt_table INDEX lv_index INTO lv_tmp.
       ASSERT sy-subrc = 0.
 
-      lv_tmp2 = rv_hash * 256.
+      lv_tmp2 = rv_hash.
+      SHIFT lv_tmp2 BY 1 PLACES LEFT IN BYTE MODE.
 
       rv_hash = ( lv_tmp2 BIT-XOR lv_tmp ) BIT-AND lc_ffffff.
     ENDDO.
