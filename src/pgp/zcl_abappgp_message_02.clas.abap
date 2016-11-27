@@ -49,15 +49,12 @@ CLASS ZCL_ABAPPGP_MESSAGE_02 IMPLEMENTATION.
   METHOD zif_abappgp_message~from_armor.
 
     DATA: lo_stream  TYPE REF TO zcl_abappgp_stream,
-          lt_packets TYPE zif_abappgp_constants=>ty_packet_list,
-          lv_bin     TYPE xstring.
+          lt_packets TYPE zif_abappgp_constants=>ty_packet_list.
 
-
-    lv_bin = zcl_abappgp_convert=>base64_decode( io_armor->get_data( ) ).
 
     CREATE OBJECT lo_stream
       EXPORTING
-        iv_data = lv_bin.
+        iv_data = io_armor->get_data( ).
 
     lt_packets = zcl_abappgp_packet_list=>from_stream( lo_stream ).
 

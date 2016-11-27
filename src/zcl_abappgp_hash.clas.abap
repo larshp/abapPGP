@@ -15,9 +15,14 @@ public section.
     returning
       value(RV_HASH) type XSTRING .
 protected section.
-private section.
 
-  class-methods CRC24_INIT .
+  types:
+    ty_table_tt TYPE STANDARD TABLE OF xstring WITH DEFAULT KEY .
+
+  class-methods CRC24_INIT
+    returning
+      value(RT_TABLE) type TY_TABLE_TT .
+private section.
 ENDCLASS.
 
 
@@ -34,13 +39,15 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
                lc_init   TYPE xstring VALUE 'B704CE'.
 
     DATA: lv_index TYPE i,
-          lt_table TYPE STANDARD TABLE OF xstring WITH DEFAULT KEY,
+          lt_table TYPE ty_table_tt,
           lv_tmp   LIKE rv_hash,
           lv_tmp2  LIKE rv_hash,
           lv_byte  TYPE x LENGTH 1.
 
 
     ASSERT xstrlen( iv_data ) > 0.
+
+    lt_table = zcl_abappgp_hash=>crc24_init( ).
 
     rv_hash = lc_init.
 
@@ -50,8 +57,8 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
 
       lv_tmp = rv_hash.
       SHIFT lv_tmp BY 16 PLACES RIGHT IN BYTE MODE.
-      lv_tmp = lv_tmp BIT-XOR lv_byte BIT-AND lc_ff.
-      lv_index = lv_tmp.
+      lv_tmp = ( lv_tmp BIT-XOR lv_byte ) BIT-AND lc_ff.
+      lv_index = lv_tmp + 1.
 
       READ TABLE lt_table INDEX lv_index INTO lv_tmp.
       ASSERT sy-subrc = 0.
@@ -69,7 +76,7 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
     DATA: lt_table TYPE STANDARD TABLE OF xstring.
 
     DEFINE _add.
-      append &1 to lt_table.
+      append &1 to rt_table.
     END-OF-DEFINITION.
 
     _add '00000000'.
@@ -334,12 +341,16 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
 
   METHOD sha256.
 
-    cl_abap_message_digest=>calculate_hash_for_raw(
-      EXPORTING
-        if_algorithm   = 'SHA256'
-        if_data        = iv_input
-      IMPORTING
-        ef_hashxstring = rv_hash ).
+    TRY.
+        cl_abap_message_digest=>calculate_hash_for_raw(
+          EXPORTING
+            if_algorithm   = 'SHA256'
+            if_data        = iv_input
+          IMPORTING
+            ef_hashxstring = rv_hash ).
+      CATCH cx_abap_message_digest.
+        ASSERT 0 = 1.
+    ENDTRY.
 
   ENDMETHOD.
 ENDCLASS.

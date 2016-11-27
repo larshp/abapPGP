@@ -10,6 +10,11 @@ public section.
       !IV_ENCODED type STRING
     returning
       value(RV_BIN) type XSTRING .
+  class-methods BASE64_ENCODE
+    importing
+      !IV_BIN type XSTRING
+    returning
+      value(RV_ENCODED) type STRING .
   class-methods BITS_TO_BIG_INTEGER
     importing
       !IV_BITS type STRING
@@ -63,6 +68,27 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
     IF sy-subrc <> 0.
       BREAK-POINT.
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD base64_encode.
+
+    CALL FUNCTION 'SSFC_BASE64_ENCODE'
+      EXPORTING
+        bindata                  = iv_bin
+      IMPORTING
+        b64data                  = rv_encoded
+      EXCEPTIONS
+        ssf_krn_error            = 1
+        ssf_krn_noop             = 2
+        ssf_krn_nomemory         = 3
+        ssf_krn_opinv            = 4
+        ssf_krn_input_data_error = 5
+        ssf_krn_invalid_par      = 6
+        ssf_krn_invalid_parlen   = 7
+        OTHERS                   = 8.
+    ASSERT sy-subrc = 0.
 
   ENDMETHOD.
 

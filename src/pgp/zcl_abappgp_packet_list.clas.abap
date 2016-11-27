@@ -100,9 +100,9 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD PACKET_HEADER.
+  METHOD packet_header.
 
-    DATA: lv_bits  TYPE string.
+    DATA: lv_bits TYPE string.
 
 
     lv_bits = zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ).
