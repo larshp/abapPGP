@@ -37,7 +37,7 @@ CLASS ltcl_crc24 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL
 
   PRIVATE SECTION.
     METHODS: test
-      IMPORTING iv_input    TYPE string
+      IMPORTING iv_input    TYPE xstring
                 iv_expected TYPE xstring.
 
     METHODS:
@@ -54,7 +54,7 @@ CLASS ltcl_crc24 IMPLEMENTATION.
     DATA: lv_hash TYPE xstring.
 
 
-    lv_hash = zcl_abappgp_hash=>crc24( zcl_abappgp_convert=>string_to_utf8( iv_input ) ).
+    lv_hash = zcl_abappgp_hash=>crc24( iv_input ).
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_hash

@@ -35,6 +35,7 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
 
     CONSTANTS: lc_gen    TYPE xstring VALUE '864CFB',
                lc_ff     TYPE x LENGTH 1 VALUE 'FF',
+               lc_00     TYPE x LENGTH 1 VALUE '00',
                lc_ffffff TYPE xstring VALUE 'FFFFFF',
                lc_init   TYPE xstring VALUE 'B704CE'.
 
@@ -56,17 +57,17 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
       lv_byte = iv_data+lv_index(1).
 
       lv_tmp = rv_hash.
-      SHIFT lv_tmp BY 2 PLACES RIGHT IN BYTE MODE.
+      lv_tmp = lv_tmp(1). " shift 16 bits right, remove 2 rightmost bytes
       lv_tmp = ( lv_tmp BIT-XOR lv_byte ) BIT-AND lc_ff.
       lv_index = lv_tmp + 1.
 
       READ TABLE lt_table INDEX lv_index INTO lv_tmp.
       ASSERT sy-subrc = 0.
 
-      lv_tmp2 = rv_hash.
-      SHIFT lv_tmp2 BY 1 PLACES LEFT IN BYTE MODE.
+      CONCATENATE rv_hash lc_00 INTO lv_tmp2 IN BYTE MODE. " shift 8 bytes left
 
       rv_hash = ( lv_tmp2 BIT-XOR lv_tmp ) BIT-AND lc_ffffff.
+      rv_hash = rv_hash(3).
     ENDDO.
 
   ENDMETHOD.
