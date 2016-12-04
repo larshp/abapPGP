@@ -14,7 +14,6 @@ public section.
       !IV_ARMOR_HEADER type STRING
       !IT_HEADERS type STRING_TABLE
       !IV_DATA type XSTRING
-      !IV_CHECKSUM type XSTRING
       !IV_ARMOR_TAIL type STRING .
   methods GET_ARMOR_HEADER
     returning
@@ -22,9 +21,6 @@ public section.
   methods GET_ARMOR_TAIL
     returning
       value(RV_TAIL) type STRING .
-  methods GET_CHECKSUM
-    returning
-      value(RV_CHECKSUM) type XSTRING .
   methods GET_DATA
     returning
       value(RV_DATA) type XSTRING .
@@ -39,7 +35,6 @@ protected section.
   data MV_ARMOR_HEADER type STRING .
   data MT_HEADERS type STRING_TABLE .
   data MV_DATA type XSTRING .
-  data MV_CHECKSUM type XSTRING .
   data MV_ARMOR_TAIL type STRING .
 private section.
 ENDCLASS.
@@ -53,13 +48,11 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
 
     ASSERT NOT iv_armor_header IS INITIAL.
     ASSERT NOT iv_data IS INITIAL.
-    ASSERT NOT iv_checksum IS INITIAL.
     ASSERT NOT iv_armor_tail IS INITIAL.
 
     mv_armor_header = iv_armor_header.
     mt_headers      = it_headers.
     mv_data         = iv_data.
-    mv_checksum     = iv_checksum.
     mv_armor_tail   = iv_armor_tail.
 
   ENDMETHOD.
@@ -82,6 +75,7 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
     DATA: lv_armor_header TYPE string,
           lt_headers      TYPE string_table,
           lv_data         TYPE string,
+          lv_xdata        TYPE xstring,
           lv_checksum     TYPE xstring,
           lv_armor_tail   TYPE string,
           lt_string       TYPE TABLE OF string,
@@ -113,7 +107,9 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
         WHEN c_mode-checksum.
           ASSERT lv_string(1) = '='.
           lv_string = lv_string+1.
+          lv_xdata = zcl_abappgp_convert=>base64_decode( lv_data ).
           lv_checksum = zcl_abappgp_convert=>base64_decode( lv_string ).
+          ASSERT lv_checksum = zcl_abappgp_hash=>crc24( lv_xdata ).
           _next_mode.
         WHEN c_mode-armor_tail.
           lv_armor_tail = lv_string.
@@ -128,8 +124,7 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
       EXPORTING
         iv_armor_header = lv_armor_header
         it_headers      = lt_headers
-        iv_data         = zcl_abappgp_convert=>base64_decode( lv_data )
-        iv_checksum     = lv_checksum
+        iv_data         = lv_xdata
         iv_armor_tail   = lv_armor_tail.
 
   ENDMETHOD.
@@ -145,13 +140,6 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
   METHOD get_armor_tail.
 
     rv_tail = mv_armor_tail.
-
-  ENDMETHOD.
-
-
-  METHOD get_checksum.
-
-    rv_checksum = mv_checksum.
 
   ENDMETHOD.
 
@@ -193,7 +181,8 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
     ENDWHILE.
     rv_armor = |{ rv_armor }{ lv_data }\n|.
 
-    rv_armor = |{ rv_armor }={ zcl_abappgp_convert=>base64_encode( mv_checksum ) }\n|.
+    rv_armor = |{ rv_armor }={ zcl_abappgp_convert=>base64_encode(
+      zcl_abappgp_hash=>crc24( mv_data ) ) }\n|.
 
     rv_armor = |{ rv_armor }{ mv_armor_tail }|.
 
