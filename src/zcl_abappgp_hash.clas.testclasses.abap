@@ -42,8 +42,7 @@ CLASS ltcl_crc24 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL
 
     METHODS:
       test01 FOR TESTING,
-      test02 FOR TESTING,
-      test03 FOR TESTING.
+      test02 FOR TESTING.
 
 ENDCLASS.       "ltcl_Crc24
 
@@ -64,23 +63,14 @@ CLASS ltcl_crc24 IMPLEMENTATION.
 
   METHOD test01.
 
-    test( iv_input    = '00000000'
-          iv_expected = '000000' ).
+    test( iv_input    = '3F214365876616AB15387D5D59'
+          iv_expected = 'BA0568' ).
 
   ENDMETHOD.
 
   METHOD test02.
 
-    test( iv_input    = '010203040506'
-          iv_expected = 'BC7E06' ).
-
-  ENDMETHOD.
-
-  METHOD test03.
-
-    DATA: lv_input  TYPE xstring,
-          lv_hash   TYPE xstring,
-          lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     CREATE OBJECT lo_stream.
@@ -118,11 +108,8 @@ CLASS ltcl_crc24 IMPLEMENTATION.
     lo_stream->write_octets( '1C5BCBE61709E5A31FA3D68CC9BDBAF59DD6C4C9' ).
     lo_stream->write_octets( 'DE7400CB27D08E708E' ).
 
-    lv_hash = zcl_abappgp_hash=>crc24( lo_stream->get_data( ) ).
-
-    cl_abap_unit_assert=>assert_equals(
-      act = lv_hash
-      exp = 'F34315' ).
+    test( iv_input    = lo_stream->get_data( )
+          iv_expected = 'F34315' ).
 
   ENDMETHOD.
 
