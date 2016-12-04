@@ -28,6 +28,7 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
 
 
   METHOD aes256_decrypt.
+* CFB mode, https://tools.ietf.org/html/rfc4880#section-13.9
 
     zcl_aes_utility=>decrypt_xstring(
       EXPORTING
@@ -42,6 +43,7 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
 
 
   METHOD aes256_encrypt.
+* CFB mode, https://tools.ietf.org/html/rfc4880#section-13.9
 
     zcl_aes_utility=>encrypt_xstring(
       EXPORTING

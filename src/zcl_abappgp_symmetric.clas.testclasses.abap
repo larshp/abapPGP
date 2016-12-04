@@ -56,6 +56,10 @@ CLASS ltcl_aes256 IMPLEMENTATION.
       iv_key     = lv_key
       iv_ivector = lv_ivector ).
 
+    cl_abap_unit_assert=>assert_differs(
+      act = lv_encrypted
+      exp = lv_result ).
+
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
       exp = lv_plain ).
