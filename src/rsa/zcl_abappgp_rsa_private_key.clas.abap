@@ -22,6 +22,9 @@ public section.
   methods GET_U
     returning
       value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  methods GET_N
+    returning
+      value(RO_N) type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
 private section.
 
@@ -49,6 +52,13 @@ CLASS ZCL_ABAPPGP_RSA_PRIVATE_KEY IMPLEMENTATION.
   METHOD GET_D.
 
     ro_integer = mo_d.
+
+  ENDMETHOD.
+
+
+  METHOD get_n.
+
+    ro_n = get_p( )->clone( )->multiply( get_q( ) ).
 
   ENDMETHOD.
 

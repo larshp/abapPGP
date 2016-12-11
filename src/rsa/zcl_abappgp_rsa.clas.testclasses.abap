@@ -143,3 +143,61 @@ CLASS ltcl_generate_keys IMPLEMENTATION.
   ENDMETHOD.
 
 ENDCLASS.
+
+CLASS ltcl_encrypt DEFINITION FOR TESTING
+    DURATION MEDIUM
+    RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      test01 FOR TESTING.
+
+ENDCLASS.
+
+CLASS ltcl_encrypt IMPLEMENTATION.
+
+  METHOD test01.
+* http://doctrina.org/How-RSA-Works-With-Examples.html
+
+    DATA: lv_q         TYPE string,
+          lv_p         TYPE string,
+          lo_keys      TYPE REF TO zcl_abappgp_rsa_key_pair,
+          lo_encrypted TYPE REF TO zcl_abappgp_integer,
+          lv_result    TYPE string,
+          lv_plain     TYPE string.
+
+
+    CONCATENATE
+      '121310724392112718973236715316124404284'
+      '724276337014109256345493123019643730420'
+      '856193241973653224168665410170573613652'
+      '14171711713797974299334871062829803541' INTO lv_q.
+
+    CONCATENATE
+      '120275242554787488859562207937345121287'
+      '333878036820754336538999839551798509887'
+      '978998691469008091316111533468170508320'
+      '96022160146366346391812470987105415233' INTO lv_p.
+
+    lv_plain = '1976620216402300889624482718775150'.
+
+
+    lo_keys = zcl_abappgp_rsa=>generate_key_pair(
+      io_p = zcl_abappgp_integer=>from_string( lv_p )
+      io_q = zcl_abappgp_integer=>from_string( lv_q ) ).
+
+    lo_encrypted = zcl_abappgp_rsa=>encrypt(
+      io_plain  = zcl_abappgp_integer=>from_string( lv_plain )
+      io_public = lo_keys->get_public( ) ).
+
+    lv_result = zcl_abappgp_rsa=>decrypt(
+      io_encrypted = lo_encrypted
+      io_private   = lo_keys->get_private( ) )->to_string( ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_result
+      exp = lv_plain ).
+
+  ENDMETHOD.
+
+ENDCLASS.

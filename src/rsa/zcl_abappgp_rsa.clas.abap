@@ -10,6 +10,18 @@ public section.
       !IO_Q type ref to ZCL_ABAPPGP_INTEGER
     returning
       value(RO_PAIR) type ref to ZCL_ABAPPGP_RSA_KEY_PAIR .
+  class-methods ENCRYPT
+    importing
+      !IO_PLAIN type ref to ZCL_ABAPPGP_INTEGER
+      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY
+    returning
+      value(RO_ENCRYPTED) type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods DECRYPT
+    importing
+      !IO_ENCRYPTED type ref to ZCL_ABAPPGP_INTEGER
+      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
+    returning
+      value(RO_PLAIN) type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
 
   class-methods FIND_COPRIME
@@ -23,6 +35,24 @@ ENDCLASS.
 
 
 CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
+
+
+  METHOD decrypt.
+
+    ro_plain = io_encrypted->clone( )->modular_pow_montgomery(
+      io_exponent = io_private->get_d( )
+      io_modulus  = io_private->get_n( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD encrypt.
+
+    ro_encrypted = io_plain->clone( )->modular_pow_montgomery(
+      io_exponent = io_public->get_e( )
+      io_modulus  = io_public->get_n( ) ).
+
+  ENDMETHOD.
 
 
   METHOD find_coprime.
