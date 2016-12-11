@@ -14,6 +14,13 @@ public section.
   methods CONSTRUCTOR
     importing
       !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
+  class-methods SIGN
+    importing
+      !IV_DATA type XSTRING
+      !IV_TIME type I
+      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
+    returning
+      value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_MESSAGE_06 .
 protected section.
 
   data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
@@ -30,6 +37,24 @@ CLASS ZCL_ABAPPGP_MESSAGE_06 IMPLEMENTATION.
     super->constructor( ).
 
     mt_packet_list = it_packet_list.
+
+  ENDMETHOD.
+
+
+  METHOD sign.
+
+    DATA: lt_list   TYPE zif_abappgp_constants=>ty_packet_list,
+          li_packet TYPE REF TO zif_abappgp_packet.
+
+
+    li_packet = zcl_abappgp_packet_02=>sign(
+      iv_data    = iv_data
+      iv_time    = iv_time
+      io_private = io_private ).
+
+    CREATE OBJECT ro_signature
+      EXPORTING
+        it_packet_list = lt_list.
 
   ENDMETHOD.
 

@@ -20,6 +20,13 @@ public section.
   types:
     TY_integers type standard table of ref to zcl_abappgp_integer with default key .
 
+  class-methods SIGN
+    importing
+      !IV_DATA type XSTRING
+      !IV_TIME type I
+      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
+    returning
+      value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_PACKET_02 .
   methods CONSTRUCTOR
     importing
       !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
@@ -27,9 +34,14 @@ public section.
       !IV_PK_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
       !IV_HASH_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH
       !IT_HASHED type TY_SUBPACKETS
-      !IT_UNHASHED type TY_SUBPACKETS
+      !IT_UNHASHED type TY_SUBPACKETS optional
       !IV_LEFT type XSEQUENCE
       !IT_INTEGERS type TY_INTEGERS .
+  methods VERIFY
+    importing
+      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY
+    returning
+      value(RV_VALID) type ABAP_BOOL .
 protected section.
 
   data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
@@ -94,6 +106,35 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
     ENDWHILE.
 
     ASSERT io_stream->get_length( ) = 0.
+
+  ENDMETHOD.
+
+
+  METHOD sign.
+
+    DATA: lt_hashed   TYPE ty_subpackets,
+          lv_left     TYPE xstring,
+          lt_integers TYPE ty_integers.
+
+* todo
+
+* todo, use constants:
+    CREATE OBJECT ro_signature
+      EXPORTING
+        iv_version   = '04'
+        iv_signature = '01'
+        iv_pk_algo   = '01'
+        iv_hash_algo = '08'
+        it_hashed    = lt_hashed
+        iv_left      = lv_left
+        it_integers  = lt_integers.
+
+  ENDMETHOD.
+
+
+  METHOD verify.
+
+* todo
 
   ENDMETHOD.
 
