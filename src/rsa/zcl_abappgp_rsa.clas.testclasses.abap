@@ -62,30 +62,23 @@ CLASS ltcl_generate_keys IMPLEMENTATION.
 
   METHOD run.
 
-    DATA: lo_n TYPE REF TO zcl_abappgp_integer,
-          lo_e TYPE REF TO zcl_abappgp_integer,
-          lo_d TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_pair TYPE REF TO zcl_abappgp_rsa_key_pair.
 
 
-    zcl_abappgp_rsa=>generate_keys(
-      EXPORTING
-        io_prime1 = zcl_abappgp_integer=>from_string( iv_p )
-        io_prime2 = zcl_abappgp_integer=>from_string( iv_q )
-      IMPORTING
-        eo_n      = lo_n
-        eo_e      = lo_e
-        eo_d      = lo_d ).
+    lo_pair = zcl_abappgp_rsa=>generate_key_pair(
+      io_p = zcl_abappgp_integer=>from_string( iv_p )
+      io_q = zcl_abappgp_integer=>from_string( iv_q ) ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_n->to_string( )
+      act = lo_pair->get_public( )->get_n( )->to_string( )
       exp = iv_n ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_e->to_string( )
+      act = lo_pair->get_public( )->get_e( )->to_string( )
       exp = iv_e ).
 
     cl_abap_unit_assert=>assert_equals(
-      act = lo_d->to_string( )
+      act = lo_pair->get_private( )->get_d( )->to_string( )
       exp = iv_d ).
 
   ENDMETHOD.
@@ -113,13 +106,13 @@ CLASS ltcl_generate_keys IMPLEMENTATION.
       '121310724392112718973236715316124404284'
       '724276337014109256345493123019643730420'
       '856193241973653224168665410170573613652'
-      '14171711713797974299334871062829803541' INTO lv_p.
+      '14171711713797974299334871062829803541' INTO lv_q.
 
     CONCATENATE
       '120275242554787488859562207937345121287'
       '333878036820754336538999839551798509887'
       '978998691469008091316111533468170508320'
-      '96022160146366346391812470987105415233' INTO lv_q.
+      '96022160146366346391812470987105415233' INTO lv_p.
 
     CONCATENATE
       '145906768007583323230186939349070635292'

@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_10 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Marker Packet'.
+    rv_name = 'Marker Packet'(001).
 
   ENDMETHOD.
 

@@ -40,9 +40,9 @@ CLASS ZCL_ABAPPGP_PACKET_03 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_PACKET~GET_NAME.
+  METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Symmetric-Key Encrypted Session Key Packet'.
+    rv_name = 'Symmetric-Key Encrypted Session Key Packet'(001).
 
   ENDMETHOD.
 

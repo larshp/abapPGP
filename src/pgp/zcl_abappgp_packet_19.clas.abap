@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_19 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Modification Detection Code Packet'.
+    rv_name = 'Modification Detection Code Packet'(001).
 
   ENDMETHOD.
 

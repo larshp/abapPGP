@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_01 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Public-Key Encrypted Session Key Packet'.
+    rv_name = 'Public-Key Encrypted Session Key Packet'(001).
 
   ENDMETHOD.
 

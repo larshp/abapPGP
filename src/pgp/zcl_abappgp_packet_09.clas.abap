@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_09 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Symmetrically Encrypted Data Packet'.
+    rv_name = 'Symmetrically Encrypted Data Packet'(001).
 
   ENDMETHOD.
 

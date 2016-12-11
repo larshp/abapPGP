@@ -36,7 +36,7 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_RSA_PRIVATE_KEY IMPLEMENTATION.
 
 
-  METHOD CONSTRUCTOR.
+  METHOD constructor.
 
     mo_d = io_d.
     mo_p = io_p.

@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_18 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Sym. Encrypted and Integrity Protected Data Packet'.
+    rv_name = 'Sym. Encrypted and Integrity Protected Data Packet'(001).
 
   ENDMETHOD.
 

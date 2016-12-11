@@ -44,7 +44,15 @@
     <RISK_LEVEL>0</RISK_LEVEL>
     <WITHIN_PACKAGE/>
    </VSEOCLASS>
-   <TPOOL/>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Public-Key Packet</ENTRY>
+     <LENGTH>27</LENGTH>
+     <SPLIT/>
+    </item>
+   </TPOOL>
    <DESCRIPTIONS>
     <SEOCOMPOTX>
      <CLSNAME>ZCL_ABAPPGP_PACKET_06</CLSNAME>

@@ -4,14 +4,12 @@ class ZCL_ABAPPGP_RSA definition
 
 public section.
 
-  class-methods GENERATE_KEYS
+  class-methods GENERATE_KEY_PAIR
     importing
-      !IO_PRIME1 type ref to ZCL_ABAPPGP_INTEGER
-      !IO_PRIME2 type ref to ZCL_ABAPPGP_INTEGER
-    exporting
-      !EO_N type ref to ZCL_ABAPPGP_INTEGER
-      !EO_E type ref to ZCL_ABAPPGP_INTEGER
-      !EO_D type ref to ZCL_ABAPPGP_INTEGER .
+      !IO_P type ref to ZCL_ABAPPGP_INTEGER
+      !IO_Q type ref to ZCL_ABAPPGP_INTEGER
+    returning
+      value(RO_PAIR) type ref to ZCL_ABAPPGP_RSA_KEY_PAIR .
 protected section.
 
   class-methods FIND_COPRIME
@@ -57,32 +55,70 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD generate_keys.
+  METHOD generate_key_pair.
 
-    DATA: lo_one TYPE REF TO zcl_abappgp_integer,
-          lo_m   TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_one     TYPE REF TO zcl_abappgp_integer,
+          lo_m       TYPE REF TO zcl_abappgp_integer,
+          lo_n       TYPE REF TO zcl_abappgp_integer,
+          lo_u       TYPE REF TO zcl_abappgp_integer,
+          lo_e       TYPE REF TO zcl_abappgp_integer,
+          lo_d       TYPE REF TO zcl_abappgp_integer,
+          lo_private TYPE REF TO zcl_abappgp_rsa_private_key,
+          lo_public  TYPE REF TO zcl_abappgp_rsa_public_key.
 
+
+    ASSERT io_p->is_lt( io_q ).
 
     CREATE OBJECT lo_one
       EXPORTING
         iv_integer = 1.
 
-    eo_n = io_prime1->clone( )->multiply( io_prime2 ).
-    lo_m = io_prime1->clone( )->subtract( lo_one )->multiply( io_prime2->clone( )->subtract( lo_one ) ).
+    lo_n = io_p->clone( )->multiply( io_q ).
+* totient:
+    lo_m = io_p->clone( )->subtract( lo_one )->multiply(
+      io_q->clone( )->subtract( lo_one ) ).
 
-    eo_e = find_coprime( lo_m ).
+    lo_e = find_coprime( lo_m ).
 
     zcl_abappgp_integer=>extended_gcd(
       EXPORTING
-        io_a      = eo_e
+        io_a      = lo_e
         io_b      = lo_m
       IMPORTING
-        eo_coeff1 = eo_d ).
-    IF eo_d->is_negative( ) = abap_true.
-      eo_d = eo_d->add( lo_m ).
+        eo_coeff1 = lo_d ).
+    IF lo_d->is_negative( ) = abap_true.
+      lo_d = lo_d->add( lo_m ).
     ENDIF.
 
-* todo: return instance of zcl_abappgp_rsa_private_key and zcl_abappgp_rsa_public_key
+    zcl_abappgp_integer=>extended_gcd(
+      EXPORTING
+        io_a      = io_p
+        io_b      = io_q
+      IMPORTING
+        eo_coeff1 = lo_u ).
+    IF lo_u->is_negative( ) = abap_true.
+      lo_u = lo_u->add( io_q ).
+    ENDIF.
+
+* todo:
+* q (p < q)
+
+    CREATE OBJECT lo_private
+      EXPORTING
+        io_d = lo_d
+        io_p = io_p
+        io_q = io_q
+        io_u = lo_u.
+
+    CREATE OBJECT lo_public
+      EXPORTING
+        io_n = lo_n
+        io_e = lo_e.
+
+    CREATE OBJECT ro_pair
+      EXPORTING
+        io_private = lo_private
+        io_public  = lo_public.
 
   ENDMETHOD.
 ENDCLASS.

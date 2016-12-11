@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_07 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Secret-Subkey Packet'.
+    rv_name = 'Secret-Subkey Packet'(001).
 
   ENDMETHOD.
 

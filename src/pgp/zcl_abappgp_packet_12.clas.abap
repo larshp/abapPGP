@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_12 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Trust Packet'.
+    rv_name = 'Trust Packet'(001).
 
   ENDMETHOD.
 

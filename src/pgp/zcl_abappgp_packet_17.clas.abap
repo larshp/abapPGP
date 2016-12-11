@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_17 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'User Attribute Packet'.
+    rv_name = 'User Attribute Packet'(001).
 
   ENDMETHOD.
 

@@ -229,7 +229,7 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Secret-Key Packet'.
+    rv_name = 'Secret-Key Packet'(001).
 
   ENDMETHOD.
 

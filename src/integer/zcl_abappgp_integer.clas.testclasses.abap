@@ -93,7 +93,8 @@ CLASS ltcl_extended_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLES
 
   PRIVATE SECTION.
     METHODS:
-      test1 FOR TESTING.
+      test1 FOR TESTING,
+      test2 FOR TESTING.
 
     METHODS:
       test IMPORTING iv_a      TYPE string
@@ -160,6 +161,18 @@ CLASS ltcl_extended_gcd IMPLEMENTATION.
           iv_gcd    = '2'
           iv_quo1   = '-120'
           iv_quo2   = '23' ).
+
+  ENDMETHOD.
+
+  METHOD test2.
+
+    test( iv_a      = '17'
+          iv_b      = '3120'
+          iv_coeff1 = '-367'
+          iv_coeff2 = '2'
+          iv_gcd    = '1'
+          iv_quo1   = '-17'
+          iv_quo2   = '3120' ).
 
   ENDMETHOD.
 

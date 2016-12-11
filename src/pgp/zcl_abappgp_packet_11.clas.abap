@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_11 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Literal Data Packet'.
+    rv_name = 'Literal Data Packet'(001).
 
   ENDMETHOD.
 

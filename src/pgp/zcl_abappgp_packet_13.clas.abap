@@ -61,7 +61,7 @@ CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'User ID Packet'.
+    rv_name = 'User ID Packet'(001).
 
   ENDMETHOD.
 

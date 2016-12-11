@@ -96,7 +96,7 @@ CLASS ZCL_ABAPPGP_PACKET_14 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Public-Subkey Packet'.
+    rv_name = 'Public-Subkey Packet'(001).
 
   ENDMETHOD.
 

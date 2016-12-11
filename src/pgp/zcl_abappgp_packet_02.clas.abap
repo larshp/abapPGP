@@ -206,7 +206,7 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Signature Packet'.
+    rv_name = 'Signature Packet'(001).
 
   ENDMETHOD.
 

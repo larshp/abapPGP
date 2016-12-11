@@ -42,7 +42,7 @@ CLASS ZCL_ABAPPGP_PACKET_08 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~get_name.
 
-    rv_name = 'Compressed Data Packet'.
+    rv_name = 'Compressed Data Packet'(001).
 
   ENDMETHOD.
 
