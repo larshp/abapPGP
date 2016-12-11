@@ -82,5 +82,7 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
       eo_d = eo_d->add( lo_m ).
     ENDIF.
 
+* todo: return instance of zcl_abappgp_rsa_private_key and zcl_abappgp_rsa_public_key
+
   ENDMETHOD.
 ENDCLASS.

@@ -20,12 +20,10 @@ public section.
       !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
       !IV_TIME type I
       !IV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
-      !IO_N type ref to ZCL_ABAPPGP_INTEGER
-      !IO_E type ref to ZCL_ABAPPGP_INTEGER .
+      !IO_KEY type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY .
 protected section.
 
-  data MO_E type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_N type ref to ZCL_ABAPPGP_INTEGER .
+  data MO_KEY type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY .
   data MV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB .
   data MV_TIME type I .
   data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
@@ -39,8 +37,7 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
 
   METHOD constructor.
 
-    mo_e         = io_e.
-    mo_n         = io_n.
+    mo_key       = io_key.
     mv_algorithm = iv_algorithm.
     mv_time      = iv_time.
     mv_version   = iv_version.
@@ -56,8 +53,8 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
       mv_version }\n\tTime\t\t{
       zcl_abappgp_time=>format_unix( mv_time ) }\n\tAlgorithm\t{
       mv_algorithm }\n\tRSA n\t\t{
-      mo_n->get_binary_length( ) } bits\n\tRSA e\t\t{
-      mo_e->get_binary_length( ) } bits\n|.
+      mo_key->get_n( )->get_binary_length( ) } bits\n\tRSA e\t\t{
+      mo_key->get_e( )->get_binary_length( ) } bits\n|.
 
   ENDMETHOD.
 
@@ -67,6 +64,7 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
     DATA: lv_version   TYPE x LENGTH 1,
           lv_algorithm TYPE x LENGTH 1,
           lv_time      TYPE i,
+          lo_key       TYPE REF TO zcl_abappgp_rsa_public_key,
           lo_n         TYPE REF TO zcl_abappgp_integer,
           lo_e         TYPE REF TO zcl_abappgp_integer.
 
@@ -82,14 +80,18 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
     lo_n = io_stream->eat_mpi( ).
     lo_e = io_stream->eat_mpi( ).
 
+    CREATE OBJECT lo_key
+      EXPORTING
+        io_n = lo_n
+        io_e = lo_e.
+
     CREATE OBJECT ri_packet
       TYPE zcl_abappgp_packet_06
       EXPORTING
         iv_version   = lv_version
         iv_time      = lv_time
         iv_algorithm = lv_algorithm
-        io_n         = lo_n
-        io_e         = lo_e.
+        io_key       = lo_key.
 
   ENDMETHOD.
 
@@ -114,8 +116,8 @@ CLASS ZCL_ABAPPGP_PACKET_06 IMPLEMENTATION.
     ro_stream->write_octet( mv_version ).
     ro_stream->write_time( mv_time ).
     ro_stream->write_octet( mv_algorithm ).
-    ro_stream->write_mpi( mo_n ).
-    ro_stream->write_mpi( mo_e ).
+    ro_stream->write_mpi( mo_key->get_n( ) ).
+    ro_stream->write_mpi( mo_key->get_e( ) ).
 
   ENDMETHOD.
 ENDCLASS.

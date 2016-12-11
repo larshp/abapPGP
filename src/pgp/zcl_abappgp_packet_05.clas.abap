@@ -18,6 +18,8 @@ public section.
   methods DECRYPT
     importing
       !IV_KEY type STRING
+    returning
+      value(RO_PRIVATE) type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
     raising
       ZCX_ABAPPGP_INVALID_KEY .
   methods CONSTRUCTOR
@@ -82,7 +84,12 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
           lv_hash   TYPE xstring,
           lv_offset TYPE i,
           lv_length TYPE i,
-          lv_plain  TYPE xstring.
+          lv_plain  TYPE xstring,
+          lo_stream TYPE REF TO zcl_abappgp_stream,
+          lo_d      TYPE REF TO zcl_abappgp_integer,
+          lo_p      TYPE REF TO zcl_abappgp_integer,
+          lo_q      TYPE REF TO zcl_abappgp_integer,
+          lo_u      TYPE REF TO zcl_abappgp_integer.
 
 
     lv_key = get_s2k( )->build_key( iv_key ).
@@ -103,7 +110,20 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
       RAISE EXCEPTION TYPE zcx_abappgp_invalid_key.
     ENDIF.
 
-* todo, parse MPIs
+    CREATE OBJECT lo_stream
+      EXPORTING
+        iv_data = lv_plain.
+    lo_d = lo_stream->eat_mpi( ).
+    lo_p = lo_stream->eat_mpi( ).
+    lo_q = lo_stream->eat_mpi( ).
+    lo_u = lo_stream->eat_mpi( ).
+
+    CREATE OBJECT ro_private
+      EXPORTING
+        io_d = lo_d
+        io_p = lo_p
+        io_q = lo_q
+        io_u = lo_u.
 
   ENDMETHOD.
 
