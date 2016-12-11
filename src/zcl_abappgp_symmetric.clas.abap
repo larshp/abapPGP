@@ -13,7 +13,7 @@ public section.
       value(RV_CIPHERTEXT) type XSTRING .
   class-methods AES256_DECRYPT
     importing
-      !IV_DATA type XSTRING
+      !IV_CIPHERTEXT type XSTRING
       !IV_KEY type XSTRING
       !IV_IVECTOR type XSTRING
     returning
@@ -30,14 +30,99 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
   METHOD aes256_decrypt.
 * CFB mode, https://tools.ietf.org/html/rfc4880#section-13.9
 
-    zcl_aes_utility=>decrypt_xstring(
+    CONSTANTS: lc_block_size TYPE i VALUE 16,
+               lc_resync     TYPE abap_bool VALUE abap_false,
+               lc_zero       TYPE x LENGTH 1 VALUE '00'.
+
+    DATA: lv_index    TYPE i,
+          lv_hex      TYPE x LENGTH 1,
+          lo_rijndael TYPE REF TO zcl_rijndael_utility,
+          lv_ablock   TYPE xstring,
+          lv_n        TYPE i,
+          lv_tmp      TYPE xstring,
+          lv_iblock   TYPE xstring.
+
+
+    CREATE OBJECT lo_rijndael
       EXPORTING
-        i_key                   = iv_key
-        i_data                  = iv_data
-        i_initialization_vector = iv_ivector
-        i_encryption_mode       = zcl_aes_utility=>mc_encryption_mode_cfb
+        i_key_length_in_bit   = xstrlen( iv_key ) * 8
+        i_block_length_in_bit = lc_block_size * 8.
+
+    DO lc_block_size TIMES.
+      CONCATENATE lv_iblock lc_zero INTO lv_iblock IN BYTE MODE.
+    ENDDO.
+
+    lo_rijndael->encrypt_xstring(
+      EXPORTING
+        i_key  = iv_key
+        i_data = lv_iblock
       IMPORTING
-        e_data                  = rv_plain ).
+        e_data = lv_iblock ).
+
+    lv_ablock = iv_ciphertext(lc_block_size).
+    DO lc_block_size TIMES.
+      lv_index = sy-index - 1.
+      lv_hex = lv_iblock+lv_index(1) BIT-XOR lv_ablock+lv_index(1).
+      CONCATENATE lv_tmp lv_hex INTO lv_tmp IN BYTE MODE.
+    ENDDO.
+    lv_iblock = lv_tmp.
+
+    lo_rijndael->encrypt_xstring(
+      EXPORTING
+        i_key  = iv_key
+        i_data = lv_ablock
+      IMPORTING
+        e_data = lv_ablock ).
+
+    lv_hex = lv_ablock(1) BIT-XOR iv_ciphertext+lc_block_size(1).
+    lv_index = lc_block_size - 2.
+    IF lv_iblock+lv_index(1) <> lv_hex.
+      BREAK-POINT. " invalid key
+    ENDIF.
+
+    lv_index = lc_block_size + 1.
+    lv_hex = lv_ablock+1(1) BIT-XOR iv_ciphertext+lv_index(1).
+    lv_index = lc_block_size - 1.
+    IF lv_iblock+lv_index(1) <> lv_hex.
+      BREAK-POINT. " invalid key
+    ENDIF.
+
+* todo, resync?
+
+    lv_iblock = iv_ciphertext(lc_block_size).
+    lv_n = lc_block_size.
+    WHILE lv_n < xstrlen( iv_ciphertext ).
+      lo_rijndael->encrypt_xstring(
+        EXPORTING
+          i_key  = iv_key
+          i_data = lv_iblock
+        IMPORTING
+          e_data = lv_ablock ).
+
+      lv_iblock = iv_ciphertext+lv_n.
+      IF xstrlen( lv_iblock ) > 16.
+        lv_iblock = lv_iblock(16).
+      ENDIF.
+
+      DO lc_block_size TIMES.
+        lv_index = sy-index - 1.
+        IF lv_index >= xstrlen( lv_iblock ).
+          EXIT. " current loop
+        ENDIF.
+        lv_hex = lv_ablock+lv_index(1) BIT-XOR lv_iblock+lv_index(1).
+        CONCATENATE rv_plain lv_hex INTO rv_plain IN BYTE MODE.
+      ENDDO.
+
+      lv_n = lv_n + lc_block_size.
+    ENDWHILE.
+
+    rv_plain = rv_plain+2.
+
+*if lc_resync = abap_true.
+*else.
+*endif.
+*
+*    BREAK-POINT.
 
   ENDMETHOD.
 
