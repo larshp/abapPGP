@@ -9,6 +9,7 @@ public section.
       !IV_PLAIN type XSTRING
       !IV_KEY type XSTRING
       !IV_IVECTOR type XSTRING
+      !IV_RESYNC type ABAP_BOOL
     returning
       value(RV_CIPHERTEXT) type XSTRING .
   class-methods AES256_DECRYPT
@@ -16,8 +17,11 @@ public section.
       !IV_CIPHERTEXT type XSTRING
       !IV_KEY type XSTRING
       !IV_IVECTOR type XSTRING
+      !IV_RESYNC type ABAP_BOOL
     returning
-      value(RV_PLAIN) type XSTRING .
+      value(RV_PLAIN) type XSTRING
+    raising
+      ZCX_ABAPPGP_INVALID_KEY .
 protected section.
 private section.
 ENDCLASS.
@@ -31,7 +35,6 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
 * CFB mode, https://tools.ietf.org/html/rfc4880#section-13.9
 
     CONSTANTS: lc_block_size TYPE i VALUE 16,
-               lc_resync     TYPE abap_bool VALUE abap_false,
                lc_zero       TYPE x LENGTH 1 VALUE '00'.
 
     DATA: lv_index    TYPE i,
@@ -77,20 +80,24 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
     lv_hex = lv_ablock(1) BIT-XOR iv_ciphertext+lc_block_size(1).
     lv_index = lc_block_size - 2.
     IF lv_iblock+lv_index(1) <> lv_hex.
-      BREAK-POINT. " invalid key
+      RAISE EXCEPTION TYPE zcx_abappgp_invalid_key.
     ENDIF.
 
     lv_index = lc_block_size + 1.
     lv_hex = lv_ablock+1(1) BIT-XOR iv_ciphertext+lv_index(1).
     lv_index = lc_block_size - 1.
     IF lv_iblock+lv_index(1) <> lv_hex.
-      BREAK-POINT. " invalid key
+      RAISE EXCEPTION TYPE zcx_abappgp_invalid_key.
     ENDIF.
 
-* todo, resync?
+    IF iv_resync = abap_true.
+      lv_index = 2.
+    ELSE.
+      lv_index = 0.
+    ENDIF.
 
-    lv_iblock = iv_ciphertext(lc_block_size).
-    lv_n = lc_block_size.
+    lv_iblock = iv_ciphertext+lv_index(lc_block_size).
+    lv_n = lc_block_size + lv_index.
     WHILE lv_n < xstrlen( iv_ciphertext ).
       lo_rijndael->encrypt_xstring(
         EXPORTING
@@ -116,13 +123,9 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
       lv_n = lv_n + lc_block_size.
     ENDWHILE.
 
-    rv_plain = rv_plain+2.
-
-*if lc_resync = abap_true.
-*else.
-*endif.
-*
-*    BREAK-POINT.
+    IF iv_resync = abap_false.
+      rv_plain = rv_plain+2.
+    ENDIF.
 
   ENDMETHOD.
 
@@ -131,7 +134,6 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
 * CFB mode, https://tools.ietf.org/html/rfc4880#section-13.9
 
     CONSTANTS: lc_block_size TYPE i VALUE 16,
-               lc_resync     TYPE abap_bool VALUE abap_false,
                lc_zero       TYPE x LENGTH 1 VALUE '00'.
 
     DATA: lv_fr       TYPE xstring,
@@ -146,7 +148,7 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
           lv_fre      TYPE xstring.
 
 
-    IF lc_resync = abap_true.
+    IF iv_resync = abap_true.
       lv_offset = 0.
     ELSE.
       lv_offset = 2.
@@ -213,8 +215,8 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
 
 *   7.  (The resynchronization step) FR is loaded with C[3] through
 *       C[BS+2].
-    IF lc_resync = abap_true.
-      BREAK-POINT.
+    IF iv_resync = abap_true.
+      lv_fr = rv_ciphertext+2(lc_block_size).
     ELSE.
       lv_fr = rv_ciphertext(lc_block_size).
     ENDIF.
@@ -235,7 +237,7 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
       lv_index = sy-index - 1.
       lv_index2 = lv_index + lv_offset.
       IF lv_index2 >= xstrlen( lv_fre ) AND lv_index >= xstrlen( iv_plain ).
-        lv_hex = '00'.
+        lv_hex = lc_zero.
       ELSEIF lv_index2 >= xstrlen( lv_fre ).
         lv_hex = iv_plain+lv_index(1).
       ELSEIF lv_index >= xstrlen( iv_plain ).
@@ -270,7 +272,7 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
         lv_index2 = lv_n + lv_index - lv_offset.
 
         IF lv_index >= xstrlen( lv_fre ) AND lv_index2 >= xstrlen( iv_plain ).
-          lv_hex = '00'.
+          lv_hex = lc_zero.
         ELSEIF lv_index >= xstrlen( lv_fre ).
           lv_hex = iv_plain+lv_index2(1).
         ELSEIF lv_index2 >= xstrlen( iv_plain ).
