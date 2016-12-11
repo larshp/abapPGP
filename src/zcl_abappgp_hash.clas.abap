@@ -14,6 +14,11 @@ public section.
       !IV_INPUT type XSTRING
     returning
       value(RV_HASH) type XSTRING .
+  class-methods SHA1
+    importing
+      !IV_DATA type XSTRING
+    returning
+      value(RV_HASH) type XSTRING .
 protected section.
 
   types:
@@ -144,6 +149,28 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
     _add '709DF7' 'F6D10C' 'FA48FA' '7C0401'.
     _add '42FA2F' 'C4B6D4' 'C82F22' '4E63D9'.
     _add 'D11CCE' '575035' '5BC9C3' 'DD8538'.
+
+  ENDMETHOD.
+
+
+  METHOD sha1.
+
+    DATA: lv_hash TYPE hash160.
+
+
+    CALL FUNCTION 'CALCULATE_HASH_FOR_RAW'
+      EXPORTING
+        data           = iv_data
+      IMPORTING
+        hash           = lv_hash
+      EXCEPTIONS
+        unknown_alg    = 1
+        param_error    = 2
+        internal_error = 3
+        OTHERS         = 4.
+    ASSERT sy-subrc = 0.
+
+    rv_hash = lv_hash.
 
   ENDMETHOD.
 

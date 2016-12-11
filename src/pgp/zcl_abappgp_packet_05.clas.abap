@@ -15,6 +15,11 @@ public section.
   aliases TO_STREAM
     for ZIF_ABAPPGP_PACKET~TO_STREAM .
 
+  methods DECRYPT
+    importing
+      !IV_KEY type STRING
+    raising
+      ZCX_ABAPPGP_INVALID_KEY .
   methods CONSTRUCTOR
     importing
       !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
@@ -26,6 +31,15 @@ public section.
       !IO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY
       !IV_IVECTOR type XSTRING
       !IV_ENCRYPTED type XSTRING .
+  methods GET_IVECTOR
+    returning
+      value(RV_IVECTOR) type XSTRING .
+  methods GET_ENCRYPTED
+    returning
+      value(RV_ENCRYPTED) type XSTRING .
+  methods GET_S2K
+    returning
+      value(RO_S2K) type ref to ZCL_ABAPPGP_STRING_TO_KEY .
 protected section.
 
   data MO_E type ref to ZCL_ABAPPGP_INTEGER .
@@ -56,6 +70,61 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
     mo_s2k       = io_s2k.
     mv_ivector   = iv_ivector.
     mv_encrypted = iv_encrypted.
+
+  ENDMETHOD.
+
+
+  METHOD decrypt.
+
+    CONSTANTS: lc_hash_length TYPE i VALUE 20.
+
+    DATA: lv_key    TYPE xstring,
+          lv_hash   TYPE xstring,
+          lv_offset TYPE i,
+          lv_length TYPE i,
+          lv_plain  TYPE xstring.
+
+
+    lv_key = get_s2k( )->build_key( iv_key ).
+
+    lv_plain = zcl_abappgp_symmetric=>aes256_decrypt_normal(
+      iv_ciphertext = get_encrypted( )
+      iv_key        = lv_key
+      iv_ivector    = get_ivector( ) ).
+
+    lv_length = xstrlen( get_encrypted( ) ).
+    lv_plain = lv_plain(lv_length).
+
+    lv_offset = xstrlen( lv_plain ) - lc_hash_length.
+    lv_hash = lv_plain+lv_offset(lc_hash_length).
+    lv_plain = lv_plain(lv_offset).
+
+    IF zcl_abappgp_hash=>sha1( lv_plain ) <> lv_hash.
+      RAISE EXCEPTION TYPE zcx_abappgp_invalid_key.
+    ENDIF.
+
+* todo, parse MPIs
+
+  ENDMETHOD.
+
+
+  METHOD get_encrypted.
+
+    rv_encrypted = mv_encrypted.
+
+  ENDMETHOD.
+
+
+  METHOD get_ivector.
+
+    rv_ivector = mv_ivector.
+
+  ENDMETHOD.
+
+
+  METHOD get_s2k.
+
+    ro_s2k = mo_s2k.
 
   ENDMETHOD.
 

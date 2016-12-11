@@ -36,7 +36,7 @@ CLASS ZCL_ABAPPGP_UNIT_TEST IMPLEMENTATION.
 
     ri_pkt = zcl_abappgp_packet_factory=>create(
       io_data = io_data
-      iv_tag = iv_tag ).
+      iv_tag  = iv_tag ).
 
     lv_result = ri_pkt->to_stream( )->get_data( ).
 

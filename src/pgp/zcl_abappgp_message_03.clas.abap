@@ -34,7 +34,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_MESSAGE~DUMP.
+  METHOD zif_abappgp_message~dump.
 
     DATA: li_packet LIKE LINE OF mt_packet_list.
 

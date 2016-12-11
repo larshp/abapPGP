@@ -12,6 +12,14 @@ public section.
       !IV_RESYNC type ABAP_BOOL
     returning
       value(RV_CIPHERTEXT) type XSTRING .
+  class-methods AES256_ENCRYPT_NORMAL
+    importing
+      !IV_PLAIN type XSTRING
+      !IV_KEY type XSTRING
+      !IV_IVECTOR type XSTRING
+      !IV_RESYNC type ABAP_BOOL
+    returning
+      value(RV_CIPHERTEXT) type XSTRING .
   class-methods AES256_DECRYPT
     importing
       !IV_CIPHERTEXT type XSTRING
@@ -22,6 +30,13 @@ public section.
       value(RV_PLAIN) type XSTRING
     raising
       ZCX_ABAPPGP_INVALID_KEY .
+  class-methods AES256_DECRYPT_NORMAL
+    importing
+      !IV_CIPHERTEXT type XSTRING
+      !IV_KEY type XSTRING
+      !IV_IVECTOR type XSTRING
+    returning
+      value(RV_PLAIN) type XSTRING .
 protected section.
 private section.
 ENDCLASS.
@@ -126,6 +141,20 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
     IF iv_resync = abap_false.
       rv_plain = rv_plain+2.
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD aes256_decrypt_normal.
+
+    zcl_aes_utility=>decrypt_xstring(
+      EXPORTING
+        i_key                   = iv_key
+        i_data                  = iv_ciphertext
+        i_initialization_vector = iv_ivector
+        i_encryption_mode       = zcl_aes_utility=>mc_encryption_mode_cfb
+      IMPORTING
+        e_data                  = rv_plain ).
 
   ENDMETHOD.
 
@@ -290,6 +319,20 @@ CLASS ZCL_ABAPPGP_SYMMETRIC IMPLEMENTATION.
 
     lv_index = xstrlen( iv_plain ) + 2 + lc_block_size.
     rv_ciphertext = rv_ciphertext(lv_index).
+
+  ENDMETHOD.
+
+
+  METHOD aes256_encrypt_normal.
+
+    zcl_aes_utility=>encrypt_xstring(
+      EXPORTING
+        i_key                   = iv_key
+        i_data                  = iv_plain
+        i_initialization_vector = iv_ivector
+        i_encryption_mode       = zcl_aes_utility=>mc_encryption_mode_cfb
+      IMPORTING
+        e_data                  = rv_ciphertext ).
 
   ENDMETHOD.
 ENDCLASS.
