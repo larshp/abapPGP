@@ -4,6 +4,13 @@ class ZCL_ABAPPGP_RSA definition
 
 public section.
 
+  class-methods VERIFY
+    importing
+      !IO_M type ref to ZCL_ABAPPGP_INTEGER
+      !IO_S type ref to ZCL_ABAPPGP_INTEGER
+      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY
+    returning
+      value(RV_VALID) type ABAP_BOOL .
   class-methods GENERATE_KEY_PAIR
     importing
       !IO_P type ref to ZCL_ABAPPGP_INTEGER
@@ -22,6 +29,12 @@ public section.
       !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
     returning
       value(RO_PLAIN) type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods SIGN
+    importing
+      !IO_M type ref to ZCL_ABAPPGP_INTEGER
+      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
+    returning
+      value(RO_SIGN) type ref to ZCL_ABAPPGP_INTEGER .
 protected section.
 
   class-methods FIND_COPRIME
@@ -149,6 +162,33 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
       EXPORTING
         io_private = lo_private
         io_public  = lo_public.
+
+  ENDMETHOD.
+
+
+  METHOD sign.
+
+    ro_sign = io_m->clone( )->modular_pow_montgomery(
+      io_exponent = io_private->get_d( )
+      io_modulus  = io_private->get_n( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD verify.
+
+    DATA: lo_result TYPE REF TO zcl_abappgp_integer.
+
+
+    lo_result = io_s->clone( )->modular_pow_montgomery(
+      io_exponent = io_public->get_e( )
+      io_modulus  = io_public->get_n( ) ).
+
+    IF lo_result->is_eq( io_m ) = abap_true.
+      rv_valid = abap_true.
+    ELSE.
+      rv_valid = abap_false.
+    ENDIF.
 
   ENDMETHOD.
 ENDCLASS.

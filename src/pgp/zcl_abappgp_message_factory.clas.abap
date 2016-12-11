@@ -29,20 +29,21 @@ CLASS ZCL_ABAPPGP_MESSAGE_FACTORY IMPLEMENTATION.
     lv_header = lo_armor->get_armor_header( ).
 
     IF lv_header = '-----BEGIN PGP MESSAGE-----'.
-* todo
-      ASSERT 0 = 1.
+      ri_message = zcl_abappgp_message_01=>from_armor( lo_armor ).
     ELSEIF lv_header = '-----BEGIN PGP PUBLIC KEY BLOCK-----'.
       ri_message = zcl_abappgp_message_02=>from_armor( lo_armor ).
     ELSEIF lv_header = '-----BEGIN PGP PRIVATE KEY BLOCK-----'.
       ri_message = zcl_abappgp_message_03=>from_armor( lo_armor ).
     ELSEIF lv_header CP '-----BEGIN PGP MESSAGE, PART +*/+*-----'.
-* todo
+* todo, 04
       ASSERT 0 = 1.
     ELSEIF lv_header CP '-----BEGIN PGP MESSAGE, PART +*-----'.
-* todo
+* todo, 05
       ASSERT 0 = 1.
     ELSEIF lv_header = '-----BEGIN PGP SIGNATURE-----'.
-* todo
+      ri_message = zcl_abappgp_message_06=>from_armor( lo_armor ).
+    ELSEIF lv_header = '-----BEGIN PGP SIGNED MESSAGE-----'.
+* todo, 07
       ASSERT 0 = 1.
     ELSE.
 * unknown message type

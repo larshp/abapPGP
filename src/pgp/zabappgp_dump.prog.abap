@@ -41,6 +41,12 @@ MODULE user_command_2000 INPUT.
     WHEN 'SAMPLE02'.
       CLEAR gv_ok_code.
       PERFORM sample02.
+    WHEN 'SAMPLE03'.
+      CLEAR gv_ok_code.
+      PERFORM sample03.
+    WHEN 'SAMPLE04'.
+      CLEAR gv_ok_code.
+      PERFORM sample04.
   ENDCASE.
 ENDMODULE.
 
@@ -172,6 +178,55 @@ FORM sample02.
     'yd50AMsn0I5wjg=='
     '=USF2'
     '-----END PGP PRIVATE KEY BLOCK-----'
+    INTO lv_text
+    SEPARATED BY cl_abap_char_utilities=>newline.
+
+  go_left->set_textstream( lv_text ).
+
+ENDFORM.
+
+FORM sample03.
+
+  DATA: lv_text TYPE string.
+
+  CONCATENATE
+    '-----BEGIN PGP MESSAGE-----'
+    'Version: OpenPGP.js v2.3.5'
+    'Comment: http://openpgpjs.org'
+    ''
+    'wYwDrPvTeiy+4BgBBACKAU4oGeQ6MUS9Cw9F1+TNeiS4XAY/X0KBUwCArdaS'
+    's+JcEg9pecvhYI4PW+AwYyLurdJBK5xf/ayWc3rU4JmWFq2rflBZSDARLmOJ'
+    'Mo+lV/OT3lmfjLPVP83wEUE1AvCavKXl2bYnjBnRnNdYetRCxxgbHOc9Gcq8'
+    'JNfAVu6kGNLAMgG011ntqdqF7lguIuxvanoxhgrLmFRz+TP6TCN4Ak8Tj48I'
+    '5hUuDgzk9bE3jNGWIT6CobclPP7P7S1/wVrCgfZhnoLah0LbwjN0HVMan08I'
+    'W8KLjKu6uMLAf9QgyW3vKPJPqsERNqZNgPzCyofmubHcd9yIcD20dmY1uAml'
+    '2g6Jx3ZeI55a5DGO7xwuvxLcXHjflWSMCu7qlY+PxSyirzHU4BaeEZCoozsi'
+    'wDtBuGbJb3BtOrpLpAnlSDTA4WU/z50risxqSb9XtbbQTgAhdyMXR0il+K3a'
+    'fnzuF2o/A4Z+JfYgWMt4UQGDOCrRhqBVsMTd'
+    '=gGCj'
+    '-----END PGP MESSAGE-----'
+    INTO lv_text
+    SEPARATED BY cl_abap_char_utilities=>newline.
+
+  go_left->set_textstream( lv_text ).
+
+ENDFORM.
+
+FORM sample04.
+
+  DATA: lv_text TYPE string.
+
+  CONCATENATE
+    '-----BEGIN PGP SIGNATURE-----'
+    'Version: OpenPGP.js v2.3.5'
+    'Comment: http://openpgpjs.org'
+    ''
+    'wpwEAQEIABAFAlhNZj4JEGXaArXjyh3hAADI7QP/Zbp4FlyJ4+pYJhfb8Btr'
+    'TyDw+9JKTpQm+OTEQIchxx8Cz194CZotxSrnv+UgewYG37NokrXAGw/92CXA'
+    'nY8CLxS5nkVj7uqm0280riY3z6c9tB48mQE51SgpJXOdZ6Xwhyg3Y67qQ2kI'
+    'qT7LM/NqmLzmCoSN4IL3R98sPgEK+fQ='
+    '=0qk7'
+    '-----END PGP SIGNATURE-----'
     INTO lv_text
     SEPARATED BY cl_abap_char_utilities=>newline.
 

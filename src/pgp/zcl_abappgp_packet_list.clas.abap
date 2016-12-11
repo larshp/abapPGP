@@ -106,7 +106,7 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
 
     lv_bits = zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ).
-    ASSERT lv_bits(2) = '11'.
+    ASSERT lv_bits(2) = '11'. " no support for old packet format
     lv_bits = lv_bits+2.
     rv_tag = determine_tag( lv_bits ).
 

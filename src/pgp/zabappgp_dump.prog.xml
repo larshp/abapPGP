@@ -284,6 +284,36 @@
       <SFW_SWITCHID/>
       <SFW_SHOWHIDE/>
      </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>SAMPLE03</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TYPE/>
+      <MODIF/>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_PHYSICAL_SAMPLE</TEXT_NAME>
+      <ICON_ID>@GW@</ICON_ID>
+      <FUN_TEXT>Sample 3</FUN_TEXT>
+      <ICON_TEXT>Sample 3</ICON_TEXT>
+      <INFO_TEXT/>
+      <PATH/>
+      <SFW_SWITCHID/>
+      <SFW_SHOWHIDE/>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
+      <CODE>SAMPLE04</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TYPE/>
+      <MODIF/>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_PHYSICAL_SAMPLE</TEXT_NAME>
+      <ICON_ID>@GW@</ICON_ID>
+      <FUN_TEXT>Sample 4</FUN_TEXT>
+      <ICON_TEXT>Sample 4</ICON_TEXT>
+      <INFO_TEXT/>
+      <PATH/>
+      <SFW_SWITCHID/>
+      <SFW_SHOWHIDE/>
+     </RSMPE_FUNT>
     </FUN>
     <MEN/>
     <MTX/>
@@ -299,13 +329,25 @@
       <PFK_CODE>000001</PFK_CODE>
       <CODE>0001</CODE>
       <NO>02</NO>
-      <PFNO>13</PFNO>
+      <PFNO>18</PFNO>
      </RSMPE_BUT>
      <RSMPE_BUT>
       <PFK_CODE>000001</PFK_CODE>
       <CODE>0001</CODE>
       <NO>03</NO>
-      <PFNO>14</PFNO>
+      <PFNO>19</PFNO>
+     </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000001</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>04</NO>
+      <PFNO>20</PFNO>
+     </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000001</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>05</NO>
+      <PFNO>21</PFNO>
      </RSMPE_BUT>
     </BUT>
     <PFK>
@@ -323,20 +365,26 @@
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000001</CODE>
-      <PFNO>09</PFNO>
-      <FUNCODE>SAMPLE</FUNCODE>
-      <FUNNO>001</FUNNO>
-     </RSMPE_PFK>
-     <RSMPE_PFK>
-      <CODE>000001</CODE>
-      <PFNO>13</PFNO>
+      <PFNO>18</PFNO>
       <FUNCODE>SAMPLE01</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
      <RSMPE_PFK>
       <CODE>000001</CODE>
-      <PFNO>14</PFNO>
+      <PFNO>19</PFNO>
       <FUNCODE>SAMPLE02</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000001</CODE>
+      <PFNO>20</PFNO>
+      <FUNCODE>SAMPLE03</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
+      <CODE>000001</CODE>
+      <PFNO>21</PFNO>
+      <FUNCODE>SAMPLE04</FUNCODE>
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
     </PFK>
@@ -351,15 +399,19 @@
      </RSMPE_STAF>
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
-      <FUNCTION>SAMPLE</FUNCTION>
-     </RSMPE_STAF>
-     <RSMPE_STAF>
-      <STATUS>STATUS_2000</STATUS>
       <FUNCTION>SAMPLE01</FUNCTION>
      </RSMPE_STAF>
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
       <FUNCTION>SAMPLE02</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_2000</STATUS>
+      <FUNCTION>SAMPLE03</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_2000</STATUS>
+      <FUNCTION>SAMPLE04</FUNCTION>
      </RSMPE_STAF>
     </SET>
     <DOC>

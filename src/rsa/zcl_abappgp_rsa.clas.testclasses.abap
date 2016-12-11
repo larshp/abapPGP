@@ -144,6 +144,62 @@ CLASS ltcl_generate_keys IMPLEMENTATION.
 
 ENDCLASS.
 
+CLASS ltcl_sign DEFINITION FOR TESTING
+    DURATION MEDIUM
+    RISK LEVEL HARMLESS FINAL.
+
+  PRIVATE SECTION.
+    METHODS:
+      test01 FOR TESTING.
+
+ENDCLASS.
+
+CLASS ltcl_sign IMPLEMENTATION.
+
+  METHOD test01.
+
+    DATA: lo_public  TYPE REF TO zcl_abappgp_rsa_public_key,
+          lo_private TYPE REF TO zcl_abappgp_rsa_private_key,
+          lo_m       TYPE REF TO zcl_abappgp_integer,
+          lo_s       TYPE REF TO zcl_abappgp_integer,
+          lv_valid   TYPE abap_bool.
+
+
+    lo_m = zcl_abappgp_integer=>from_string( '35' ).
+
+    CREATE OBJECT lo_private
+      EXPORTING
+        io_d = zcl_abappgp_integer=>from_string( '29' )
+        io_p = zcl_abappgp_integer=>from_string( '7' )
+        io_q = zcl_abappgp_integer=>from_string( '13' )
+        io_u = zcl_abappgp_integer=>from_string( '0' ).
+
+    CREATE OBJECT lo_public
+      EXPORTING
+        io_n = zcl_abappgp_integer=>from_string( '91' )
+        io_e = zcl_abappgp_integer=>from_string( '5' ).
+
+    lo_s = zcl_abappgp_rsa=>sign(
+      io_m       = lo_m
+      io_private = lo_private ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lo_s->to_string( )
+      exp = '42' ).
+
+    lv_valid = zcl_abappgp_rsa=>verify(
+      io_m      = lo_m
+      io_s      = lo_s
+      io_public = lo_public ).
+
+    cl_abap_unit_assert=>assert_equals(
+      act = lv_valid
+      exp = abap_true ).
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS ltcl_encrypt DEFINITION FOR TESTING
     DURATION MEDIUM
     RISK LEVEL HARMLESS FINAL.
