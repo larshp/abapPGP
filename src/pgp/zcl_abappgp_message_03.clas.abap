@@ -14,6 +14,13 @@ public section.
   methods CONSTRUCTOR
     importing
       !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
+  methods DECRYPT
+    importing
+      !IV_KEY type STRING
+    returning
+      value(RO_PRIVATE) type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
+    raising
+      ZCX_ABAPPGP_INVALID_KEY .
 protected section.
 
   data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
@@ -30,6 +37,25 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
     super->constructor( ).
 
     mt_packet_list = it_packet_list.
+
+  ENDMETHOD.
+
+
+  METHOD decrypt.
+
+    DATA: li_packet     TYPE REF TO zif_abappgp_packet,
+          lo_secret_key TYPE REF TO zcl_abappgp_packet_05.
+
+
+    LOOP AT mt_packet_list INTO li_packet.
+      IF li_packet->get_tag( ) = zif_abappgp_constants=>c_tag-secret_key.
+        EXIT.
+      ENDIF.
+    ENDLOOP.
+
+    lo_secret_key ?= li_packet.
+
+    ro_private = lo_secret_key->decrypt( iv_key ).
 
   ENDMETHOD.
 

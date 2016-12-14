@@ -23,7 +23,8 @@ public section.
   class-methods SIGN
     importing
       !IV_DATA type XSTRING
-      !IV_TIME type I
+      !IV_TIME type I optional
+      !IV_ISSUER type XSTRING
       !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
     returning
       value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_PACKET_02 .
@@ -37,11 +38,6 @@ public section.
       !IT_UNHASHED type TY_SUBPACKETS optional
       !IV_LEFT type XSEQUENCE
       !IT_INTEGERS type TY_INTEGERS .
-  methods VERIFY
-    importing
-      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY
-    returning
-      value(RV_VALID) type ABAP_BOOL .
 protected section.
 
   data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
@@ -112,13 +108,63 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD sign.
 
-    DATA: lt_hashed   TYPE ty_subpackets,
-          lv_left     TYPE xstring,
-          lt_integers TYPE ty_integers.
+    DATA: lt_hashed     TYPE ty_subpackets,
+          lo_stream     TYPE REF TO zcl_abappgp_stream,
+          li_subpacket  TYPE REF TO zif_abappgp_subpacket,
+          lv_left       TYPE xstring,
+          lv_hash       TYPE xstring,
+          lv_em         TYPE xstring,
+          lv_hashed     TYPE xstring,
+          lv_time       LIKE iv_time,
+          lo_em_integer TYPE REF TO zcl_abappgp_integer,
+          lo_sign       TYPE REF TO zcl_abappgp_integer,
+          lv_length     TYPE x LENGTH 4,
+          lt_integers   TYPE ty_integers.
 
-* todo
 
-* todo, use constants:
+    lv_time = iv_time.
+    IF lv_time IS INITIAL.
+      lv_time = zcl_abappgp_time=>get_unix( ).
+    ENDIF.
+    CREATE OBJECT li_subpacket
+      TYPE zcl_abappgp_subpacket_02
+      EXPORTING
+        iv_time = lv_time.
+    APPEND li_subpacket TO lt_hashed.
+
+* todo, move iv_issuer somewhere?
+    CREATE OBJECT li_subpacket
+      TYPE zcl_abappgp_subpacket_16
+      EXPORTING
+        iv_key = iv_issuer.
+    APPEND li_subpacket TO lt_hashed.
+
+    CREATE OBJECT lo_stream.
+    lo_stream->write_octets( '04010108' ).
+
+    write_subpackets( io_stream  = lo_stream
+                      it_packets = lt_hashed ).
+
+* trailer
+    lv_length = xstrlen( lo_stream->get_data( ) ).
+    lo_stream->write_octets( '04FF' ).
+    lo_stream->write_octets( lv_length ).
+
+    lv_hash = lo_stream->get_data( ).
+    CONCATENATE iv_data lv_hash INTO lv_hash IN BYTE MODE.
+
+    lv_hashed = zcl_abappgp_hash=>sha256( lv_hash ).
+    lv_left = lv_hashed(2).
+
+    lv_em = zcl_abappgp_encode=>pkcs1_emse( lv_hash ).
+    lo_em_integer = zcl_abappgp_integer=>from_hex( lv_em ).
+
+    lo_sign = zcl_abappgp_rsa=>sign(
+      io_m       = lo_em_integer
+      io_private = io_private ).
+    APPEND lo_sign TO lt_integers.
+
+* todo, use constants instead of hardcoded values:
     CREATE OBJECT ro_signature
       EXPORTING
         iv_version   = '04'
@@ -128,13 +174,6 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
         it_hashed    = lt_hashed
         iv_left      = lv_left
         it_integers  = lt_integers.
-
-  ENDMETHOD.
-
-
-  METHOD verify.
-
-* todo
 
   ENDMETHOD.
 
