@@ -28,21 +28,21 @@ CLASS ZCL_ABAPPGP_MESSAGE_FACTORY IMPLEMENTATION.
 
     lv_header = lo_armor->get_armor_header( ).
 
-    IF lv_header = '-----BEGIN PGP MESSAGE-----'.
+    IF lv_header = zcl_abappgp_armor=>c_header-message.
       ri_message = zcl_abappgp_message_01=>from_armor( lo_armor ).
-    ELSEIF lv_header = '-----BEGIN PGP PUBLIC KEY BLOCK-----'.
+    ELSEIF lv_header = zcl_abappgp_armor=>c_header-public.
       ri_message = zcl_abappgp_message_02=>from_armor( lo_armor ).
-    ELSEIF lv_header = '-----BEGIN PGP PRIVATE KEY BLOCK-----'.
+    ELSEIF lv_header = zcl_abappgp_armor=>c_header-private.
       ri_message = zcl_abappgp_message_03=>from_armor( lo_armor ).
-    ELSEIF lv_header CP '-----BEGIN PGP MESSAGE, PART +*/+*-----'.
+    ELSEIF lv_header CP zcl_abappgp_armor=>c_header-messagexx.
 * todo, 04
       ASSERT 0 = 1.
-    ELSEIF lv_header CP '-----BEGIN PGP MESSAGE, PART +*-----'.
+    ELSEIF lv_header CP zcl_abappgp_armor=>c_header-messagex.
 * todo, 05
       ASSERT 0 = 1.
-    ELSEIF lv_header = '-----BEGIN PGP SIGNATURE-----'.
+    ELSEIF lv_header = zcl_abappgp_armor=>c_header-signature.
       ri_message = zcl_abappgp_message_06=>from_armor( lo_armor ).
-    ELSEIF lv_header = '-----BEGIN PGP SIGNED MESSAGE-----'.
+    ELSEIF lv_header = zcl_abappgp_armor=>c_header-signed.
 * todo, 07
       ASSERT 0 = 1.
     ELSE.

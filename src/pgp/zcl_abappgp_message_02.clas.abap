@@ -25,9 +25,7 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_MESSAGE_02 IMPLEMENTATION.
 
 
-  METHOD CONSTRUCTOR.
-
-    super->constructor( ).
+  METHOD constructor.
 
     mt_packet_list = it_packet_list.
 
@@ -51,6 +49,9 @@ CLASS ZCL_ABAPPGP_MESSAGE_02 IMPLEMENTATION.
     DATA: lo_stream  TYPE REF TO zcl_abappgp_stream,
           lt_packets TYPE zif_abappgp_constants=>ty_packet_list.
 
+
+    ASSERT io_armor->get_armor_header( ) = zcl_abappgp_armor=>c_header-public.
+    ASSERT io_armor->get_armor_tail( ) = zcl_abappgp_armor=>c_tail-public.
 
     CREATE OBJECT lo_stream
       EXPORTING

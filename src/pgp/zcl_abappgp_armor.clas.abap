@@ -1,35 +1,57 @@
-class ZCL_ABAPPGP_ARMOR definition
-  public
-  create public .
+CLASS zcl_abappgp_armor DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods FROM_STRING
-    importing
-      !IV_ARMOR type STRING
-    returning
-      value(RO_ARMOR) type ref to ZCL_ABAPPGP_ARMOR .
-  methods CONSTRUCTOR
-    importing
-      !IV_ARMOR_HEADER type STRING
-      !IT_HEADERS type STRING_TABLE
-      !IV_DATA type XSTRING
-      !IV_ARMOR_TAIL type STRING .
-  methods GET_ARMOR_HEADER
-    returning
-      value(RV_HEADER) type STRING .
-  methods GET_ARMOR_TAIL
-    returning
-      value(RV_TAIL) type STRING .
-  methods GET_DATA
-    returning
-      value(RV_DATA) type XSTRING .
-  methods GET_HEADERS
-    returning
-      value(RT_HEADERS) type STRING_TABLE .
-  methods TO_STRING
-    returning
-      value(RV_ARMOR) type STRING .
+    CONSTANTS:
+      BEGIN OF c_header,
+        message   TYPE string VALUE '-----BEGIN PGP MESSAGE-----',
+        public    TYPE string VALUE '-----BEGIN PGP PUBLIC KEY BLOCK-----',
+        private   TYPE string VALUE '-----BEGIN PGP PRIVATE KEY BLOCK-----',
+        messagexx TYPE string VALUE '-----BEGIN PGP MESSAGE, PART +*/+*-----',
+        messagex  TYPE string VALUE '-----BEGIN PGP MESSAGE, PART +*-----',
+        signature TYPE string VALUE '-----BEGIN PGP SIGNATURE-----',
+        signed    TYPE string VALUE '-----BEGIN PGP SIGNED MESSAGE-----',
+      END OF c_header.
+
+    CONSTANTS:
+      BEGIN OF c_tail,
+        message   TYPE string VALUE '-----END PGP MESSAGE-----',
+        public    TYPE string VALUE '-----END PGP PUBLIC KEY BLOCK-----',
+        private   TYPE string VALUE '-----END PGP PRIVATE KEY BLOCK-----',
+        messagexx TYPE string VALUE '-----END PGP MESSAGE, PART +*/+*-----',
+        messagex  TYPE string VALUE '-----END PGP MESSAGE, PART +*-----',
+        signature TYPE string VALUE '-----END PGP SIGNATURE-----',
+        signed    TYPE string VALUE '-----END PGP SIGNED MESSAGE-----',
+      END OF c_tail.
+
+    CLASS-METHODS from_string
+      IMPORTING
+        !iv_armor       TYPE string
+      RETURNING
+        VALUE(ro_armor) TYPE REF TO zcl_abappgp_armor .
+    METHODS constructor
+      IMPORTING
+        !iv_armor_header TYPE string
+        !it_headers      TYPE string_table
+        !iv_data         TYPE xstring
+        !iv_armor_tail   TYPE string .
+    METHODS get_armor_header
+      RETURNING
+        VALUE(rv_header) TYPE string .
+    METHODS get_armor_tail
+      RETURNING
+        VALUE(rv_tail) TYPE string .
+    METHODS get_data
+      RETURNING
+        VALUE(rv_data) TYPE xstring .
+    METHODS get_headers
+      RETURNING
+        VALUE(rt_headers) TYPE string_table .
+    METHODS to_string
+      RETURNING
+        VALUE(rv_armor) TYPE string .
 protected section.
 
   data MV_ARMOR_HEADER type STRING .

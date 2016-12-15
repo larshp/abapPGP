@@ -18,6 +18,7 @@ public section.
     importing
       !IV_DATA type XSTRING
       !IV_TIME type I
+      !IV_ISSUER type XSTRING
       !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
     returning
       value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_MESSAGE_06 .
@@ -34,8 +35,6 @@ CLASS ZCL_ABAPPGP_MESSAGE_06 IMPLEMENTATION.
 
   METHOD constructor.
 
-    super->constructor( ).
-
     mt_packet_list = it_packet_list.
 
   ENDMETHOD.
@@ -50,6 +49,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_06 IMPLEMENTATION.
     li_packet = zcl_abappgp_packet_02=>sign(
       iv_data    = iv_data
       iv_time    = iv_time
+      iv_issuer  = iv_issuer
       io_private = io_private ).
 
     CREATE OBJECT ro_signature
@@ -76,6 +76,9 @@ CLASS ZCL_ABAPPGP_MESSAGE_06 IMPLEMENTATION.
     DATA: lo_stream  TYPE REF TO zcl_abappgp_stream,
           lt_packets TYPE zif_abappgp_constants=>ty_packet_list.
 
+
+    ASSERT io_armor->get_armor_header( ) = zcl_abappgp_armor=>c_header-signature.
+    ASSERT io_armor->get_armor_tail( ) = zcl_abappgp_armor=>c_tail-signature.
 
     CREATE OBJECT lo_stream
       EXPORTING
