@@ -16,12 +16,35 @@ public section.
       value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
 protected section.
 
-  class-methods DETERMINE_TAG
+  types:
+    BEGIN OF ty_map,
+           binary TYPE string,
+           tag    TYPE i,
+         END OF ty_map .
+  types:
+    ty_map_tt TYPE STANDARD TABLE OF ty_map WITH DEFAULT KEY .
+
+  constants C_NEW_PACKET_FORMAT type STRING value '11' ##NO_TEXT.
+
+  class-methods BUILD_PACKET_HEADER
+    importing
+      !IV_TAG type ZIF_ABAPPGP_CONSTANTS=>TY_TAG
+    returning
+      value(RV_HEADER) type XSTRING .
+  class-methods GET_TAG_MAPPING
+    returning
+      value(RT_MAP) type TY_MAP_TT .
+  class-methods TAG_TO_BINARY
+    importing
+      !IV_TAG type I
+    returning
+      value(RV_STRING) type STRING .
+  class-methods BINARY_TO_TAG
     importing
       !IV_STRING type STRING
     returning
       value(RV_TAG) type I .
-  class-methods PACKET_HEADER
+  class-methods READ_PACKET_HEADER
     importing
       !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
     returning
@@ -34,48 +57,78 @@ ENDCLASS.
 CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
 
-  METHOD DETERMINE_TAG.
+  METHOD binary_to_tag.
+
+    DATA: lt_map TYPE ty_map_tt.
+
+    FIELD-SYMBOLS: <ls_map> LIKE LINE OF lt_map.
+
 
     ASSERT strlen( iv_string ) = 6.
 
-    CASE iv_string.
-      WHEN '000001'. " Public-Key Encrypted Session Key Packet
-        rv_tag = zif_abappgp_constants=>c_tag-public_key_enc.
-      WHEN '000010'. " Signature Packet
-        rv_tag = zif_abappgp_constants=>c_tag-signature.
-      WHEN '000011'. " Symmetric-Key Encrypted Session Key Packet
-        rv_tag = zif_abappgp_constants=>c_tag-symmetric_key_enc.
-      WHEN '000100'. " One-Pass Signature Packet
-        rv_tag = zif_abappgp_constants=>c_tag-one_pass.
-      WHEN '000101'. " Secret-Key Packet
-        rv_tag = zif_abappgp_constants=>c_tag-secret_key.
-      WHEN '000110'. " Public-Key Packet
-        rv_tag = zif_abappgp_constants=>c_tag-public_key.
-      WHEN '000111'. " Secret-Subkey Packet
-        rv_tag = zif_abappgp_constants=>c_tag-secret_subkey.
-      WHEN '001000'. " Compressed Data Packet
-        rv_tag = zif_abappgp_constants=>c_tag-compressed_data.
-      WHEN '001001'. " Symmetrically Encrypted Data Packet
-        rv_tag = zif_abappgp_constants=>c_tag-symmetrical_enc.
-      WHEN '001010'. " Marker Packet
-        rv_tag = zif_abappgp_constants=>c_tag-marker.
-      WHEN '001011'. " Literal Data Packet
-        rv_tag = zif_abappgp_constants=>c_tag-literal.
-      WHEN '001100'. " Trust Packet
-        rv_tag = zif_abappgp_constants=>c_tag-trust.
-      WHEN '001101'. " User ID Packet
-        rv_tag = zif_abappgp_constants=>c_tag-user_id.
-      WHEN '001110'. " Public-Subkey Packet
-        rv_tag = zif_abappgp_constants=>c_tag-public_subkey.
-      WHEN '010001'. " User Attribute Packet
-        rv_tag = zif_abappgp_constants=>c_tag-user_attribute.
-      WHEN '010010'. " Sym. Encrypted and Integrity Protected Data Packet
-        rv_tag = zif_abappgp_constants=>c_tag-symmetrical_inte.
-      WHEN '010011'. " Modification Detection Code Packet
-        rv_tag = zif_abappgp_constants=>c_tag-modification_detection.
-      WHEN OTHERS.
-        ASSERT 0 = 1.
-    ENDCASE.
+    lt_map = get_tag_mapping( ).
+
+    READ TABLE lt_map WITH KEY binary = iv_string ASSIGNING <ls_map>.
+    ASSERT sy-subrc = 0.
+
+    rv_tag = <ls_map>-tag.
+
+*    CASE iv_string.
+*      WHEN '000001'. " Public-Key Encrypted Session Key Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-public_key_enc.
+*      WHEN '000010'. " Signature Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-signature.
+*      WHEN '000011'. " Symmetric-Key Encrypted Session Key Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-symmetric_key_enc.
+*      WHEN '000100'. " One-Pass Signature Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-one_pass.
+*      WHEN '000101'. " Secret-Key Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-secret_key.
+*      WHEN '000110'. " Public-Key Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-public_key.
+*      WHEN '000111'. " Secret-Subkey Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-secret_subkey.
+*      WHEN '001000'. " Compressed Data Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-compressed_data.
+*      WHEN '001001'. " Symmetrically Encrypted Data Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-symmetrical_enc.
+*      WHEN '001010'. " Marker Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-marker.
+*      WHEN '001011'. " Literal Data Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-literal.
+*      WHEN '001100'. " Trust Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-trust.
+*      WHEN '001101'. " User ID Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-user_id.
+*      WHEN '001110'. " Public-Subkey Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-public_subkey.
+*      WHEN '010001'. " User Attribute Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-user_attribute.
+*      WHEN '010010'. " Sym. Encrypted and Integrity Protected Data Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-symmetrical_inte.
+*      WHEN '010011'. " Modification Detection Code Packet
+*        rv_tag = zif_abappgp_constants=>c_tag-modification_detection.
+*      WHEN OTHERS.
+*        ASSERT 0 = 1.
+*    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD build_packet_header.
+
+    DATA: lv_bits TYPE string,
+          lv_hex  TYPE x LENGTH 1,
+          lv_tag  TYPE string.
+
+
+    lv_tag = tag_to_binary( iv_tag ).
+
+    CONCATENATE c_new_packet_format lv_tag INTO lv_bits.
+
+    lv_hex = zcl_abappgp_convert=>bits_to_integer( lv_bits ).
+
+    rv_header = lv_hex.
 
   ENDMETHOD.
 
@@ -88,7 +141,7 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
 
     WHILE io_stream->get_length( ) > 0.
-      lv_tag = packet_header( io_stream ).
+      lv_tag = read_packet_header( io_stream ).
       lo_data = io_stream->eat_stream( io_stream->eat_length( ) ).
 
       li_pkt = zcl_abappgp_packet_factory=>create( io_data = lo_data
@@ -100,22 +153,82 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD packet_header.
+  METHOD get_tag_mapping.
+
+    DEFINE _append.
+      append initial line to rt_map assigning <ls_map>.
+      <ls_map>-binary = &1.
+      <ls_map>-tag = &2.
+    END-OF-DEFINITION.
+
+    FIELD-SYMBOLS: <ls_map> LIKE LINE OF rt_map.
+
+
+    _append '000001' zif_abappgp_constants=>c_tag-public_key_enc.
+    _append '000010' zif_abappgp_constants=>c_tag-signature.
+    _append '000011' zif_abappgp_constants=>c_tag-symmetric_key_enc.
+    _append '000100' zif_abappgp_constants=>c_tag-one_pass.
+    _append '000101' zif_abappgp_constants=>c_tag-secret_key.
+    _append '000110' zif_abappgp_constants=>c_tag-public_key.
+    _append '000111' zif_abappgp_constants=>c_tag-secret_subkey.
+    _append '001000' zif_abappgp_constants=>c_tag-compressed_data.
+    _append '001001' zif_abappgp_constants=>c_tag-symmetrical_enc.
+    _append '001010' zif_abappgp_constants=>c_tag-marker.
+    _append '001011' zif_abappgp_constants=>c_tag-literal.
+    _append '001100' zif_abappgp_constants=>c_tag-trust.
+    _append '001101' zif_abappgp_constants=>c_tag-user_id.
+    _append '001110' zif_abappgp_constants=>c_tag-public_subkey.
+    _append '010001' zif_abappgp_constants=>c_tag-user_attribute.
+    _append '010010' zif_abappgp_constants=>c_tag-symmetrical_inte.
+    _append '010011' zif_abappgp_constants=>c_tag-modification_detection.
+
+  ENDMETHOD.
+
+
+  METHOD read_packet_header.
 
     DATA: lv_bits TYPE string.
 
 
     lv_bits = zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ).
-    ASSERT lv_bits(2) = '11'. " no support for old packet format
+    ASSERT lv_bits(2) = C_NEW_PACKET_FORMAT. " no support for old packet format
     lv_bits = lv_bits+2.
-    rv_tag = determine_tag( lv_bits ).
+    rv_tag = binary_to_tag( lv_bits ).
+
+  ENDMETHOD.
+
+
+  METHOD tag_to_binary.
+
+    DATA: lt_map TYPE ty_map_tt.
+
+    FIELD-SYMBOLS: <ls_map> LIKE LINE OF lt_map.
+
+
+    lt_map = get_tag_mapping( ).
+
+    READ TABLE lt_map WITH KEY tag = iv_tag ASSIGNING <ls_map>.
+    ASSERT sy-subrc = 0.
+
+    rv_string = <ls_map>-binary.
 
   ENDMETHOD.
 
 
   METHOD to_stream.
 
-* todo
+    DATA: li_packet TYPE REF TO zif_abappgp_packet,
+          lv_data   TYPE xstring.
+
+
+    CREATE OBJECT ro_stream.
+
+    LOOP AT it_packets INTO li_packet.
+      ro_stream->write_octets( build_packet_header( li_packet->get_tag( ) ) ).
+      lv_data = li_packet->to_stream( )->get_data( ).
+      ro_stream->write_length( xstrlen( lv_data ) ).
+      ro_stream->write_octets( lv_data ).
+    ENDLOOP.
 
   ENDMETHOD.
 ENDCLASS.

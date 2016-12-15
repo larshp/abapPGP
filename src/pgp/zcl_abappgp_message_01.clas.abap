@@ -8,15 +8,15 @@ public section.
 
   aliases FROM_ARMOR
     for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
-  aliases GET_TYPE
-    for ZIF_ABAPPGP_MESSAGE~GET_TYPE .
 
   methods CONSTRUCTOR
     importing
-      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
+      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST
+      !IT_HEADERS type STRING_TABLE optional .
 protected section.
 
   data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
+  data MT_HEADERS type STRING_TABLE .
 private section.
 ENDCLASS.
 
@@ -62,28 +62,18 @@ CLASS ZCL_ABAPPGP_MESSAGE_01 IMPLEMENTATION.
     CREATE OBJECT ri_message
       TYPE zcl_abappgp_message_01
       EXPORTING
-        it_packet_list = lt_packets.
-
-  ENDMETHOD.
-
-
-  METHOD zif_abappgp_message~get_type.
-
-* todo
+        it_packet_list = lt_packets
+        it_headers     = io_armor->get_headers( ).
 
   ENDMETHOD.
 
 
   METHOD zif_abappgp_message~to_armor.
 
-    DATA: lt_headers TYPE string_table.
-
-* todo, fill lt_headers
-
     CREATE OBJECT ro_armor
       EXPORTING
         iv_armor_header = zcl_abappgp_armor=>c_header-message
-        it_headers      = lt_headers
+        it_headers      = mt_headers
         iv_data         = zcl_abappgp_packet_list=>to_stream( mt_packet_list )->get_data( )
         iv_armor_tail   = zcl_abappgp_armor=>c_tail-message.
 

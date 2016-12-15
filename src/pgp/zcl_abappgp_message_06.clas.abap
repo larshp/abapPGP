@@ -8,8 +8,6 @@ public section.
 
   aliases FROM_ARMOR
     for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
-  aliases GET_TYPE
-    for ZIF_ABAPPGP_MESSAGE~GET_TYPE .
 
   methods CONSTRUCTOR
     importing

@@ -8,8 +8,6 @@ public section.
 
   aliases FROM_ARMOR
     for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
-  aliases GET_TYPE
-    for ZIF_ABAPPGP_MESSAGE~GET_TYPE .
 
   methods CONSTRUCTOR
     importing
@@ -89,13 +87,6 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
       TYPE zcl_abappgp_message_03
       EXPORTING
         it_packet_list = lt_packets.
-
-  ENDMETHOD.
-
-
-  METHOD ZIF_ABAPPGP_MESSAGE~GET_TYPE.
-
-* todo
 
   ENDMETHOD.
 
