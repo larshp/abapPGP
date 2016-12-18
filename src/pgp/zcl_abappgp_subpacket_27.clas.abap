@@ -1,33 +1,33 @@
-class ZCL_ABAPPGP_SUBPACKET_27 definition
-  public
-  create public .
+CLASS zcl_abappgp_subpacket_27 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_SUBPACKET .
+    INTERFACES zif_abappgp_subpacket .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_SUBPACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_SUBPACKET~GET_NAME .
-  aliases GET_TYPE
-    for ZIF_ABAPPGP_SUBPACKET~GET_TYPE .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_SUBPACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_subpacket~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_subpacket~get_name .
+    ALIASES get_type
+      FOR zif_abappgp_subpacket~get_type .
+    ALIASES to_stream
+      FOR zif_abappgp_subpacket~to_stream .
 
-  methods CONSTRUCTOR
-    importing
-      !IV_CERTIFY_OTHER type ABAP_BOOL
-      !IV_SIGN_DATA type ABAP_BOOL
-      !IV_ENCRYPT_COMMUNICATIONS type ABAP_BOOL
-      !IV_ENCRYPT_STORAGE type ABAP_BOOL .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !iv_certify_other          TYPE abap_bool
+        !iv_sign_data              TYPE abap_bool
+        !iv_encrypt_communications TYPE abap_bool
+        !iv_encrypt_storage        TYPE abap_bool .
+  PROTECTED SECTION.
 
-  data MV_CERTIFY_OTHER type ABAP_BOOL .
-  data MV_SIGN_DATA type ABAP_BOOL .
-  data MV_ENCRYPT_COMMUNICATIONS type ABAP_BOOL .
-  data MV_ENCRYPT_STORAGE type ABAP_BOOL .
-private section.
+    DATA mv_certify_other TYPE abap_bool .
+    DATA mv_sign_data TYPE abap_bool .
+    DATA mv_encrypt_communications TYPE abap_bool .
+    DATA mv_encrypt_storage TYPE abap_bool .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

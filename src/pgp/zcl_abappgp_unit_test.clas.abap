@@ -1,41 +1,41 @@
-class ZCL_ABAPPGP_UNIT_TEST definition
-  public
-  create public
-  for testing .
+CLASS zcl_abappgp_unit_test DEFINITION
+  PUBLIC
+  CREATE PUBLIC
+  FOR TESTING .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods PACKET_IDENTITY
-    importing
-      !IO_DATA type ref to ZCL_ABAPPGP_STREAM
-      !IV_TAG type ZIF_ABAPPGP_CONSTANTS=>TY_TAG
-    returning
-      value(RI_PKT) type ref to ZIF_ABAPPGP_PACKET .
-  class-methods SUBPACKET_IDENTITY
-    importing
-      !IV_DATA type XSTRING
-      !IV_TYPE type ZIF_ABAPPGP_CONSTANTS=>TY_SUB_TYPE
-    returning
-      value(RI_SUB) type ref to ZIF_ABAPPGP_SUBPACKET .
-  class-methods GET_MESSAGE
-    returning
-      value(RV_MESSAGE) type STRING .
-  class-methods GET_PRIVATE_KEY
-    returning
-      value(RV_KEY) type STRING .
-  class-methods GET_PUBLIC_KEY
-    returning
-      value(RV_KEY) type STRING .
-  class-methods GET_SIGNATURE
-    returning
-      value(RV_SIGNATURE) type STRING .
-  class-methods MESSAGE_IDENTITY
-    importing
-      !IV_ARMOR type STRING
-    returning
-      value(RI_MESSAGE) type ref to ZIF_ABAPPGP_MESSAGE .
-protected section.
-private section.
+    CLASS-METHODS packet_identity
+      IMPORTING
+        !io_data      TYPE REF TO zcl_abappgp_stream
+        !iv_tag       TYPE zif_abappgp_constants=>ty_tag
+      RETURNING
+        VALUE(ri_pkt) TYPE REF TO zif_abappgp_packet .
+    CLASS-METHODS subpacket_identity
+      IMPORTING
+        !iv_data      TYPE xstring
+        !iv_type      TYPE zif_abappgp_constants=>ty_sub_type
+      RETURNING
+        VALUE(ri_sub) TYPE REF TO zif_abappgp_subpacket .
+    CLASS-METHODS get_message
+      RETURNING
+        VALUE(rv_message) TYPE string .
+    CLASS-METHODS get_private_key
+      RETURNING
+        VALUE(rv_key) TYPE string .
+    CLASS-METHODS get_public_key
+      RETURNING
+        VALUE(rv_key) TYPE string .
+    CLASS-METHODS get_signature
+      RETURNING
+        VALUE(rv_signature) TYPE string .
+    CLASS-METHODS message_identity
+      IMPORTING
+        !iv_armor         TYPE string
+      RETURNING
+        VALUE(ri_message) TYPE REF TO zif_abappgp_message .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 

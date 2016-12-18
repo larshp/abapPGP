@@ -1,27 +1,27 @@
-class ZCL_ABAPPGP_SUBPACKET_16 definition
-  public
-  create public .
+CLASS zcl_abappgp_subpacket_16 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_SUBPACKET .
+    INTERFACES zif_abappgp_subpacket .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_SUBPACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_SUBPACKET~GET_NAME .
-  aliases GET_TYPE
-    for ZIF_ABAPPGP_SUBPACKET~GET_TYPE .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_SUBPACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_subpacket~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_subpacket~get_name .
+    ALIASES get_type
+      FOR zif_abappgp_subpacket~get_type .
+    ALIASES to_stream
+      FOR zif_abappgp_subpacket~to_stream .
 
-  methods CONSTRUCTOR
-    importing
-      !IV_KEY type XSTRING .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !iv_key TYPE xstring .
+  PROTECTED SECTION.
 
-  data MV_KEY type XSTRING .
-private section.
+    DATA mv_key TYPE xstring .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

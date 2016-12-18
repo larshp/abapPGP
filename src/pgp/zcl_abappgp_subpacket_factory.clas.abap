@@ -1,17 +1,17 @@
-class ZCL_ABAPPGP_SUBPACKET_FACTORY definition
-  public
-  create public .
+CLASS zcl_abappgp_subpacket_factory DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CREATE
-    importing
-      !IV_DATA type XSTRING
-      !IV_TYPE type ZIF_ABAPPGP_CONSTANTS=>TY_SUB_TYPE
-    returning
-      value(RI_SUB) type ref to ZIF_ABAPPGP_SUBPACKET .
-protected section.
-private section.
+    CLASS-METHODS create
+      IMPORTING
+        !iv_data      TYPE xstring
+        !iv_type      TYPE zif_abappgp_constants=>ty_sub_type
+      RETURNING
+        VALUE(ri_sub) TYPE REF TO zif_abappgp_subpacket .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 
