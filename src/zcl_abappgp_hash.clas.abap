@@ -1,33 +1,33 @@
-class ZCL_ABAPPGP_HASH definition
-  public
-  create public .
+CLASS zcl_abappgp_hash DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CRC24
-    importing
-      !IV_DATA type XSTRING
-    returning
-      value(RV_HASH) type XSTRING .
-  class-methods SHA256
-    importing
-      !IV_INPUT type XSTRING
-    returning
-      value(RV_HASH) type XSTRING .
-  class-methods SHA1
-    importing
-      !IV_DATA type XSTRING
-    returning
-      value(RV_HASH) type XSTRING .
-protected section.
+    CLASS-METHODS crc24
+      IMPORTING
+        !iv_data       TYPE xstring
+      RETURNING
+        VALUE(rv_hash) TYPE xstring .
+    CLASS-METHODS sha256
+      IMPORTING
+        !iv_input      TYPE xstring
+      RETURNING
+        VALUE(rv_hash) TYPE xstring .
+    CLASS-METHODS sha1
+      IMPORTING
+        !iv_data       TYPE xstring
+      RETURNING
+        VALUE(rv_hash) TYPE xstring .
+  PROTECTED SECTION.
 
-  types:
-    ty_table_tt TYPE STANDARD TABLE OF xstring WITH DEFAULT KEY .
+    TYPES:
+      ty_table_tt TYPE STANDARD TABLE OF xstring WITH DEFAULT KEY .
 
-  class-methods CRC24_INIT
-    returning
-      value(RT_TABLE) type TY_TABLE_TT .
-private section.
+    CLASS-METHODS crc24_init
+      RETURNING
+        VALUE(rt_table) TYPE ty_table_tt .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

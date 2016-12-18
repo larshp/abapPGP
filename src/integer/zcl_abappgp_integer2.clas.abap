@@ -1,114 +1,114 @@
-class ZCL_ABAPPGP_INTEGER2 definition
-  public
-  create public .
+CLASS zcl_abappgp_integer2 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  type-pools ABAP .
-  methods IS_GT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  class-methods CLASS_CONSTRUCTOR .
-  class-methods FROM_INTEGER
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
-  class-methods FROM_STRING
-    importing
-      !IV_INTEGER type STRING
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods ADD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods AND
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods CLONE
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods CONSTRUCTOR
-    importing
-      !IV_INTEGER type I default 1 .
-  methods DIVIDE_BY_2
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods GET_BINARY_LENGTH
-    returning
-      value(RV_LENGTH) type I .
-  methods IS_EQ
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ONE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods MULTIPLY
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods SHIFT_LEFT
-    importing
-      !IV_TIMES type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods SHIFT_RIGHT
-    importing
-      !IV_TIMES type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods SUBTRACT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER2 .
-  methods TO_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods TO_STRING
-    returning
-      value(RV_INTEGER) type STRING .
-  methods MULTIPLY_KARATSUBA
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-      !IV_FALLBACK type I default 20
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER2 .
-protected section.
+    TYPE-POOLS abap .
+    METHODS is_gt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer2
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    CLASS-METHODS class_constructor .
+    CLASS-METHODS from_integer
+      IMPORTING
+        !io_integer       TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer2 .
+    CLASS-METHODS from_string
+      IMPORTING
+        !iv_integer       TYPE string
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS add
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS and
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS clone
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS constructor
+      IMPORTING
+        !iv_integer TYPE i DEFAULT 1 .
+    METHODS divide_by_2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS get_binary_length
+      RETURNING
+        VALUE(rv_length) TYPE i .
+    METHODS is_eq
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer2
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_one
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_zero
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS multiply
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS shift_left
+      IMPORTING
+        !iv_times        TYPE i
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS shift_right
+      IMPORTING
+        !iv_times        TYPE i
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS subtract
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer2 .
+    METHODS to_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS to_string
+      RETURNING
+        VALUE(rv_integer) TYPE string .
+    METHODS multiply_karatsuba
+      IMPORTING
+        !io_integer       TYPE REF TO zcl_abappgp_integer2
+        !iv_fallback      TYPE i DEFAULT 20
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer2 .
+  PROTECTED SECTION.
 
-  types TY_SPLIT type I .
-  types:
-    ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
+    TYPES ty_split TYPE i .
+    TYPES:
+      ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
-  data MT_SPLIT type TY_SPLIT_TT .
-  class-data GV_MAX type I value 8192. "#EC NOTEXT .  .  . " .
-  class-data GV_BITS type I value 13. "#EC NOTEXT .  .  . " .
-  class-data GO_MAX type ref to ZCL_ABAPPGP_INTEGER .
-  class-data:
-    gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
-  class-data GO_TWO type ref to ZCL_ABAPPGP_INTEGER2 .
+    DATA mt_split TYPE ty_split_tt .
+    CLASS-DATA gv_max TYPE i VALUE 8192.        "#EC NOTEXT .  .  . " .
+    CLASS-DATA gv_bits TYPE i VALUE 13.         "#EC NOTEXT .  .  . " .
+    CLASS-DATA go_max TYPE REF TO zcl_abappgp_integer .
+    CLASS-DATA:
+      gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
+    CLASS-DATA go_two TYPE REF TO zcl_abappgp_integer2 .
 
-  methods REMOVE_LEADING_ZEROS .
-  class-methods SPLIT_AT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER2
-      !IV_AT type I
-    exporting
-      !EO_LOW type ref to ZCL_ABAPPGP_INTEGER2
-      !EO_HIGH type ref to ZCL_ABAPPGP_INTEGER2 .
-private section.
+    METHODS remove_leading_zeros .
+    CLASS-METHODS split_at
+      IMPORTING
+        !io_integer TYPE REF TO zcl_abappgp_integer2
+        !iv_at      TYPE i
+      EXPORTING
+        !eo_low     TYPE REF TO zcl_abappgp_integer2
+        !eo_high    TYPE REF TO zcl_abappgp_integer2 .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

@@ -1,31 +1,31 @@
-class ZCL_ABAPPGP_RANDOM definition
-  public
-  create public .
+CLASS zcl_abappgp_random DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods FROM_BITS
-    importing
-      !IV_BITS type I
-    returning
-      value(RO_RANDOM) type ref to ZCL_ABAPPGP_RANDOM .
-  methods CONSTRUCTOR
-    importing
-      !IO_LOW type ref to ZCL_ABAPPGP_INTEGER
-      !IO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
-  methods RANDOM
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-protected section.
+    CLASS-METHODS from_bits
+      IMPORTING
+        !iv_bits         TYPE i
+      RETURNING
+        VALUE(ro_random) TYPE REF TO zcl_abappgp_random .
+    METHODS constructor
+      IMPORTING
+        !io_low  TYPE REF TO zcl_abappgp_integer
+        !io_high TYPE REF TO zcl_abappgp_integer .
+    METHODS random
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+  PROTECTED SECTION.
 
-  data MO_LOW type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_HIGH type ref to ZCL_ABAPPGP_INTEGER .
+    DATA mo_low TYPE REF TO zcl_abappgp_integer .
+    DATA mo_high TYPE REF TO zcl_abappgp_integer .
 
-  methods RANDOM_DIGITS
-    importing
-      !IV_DIGITS type I
-    returning
-      value(RV_RANDOM) type STRING .
+    METHODS random_digits
+      IMPORTING
+        !iv_digits       TYPE i
+      RETURNING
+        VALUE(rv_random) TYPE string .
   PRIVATE SECTION.
 ENDCLASS.
 

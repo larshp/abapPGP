@@ -1,34 +1,34 @@
-class ZCL_ABAPPGP_PRIME definition
-  public
-  create public .
+CLASS zcl_abappgp_prime DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CHECK
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-      !IV_ITERATIONS type I default 60
-      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-PROTECTED SECTION.
+    CLASS-METHODS check
+      IMPORTING
+        !io_integer       TYPE REF TO zcl_abappgp_integer
+        !iv_iterations    TYPE i DEFAULT 60
+        !iv_show_progress TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(rv_bool)    TYPE abap_bool .
+  PROTECTED SECTION.
 
-  TYPES:
-    ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
+    TYPES:
+      ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
-  CLASS-DATA gt_low TYPE ty_integer_tt.
+    CLASS-DATA gt_low TYPE ty_integer_tt.
 
-  CLASS-METHODS low_primes
-    RETURNING
-      VALUE(rt_low) TYPE ty_integer_tt .
-  CLASS-METHODS rabin_miller
-    IMPORTING
-      !io_n TYPE REF TO zcl_abappgp_integer
-      !iv_iterations TYPE i
-      !iv_show_progress TYPE abap_bool DEFAULT abap_false
-    RETURNING
-      VALUE(rv_bool) TYPE abap_bool .
-private section.
+    CLASS-METHODS low_primes
+      RETURNING
+        VALUE(rt_low) TYPE ty_integer_tt .
+    CLASS-METHODS rabin_miller
+      IMPORTING
+        !io_n             TYPE REF TO zcl_abappgp_integer
+        !iv_iterations    TYPE i
+        !iv_show_progress TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(rv_bool)    TYPE abap_bool .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

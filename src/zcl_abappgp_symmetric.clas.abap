@@ -1,44 +1,44 @@
-class ZCL_ABAPPGP_SYMMETRIC definition
-  public
-  create public .
+CLASS zcl_abappgp_symmetric DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods AES256_ENCRYPT
-    importing
-      !IV_PLAIN type XSTRING
-      !IV_KEY type XSTRING
-      !IV_IVECTOR type XSTRING
-      !IV_RESYNC type ABAP_BOOL
-    returning
-      value(RV_CIPHERTEXT) type XSTRING .
-  class-methods AES256_ENCRYPT_NORMAL
-    importing
-      !IV_PLAIN type XSTRING
-      !IV_KEY type XSTRING
-      !IV_IVECTOR type XSTRING
-      !IV_RESYNC type ABAP_BOOL
-    returning
-      value(RV_CIPHERTEXT) type XSTRING .
-  class-methods AES256_DECRYPT
-    importing
-      !IV_CIPHERTEXT type XSTRING
-      !IV_KEY type XSTRING
-      !IV_IVECTOR type XSTRING
-      !IV_RESYNC type ABAP_BOOL
-    returning
-      value(RV_PLAIN) type XSTRING
-    raising
-      ZCX_ABAPPGP_INVALID_KEY .
-  class-methods AES256_DECRYPT_NORMAL
-    importing
-      !IV_CIPHERTEXT type XSTRING
-      !IV_KEY type XSTRING
-      !IV_IVECTOR type XSTRING
-    returning
-      value(RV_PLAIN) type XSTRING .
-protected section.
-private section.
+    CLASS-METHODS aes256_encrypt
+      IMPORTING
+        !iv_plain            TYPE xstring
+        !iv_key              TYPE xstring
+        !iv_ivector          TYPE xstring
+        !iv_resync           TYPE abap_bool
+      RETURNING
+        VALUE(rv_ciphertext) TYPE xstring .
+    CLASS-METHODS aes256_encrypt_normal
+      IMPORTING
+        !iv_plain            TYPE xstring
+        !iv_key              TYPE xstring
+        !iv_ivector          TYPE xstring
+        !iv_resync           TYPE abap_bool
+      RETURNING
+        VALUE(rv_ciphertext) TYPE xstring .
+    CLASS-METHODS aes256_decrypt
+      IMPORTING
+        !iv_ciphertext  TYPE xstring
+        !iv_key         TYPE xstring
+        !iv_ivector     TYPE xstring
+        !iv_resync      TYPE abap_bool
+      RETURNING
+        VALUE(rv_plain) TYPE xstring
+      RAISING
+        zcx_abappgp_invalid_key .
+    CLASS-METHODS aes256_decrypt_normal
+      IMPORTING
+        !iv_ciphertext  TYPE xstring
+        !iv_key         TYPE xstring
+        !iv_ivector     TYPE xstring
+      RETURNING
+        VALUE(rv_plain) TYPE xstring .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 

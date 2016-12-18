@@ -1,38 +1,38 @@
-class ZCL_ABAPPGP_MONTGOMERY definition
-  public
-  create public .
+CLASS zcl_abappgp_montgomery DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods CONSTRUCTOR
-    importing
-      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER .
-  methods MULTIPLY
-    importing
-      !IO_X type ref to ZCL_ABAPPGP_MONTGOMERY_INTEGER
-      !IO_Y type ref to ZCL_ABAPPGP_MONTGOMERY_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_MONTGOMERY_INTEGER .
-  methods BUILD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_MONTGOMERY) type ref to ZCL_ABAPPGP_MONTGOMERY_INTEGER .
-  methods UNBUILD
-    importing
-      !IO_MONTGOMERY type ref to ZCL_ABAPPGP_MONTGOMERY_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-protected section.
-private section.
+    METHODS constructor
+      IMPORTING
+        !io_modulus TYPE REF TO zcl_abappgp_integer .
+    METHODS multiply
+      IMPORTING
+        !io_x            TYPE REF TO zcl_abappgp_montgomery_integer
+        !io_y            TYPE REF TO zcl_abappgp_montgomery_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_montgomery_integer .
+    METHODS build
+      IMPORTING
+        !io_integer          TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_montgomery) TYPE REF TO zcl_abappgp_montgomery_integer .
+    METHODS unbuild
+      IMPORTING
+        !io_montgomery    TYPE REF TO zcl_abappgp_montgomery_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 
-  data MO_FACTOR type ref to ZCL_ABAPPGP_INTEGER2 .
-  data MO_MASK type ref to ZCL_ABAPPGP_INTEGER2 .
-  data MO_RECIPROCAL type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_MODULUS2 type ref to ZCL_ABAPPGP_INTEGER2 .
-  data MO_MODULUS type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_REDUCER type ref to ZCL_ABAPPGP_INTEGER .
-  data MV_BITS type I .
+    DATA mo_factor TYPE REF TO zcl_abappgp_integer2 .
+    DATA mo_mask TYPE REF TO zcl_abappgp_integer2 .
+    DATA mo_reciprocal TYPE REF TO zcl_abappgp_integer .
+    DATA mo_modulus2 TYPE REF TO zcl_abappgp_integer2 .
+    DATA mo_modulus TYPE REF TO zcl_abappgp_integer .
+    DATA mo_reducer TYPE REF TO zcl_abappgp_integer .
+    DATA mv_bits TYPE i .
 ENDCLASS.
 
 

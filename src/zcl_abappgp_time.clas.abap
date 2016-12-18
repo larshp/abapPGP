@@ -1,19 +1,19 @@
-class ZCL_ABAPPGP_TIME definition
-  public
-  create public .
+CLASS zcl_abappgp_time DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods FORMAT_UNIX
-    importing
-      !IV_UNIX type I
-    returning
-      value(RV_FORMATTED) type STRING .
-  class-methods GET_UNIX
-    returning
-      value(RV_TIME) type I .
-protected section.
-private section.
+    CLASS-METHODS format_unix
+      IMPORTING
+        !iv_unix            TYPE i
+      RETURNING
+        VALUE(rv_formatted) TYPE string .
+    CLASS-METHODS get_unix
+      RETURNING
+        VALUE(rv_time) TYPE i .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 

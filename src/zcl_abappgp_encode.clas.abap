@@ -1,20 +1,20 @@
-class ZCL_ABAPPGP_ENCODE definition
-  public
-  create public .
+CLASS zcl_abappgp_encode DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods PKCS1_EMSE
-    importing
-      !IV_M type XSTRING
-    returning
-      value(RV_EM) type XSTRING .
-protected section.
+    CLASS-METHODS pkcs1_emse
+      IMPORTING
+        !iv_m        TYPE xstring
+      RETURNING
+        VALUE(rv_em) TYPE xstring .
+  PROTECTED SECTION.
 
-  class-methods HASH_PREFIX
-    returning
-      value(RV_PREFIX) type XSTRING .
-private section.
+    CLASS-METHODS hash_prefix
+      RETURNING
+        VALUE(rv_prefix) TYPE xstring .
+  PRIVATE SECTION.
 ENDCLASS.
 
 
