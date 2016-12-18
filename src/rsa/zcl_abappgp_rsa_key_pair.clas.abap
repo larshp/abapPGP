@@ -1,24 +1,24 @@
-class ZCL_ABAPPGP_RSA_KEY_PAIR definition
-  public
-  create public .
+CLASS zcl_abappgp_rsa_key_pair DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods CONSTRUCTOR
-    importing
-      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY .
-  methods GET_PUBLIC
-    returning
-      value(RO_KEY) type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY .
-  methods GET_PRIVATE
-    returning
-      value(RO_KEY) type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY .
-protected section.
-private section.
+    METHODS constructor
+      IMPORTING
+        !io_private TYPE REF TO zcl_abappgp_rsa_private_key
+        !io_public  TYPE REF TO zcl_abappgp_rsa_public_key .
+    METHODS get_public
+      RETURNING
+        VALUE(ro_key) TYPE REF TO zcl_abappgp_rsa_public_key .
+    METHODS get_private
+      RETURNING
+        VALUE(ro_key) TYPE REF TO zcl_abappgp_rsa_private_key .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 
-  data MO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY .
-  data MO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY .
+    DATA mo_private TYPE REF TO zcl_abappgp_rsa_private_key .
+    DATA mo_public TYPE REF TO zcl_abappgp_rsa_public_key .
 ENDCLASS.
 
 

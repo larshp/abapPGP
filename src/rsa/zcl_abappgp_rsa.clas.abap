@@ -1,48 +1,48 @@
-class ZCL_ABAPPGP_RSA definition
-  public
-  create public .
+CLASS zcl_abappgp_rsa DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods VERIFY
-    importing
-      !IO_M type ref to ZCL_ABAPPGP_INTEGER
-      !IO_S type ref to ZCL_ABAPPGP_INTEGER
-      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY
-    returning
-      value(RV_VALID) type ABAP_BOOL .
-  class-methods GENERATE_KEY_PAIR
-    importing
-      !IO_P type ref to ZCL_ABAPPGP_INTEGER
-      !IO_Q type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_PAIR) type ref to ZCL_ABAPPGP_RSA_KEY_PAIR .
-  class-methods ENCRYPT
-    importing
-      !IO_PLAIN type ref to ZCL_ABAPPGP_INTEGER
-      !IO_PUBLIC type ref to ZCL_ABAPPGP_RSA_PUBLIC_KEY
-    returning
-      value(RO_ENCRYPTED) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods DECRYPT
-    importing
-      !IO_ENCRYPTED type ref to ZCL_ABAPPGP_INTEGER
-      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    returning
-      value(RO_PLAIN) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods SIGN
-    importing
-      !IO_M type ref to ZCL_ABAPPGP_INTEGER
-      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    returning
-      value(RO_SIGN) type ref to ZCL_ABAPPGP_INTEGER .
-protected section.
+    CLASS-METHODS verify
+      IMPORTING
+        !io_m           TYPE REF TO zcl_abappgp_integer
+        !io_s           TYPE REF TO zcl_abappgp_integer
+        !io_public      TYPE REF TO zcl_abappgp_rsa_public_key
+      RETURNING
+        VALUE(rv_valid) TYPE abap_bool .
+    CLASS-METHODS generate_key_pair
+      IMPORTING
+        !io_p          TYPE REF TO zcl_abappgp_integer
+        !io_q          TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_pair) TYPE REF TO zcl_abappgp_rsa_key_pair .
+    CLASS-METHODS encrypt
+      IMPORTING
+        !io_plain           TYPE REF TO zcl_abappgp_integer
+        !io_public          TYPE REF TO zcl_abappgp_rsa_public_key
+      RETURNING
+        VALUE(ro_encrypted) TYPE REF TO zcl_abappgp_integer .
+    CLASS-METHODS decrypt
+      IMPORTING
+        !io_encrypted   TYPE REF TO zcl_abappgp_integer
+        !io_private     TYPE REF TO zcl_abappgp_rsa_private_key
+      RETURNING
+        VALUE(ro_plain) TYPE REF TO zcl_abappgp_integer .
+    CLASS-METHODS sign
+      IMPORTING
+        !io_m          TYPE REF TO zcl_abappgp_integer
+        !io_private    TYPE REF TO zcl_abappgp_rsa_private_key
+      RETURNING
+        VALUE(ro_sign) TYPE REF TO zcl_abappgp_integer .
+  PROTECTED SECTION.
 
-  class-methods FIND_COPRIME
-    importing
-      !IO_INPUT type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_COPRIME) type ref to ZCL_ABAPPGP_INTEGER .
-private section.
+    CLASS-METHODS find_coprime
+      IMPORTING
+        !io_input         TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_coprime) TYPE REF TO zcl_abappgp_integer .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

@@ -1,37 +1,37 @@
-class ZCL_ABAPPGP_RSA_PRIVATE_KEY definition
-  public
-  create public .
+CLASS zcl_abappgp_rsa_private_key DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods CONSTRUCTOR
-    importing
-      !IO_D type ref to ZCL_ABAPPGP_INTEGER
-      !IO_P type ref to ZCL_ABAPPGP_INTEGER
-      !IO_Q type ref to ZCL_ABAPPGP_INTEGER
-      !IO_U type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_D
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_P
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_Q
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_U
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_N
-    returning
-      value(RO_N) type ref to ZCL_ABAPPGP_INTEGER .
-protected section.
-private section.
+    METHODS constructor
+      IMPORTING
+        !io_d TYPE REF TO zcl_abappgp_integer
+        !io_p TYPE REF TO zcl_abappgp_integer
+        !io_q TYPE REF TO zcl_abappgp_integer
+        !io_u TYPE REF TO zcl_abappgp_integer .
+    METHODS get_d
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS get_p
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS get_q
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS get_u
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS get_n
+      RETURNING
+        VALUE(ro_n) TYPE REF TO zcl_abappgp_integer .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 
-  data MO_D type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_P type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_Q type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_U type ref to ZCL_ABAPPGP_INTEGER .
+    DATA mo_d TYPE REF TO zcl_abappgp_integer .
+    DATA mo_p TYPE REF TO zcl_abappgp_integer .
+    DATA mo_q TYPE REF TO zcl_abappgp_integer .
+    DATA mo_u TYPE REF TO zcl_abappgp_integer .
 ENDCLASS.
 
 
@@ -49,7 +49,7 @@ CLASS ZCL_ABAPPGP_RSA_PRIVATE_KEY IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD GET_D.
+  METHOD get_d.
 
     ro_integer = mo_d.
 
@@ -63,21 +63,21 @@ CLASS ZCL_ABAPPGP_RSA_PRIVATE_KEY IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD GET_P.
+  METHOD get_p.
 
     ro_integer = mo_p.
 
   ENDMETHOD.
 
 
-  METHOD GET_Q.
+  METHOD get_q.
 
     ro_integer = mo_q.
 
   ENDMETHOD.
 
 
-  METHOD GET_U.
+  METHOD get_u.
 
     ro_integer = mo_u.
 
