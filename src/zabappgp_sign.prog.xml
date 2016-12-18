@@ -90,17 +90,49 @@
       </RPY_DYCATT>
       <RPY_DYCATT>
        <TYPE>CUST_CTRL</TYPE>
-       <NAME>CUSTOM_2000</NAME>
+       <NAME>CUSTOM_INPUT</NAME>
        <ELEMENT_OF>SCREEN</ELEMENT_OF>
        <LINE>003</LINE>
        <COLUMN>001</COLUMN>
-       <LENGTH>253</LENGTH>
+       <LENGTH>078</LENGTH>
        <HEIGHT>043</HEIGHT>
        <LOOP_TYPE/>
        <LOOP_BLOCK>000</LOOP_BLOCK>
        <LOOP_DISP>000</LOOP_DISP>
        <C_RESIZE_V>X</C_RESIZE_V>
-       <C_RESIZE_H>X</C_RESIZE_H>
+       <C_RESIZE_H/>
+       <C_LINE_MIN>005</C_LINE_MIN>
+       <C_COLN_MIN>005</C_COLN_MIN>
+       <C_SCROLL_V/>
+       <C_SCROLL_H/>
+       <TC_TABTYPE/>
+       <TC_SEPAR_V/>
+       <TC_SEPAR_H/>
+       <TC_TITLE/>
+       <TC_HEADER/>
+       <TC_CONFIG/>
+       <TC_SEL_LNS/>
+       <TC_SEL_CLS/>
+       <TC_LSEL_CL/>
+       <TC_FIXCOL>000</TC_FIXCOL>
+       <CU_CC_NAME/>
+       <SFW_SWITCHID/>
+       <SFW_SHOWHIDE/>
+       <PROPERTIES/>
+      </RPY_DYCATT>
+      <RPY_DYCATT>
+       <TYPE>CUST_CTRL</TYPE>
+       <NAME>CUSTOM_RESULT</NAME>
+       <ELEMENT_OF>SCREEN</ELEMENT_OF>
+       <LINE>003</LINE>
+       <COLUMN>082</COLUMN>
+       <LENGTH>078</LENGTH>
+       <HEIGHT>043</HEIGHT>
+       <LOOP_TYPE/>
+       <LOOP_BLOCK>000</LOOP_BLOCK>
+       <LOOP_DISP>000</LOOP_DISP>
+       <C_RESIZE_V>X</C_RESIZE_V>
+       <C_RESIZE_H/>
        <C_LINE_MIN>005</C_LINE_MIN>
        <C_COLN_MIN>005</C_COLN_MIN>
        <C_SCROLL_V/>
@@ -260,7 +292,7 @@
        <CONT_TYPE>SCREEN</CONT_TYPE>
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
-       <NAME>ZABAPPGP_SIGN-PASSWORD</NAME>
+       <NAME>LABEL_PASSWORD</NAME>
        <TEXT>Password____________</TEXT>
        <DROPDOWN/>
        <ICON_NAME/>
@@ -281,8 +313,8 @@
        <PUSH_FTYPE/>
        <CXT_MENON/>
        <FORMAT>CHAR</FORMAT>
-       <FROM_DICT>X</FROM_DICT>
-       <MODIFIC>2</MODIFIC>
+       <FROM_DICT/>
+       <MODIFIC/>
        <CONV_EXIT/>
        <PARAM_ID/>
        <SET_PARAM/>
@@ -474,153 +506,8 @@
       <RPY_DYFLOW>
        <LINE>MODULE user_command_2000.</LINE>
       </RPY_DYFLOW>
-     </FLOW_LOGIC>
-     <SPACES>
-      <item>0</item>
-      <item>2</item>
-      <item>0</item>
-      <item>0</item>
-      <item>2</item>
-     </SPACES>
-    </item>
-    <item>
-     <HEADER>
-      <PROGRAM>ZABAPPGP_SIGN</PROGRAM>
-      <SCREEN>3000</SCREEN>
-      <LANGUAGE>E</LANGUAGE>
-      <DESCRIPT>Signature</DESCRIPT>
-      <TYPE>N</TYPE>
-      <NEXTSCREEN>3000</NEXTSCREEN>
-      <CURSOR_POS/>
-      <SCREEN_GRP/>
-      <LINES>027</LINES>
-      <COLUMNS>120</COLUMNS>
-      <HOLD_DATA/>
-      <FIXED_FONT/>
-      <NO_COMPR/>
-      <NO_EXECUTE/>
-      <KEEP_SCPOS/>
-      <NO_TOOLBAR/>
-      <CTX_MENON/>
-     </HEADER>
-     <CONTAINERS>
-      <RPY_DYCATT>
-       <TYPE>SCREEN</TYPE>
-       <NAME>SCREEN</NAME>
-       <ELEMENT_OF/>
-       <LINE>000</LINE>
-       <COLUMN>000</COLUMN>
-       <LENGTH>000</LENGTH>
-       <HEIGHT>000</HEIGHT>
-       <LOOP_TYPE/>
-       <LOOP_BLOCK>000</LOOP_BLOCK>
-       <LOOP_DISP>000</LOOP_DISP>
-       <C_RESIZE_V/>
-       <C_RESIZE_H/>
-       <C_LINE_MIN>000</C_LINE_MIN>
-       <C_COLN_MIN>000</C_COLN_MIN>
-       <C_SCROLL_V/>
-       <C_SCROLL_H/>
-       <TC_TABTYPE/>
-       <TC_SEPAR_V/>
-       <TC_SEPAR_H/>
-       <TC_TITLE/>
-       <TC_HEADER/>
-       <TC_CONFIG/>
-       <TC_SEL_LNS/>
-       <TC_SEL_CLS/>
-       <TC_LSEL_CL/>
-       <TC_FIXCOL>000</TC_FIXCOL>
-       <CU_CC_NAME/>
-       <SFW_SWITCHID/>
-       <SFW_SHOWHIDE/>
-       <PROPERTIES/>
-      </RPY_DYCATT>
-     </CONTAINERS>
-     <FIELDS>
-      <RPY_DYFATC>
-       <CONT_TYPE>SCREEN</CONT_TYPE>
-       <CONT_NAME>SCREEN</CONT_NAME>
-       <TYPE>OKCODE</TYPE>
-       <NAME>GV_OK_CODE</NAME>
-       <TEXT>____________________</TEXT>
-       <DROPDOWN/>
-       <ICON_NAME/>
-       <ICON_QINFO/>
-       <ICON_QSPEC/>
-       <WITH_ICON/>
-       <ROLLING/>
-       <LINE>000</LINE>
-       <COLUMN>000</COLUMN>
-       <LENGTH>020</LENGTH>
-       <VISLENGTH>020</VISLENGTH>
-       <HEIGHT>001</HEIGHT>
-       <GROUP1/>
-       <GROUP2/>
-       <GROUP3/>
-       <GROUP4/>
-       <PUSH_FCODE/>
-       <PUSH_FTYPE/>
-       <CXT_MENON/>
-       <FORMAT>CHAR</FORMAT>
-       <FROM_DICT/>
-       <MODIFIC/>
-       <CONV_EXIT/>
-       <PARAM_ID/>
-       <SET_PARAM/>
-       <GET_PARAM/>
-       <UP_LOWER/>
-       <NO_TEMPL/>
-       <FOREIGNKEY/>
-       <INPUT_FLD>X</INPUT_FLD>
-       <OUTPUT_FLD/>
-       <OUTPUTONLY/>
-       <REQU_ENTRY/>
-       <POSS_ENTRY/>
-       <DROPFROM/>
-       <RIGHT_JUST/>
-       <LEAD_ZEROS/>
-       <_--2A_ENTRY/>
-       <NO_RESET/>
-       <FIXED_FONT/>
-       <BRIGHT/>
-       <INVISIBLE/>
-       <_--32_DIMENS/>
-       <LABELLEFT/>
-       <LABELRIGHT/>
-       <LTR/>
-       <BIDICTRL/>
-       <DBLCLICK/>
-       <MATCHCODE/>
-       <REF_FIELD/>
-       <TC_TITLE/>
-       <TC_HEADING/>
-       <TC_SELCOL/>
-       <BUTT_RIGHT/>
-       <DICT_I_FKY/>
-       <DICT_I_FKD/>
-       <DICT_I_SGN/>
-       <DICT_I_VAL/>
-       <SFW_SWITCHID/>
-       <SFW_SHOWHIDE/>
-       <PROPERTIES/>
-      </RPY_DYFATC>
-     </FIELDS>
-     <FLOW_LOGIC>
       <RPY_DYFLOW>
-       <LINE>PROCESS BEFORE OUTPUT.</LINE>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW>
-       <LINE>MODULE status_3000.</LINE>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW>
-       <LINE/>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW>
-       <LINE>PROCESS AFTER INPUT.</LINE>
-      </RPY_DYFLOW>
-      <RPY_DYFLOW>
-       <LINE>MODULE user_command_3000.</LINE>
+       <LINE>MODULE user_command_2000_e AT EXIT-COMMAND.</LINE>
       </RPY_DYFLOW>
      </FLOW_LOGIC>
      <SPACES>
@@ -628,6 +515,7 @@
       <item>2</item>
       <item>0</item>
       <item>0</item>
+      <item>2</item>
       <item>2</item>
      </SPACES>
     </item>
@@ -643,15 +531,6 @@
     </ADM>
     <STA>
      <RSMPE_STAT>
-      <CODE>SCREEN_3000</CODE>
-      <MODAL>D</MODAL>
-      <ACTCODE>000002</ACTCODE>
-      <PFKCODE>000002</PFKCODE>
-      <BUTCODE>0001</BUTCODE>
-      <INT_NOTE>Status, screen 3000</INT_NOTE>
-      <CTXCODE/>
-     </RSMPE_STAT>
-     <RSMPE_STAT>
       <CODE>STATUS_2000</CODE>
       <MODAL>D</MODAL>
       <ACTCODE>000001</ACTCODE>
@@ -665,7 +544,7 @@
      <RSMPE_FUNT>
       <CODE>BACK</CODE>
       <TEXTNO>001</TEXTNO>
-      <TYPE/>
+      <TYPE>E</TYPE>
       <MODIF/>
       <TEXT_TYPE>S</TEXT_TYPE>
       <TEXT_NAME/>
@@ -725,10 +604,6 @@
      </RSMPE_PFK>
     </PFK>
     <SET>
-     <RSMPE_STAF>
-      <STATUS>SCREEN_3000</STATUS>
-      <FUNCTION>BACK</FUNCTION>
-     </RSMPE_STAF>
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
       <FUNCTION>BACK</FUNCTION>
@@ -792,10 +667,6 @@
      <RSMPE_TITT>
       <CODE>TITLE_2000</CODE>
       <TEXT>Sign</TEXT>
-     </RSMPE_TITT>
-     <RSMPE_TITT>
-      <CODE>TITLE_3000</CODE>
-      <TEXT>Signature</TEXT>
      </RSMPE_TITT>
     </TIT>
     <BIV/>

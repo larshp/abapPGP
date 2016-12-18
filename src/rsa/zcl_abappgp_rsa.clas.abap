@@ -169,8 +169,9 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
   METHOD sign.
 
     ro_sign = io_m->clone( )->modular_pow_montgomery(
-      io_exponent = io_private->get_d( )
-      io_modulus  = io_private->get_n( ) ).
+      io_exponent      = io_private->get_d( )
+      io_modulus       = io_private->get_n( )
+      iv_show_progress = abap_true ).
 
   ENDMETHOD.
 
