@@ -58,6 +58,10 @@ CLASS lcl_overview DEFINITION.
 
     CLASS-METHODS:
       call_display,
+      call_change,
+      delete,
+      get_selected RETURNING VALUE(rs_key) TYPE zabappgp_keys,
+      call_key_screen IMPORTING iv_mode TYPE i,
       refresh.
 
 ENDCLASS.
@@ -75,10 +79,38 @@ CLASS lcl_overview IMPLEMENTATION.
 
   ENDMETHOD.
 
+  METHOD call_change.
+
+    call_key_screen( c_mode-change ).
+
+  ENDMETHOD.
+
   METHOD call_display.
 
+    call_key_screen( c_mode-display ).
+
+  ENDMETHOD.
+
+  METHOD delete.
+
+    DATA: ls_key  LIKE LINE OF gt_keys.
+
+
+    ls_key = get_selected( ).
+    IF ls_key IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    DELETE FROM zabappgp_keys WHERE key_id = ls_key-key_id.
+    ASSERT sy-subrc = 0.
+
+    refresh( ).
+
+  ENDMETHOD.
+
+  METHOD get_selected.
+
     DATA: lt_rows TYPE salv_t_row,
-          ls_key  LIKE LINE OF gt_keys,
           lv_row  LIKE LINE OF lt_rows.
 
 
@@ -90,10 +122,22 @@ CLASS lcl_overview IMPLEMENTATION.
 
     READ TABLE lt_rows INDEX 1 INTO lv_row.
     ASSERT sy-subrc = 0.
-    READ TABLE gt_keys INDEX lv_row INTO ls_key.
+    READ TABLE gt_keys INDEX lv_row INTO rs_key.
     ASSERT sy-subrc = 0.
 
-    lcl_key=>call( iv_mode = c_mode-display
+  ENDMETHOD.
+
+  METHOD call_key_screen.
+
+    DATA: ls_key  LIKE LINE OF gt_keys.
+
+
+    ls_key = get_selected( ).
+    IF ls_key IS INITIAL.
+      RETURN.
+    ENDIF.
+
+    lcl_key=>call( iv_mode = iv_mode
                    is_key  = ls_key ).
 
     refresh( ).
@@ -117,14 +161,17 @@ CLASS lcl_overview IMPLEMENTATION.
         refresh( ).
       WHEN 'GENERATE'.
         CLEAR gv_ok_code.
+* todo
         BREAK-POINT.
       WHEN 'DISPLAY'.
         CLEAR gv_ok_code.
         call_display( ).
       WHEN 'CHANGE'.
         CLEAR gv_ok_code.
-        lcl_key=>call( iv_mode = c_mode-change ).
-        refresh( ).
+        call_change( ).
+      WHEN 'DELETE'.
+        CLEAR gv_ok_code.
+        delete( ).
       WHEN 'REFRESH'.
         CLEAR gv_ok_code.
         refresh( ).
@@ -156,6 +203,8 @@ CLASS lcl_overview IMPLEMENTATION.
 
     go_alv->get_selections( )->set_selection_mode( if_salv_c_selection_mode=>row_column ).
     go_alv->get_columns( )->get_column( 'MANDT' )->set_technical( ).
+    go_alv->get_columns( )->get_column( 'PRIVATE_KEY' )->set_technical( ).
+    go_alv->get_columns( )->get_column( 'PUBLIC_KEY' )->set_technical( ).
     go_alv->display( ).
 
   ENDMETHOD.
@@ -238,19 +287,26 @@ CLASS lcl_key IMPLEMENTATION.
       ELSE.
         screen-input = 1.
       ENDIF.
+      IF gv_mode = c_mode-change
+          AND screen-name = 'ZABAPPGP_KEYS_KEY-KEY_ID'.
+        screen-input = 0.
+      ENDIF.
       MODIFY SCREEN.
     ENDLOOP.
 
     IF gv_mode = c_mode-display.
-      go_public->set_readonly_mode( 1 ).
-      go_private->set_readonly_mode( 1 ).
+      go_public->set_readonly_mode( cl_gui_textedit=>true ).
+      go_private->set_readonly_mode( cl_gui_textedit=>true ).
     ELSE.
-      go_public->set_readonly_mode( 0 ).
-      go_private->set_readonly_mode( 0 ).
+      go_public->set_readonly_mode( cl_gui_textedit=>false ).
+      go_private->set_readonly_mode( cl_gui_textedit=>false ).
     ENDIF.
 
     go_public->set_textstream( gs_key-public_key ).
     go_private->set_textstream( gs_key-private_key ).
+
+    go_public->set_statusbar_mode( cl_gui_textedit=>false ).
+    go_private->set_statusbar_mode( cl_gui_textedit=>false ).
 
   ENDMETHOD.
 

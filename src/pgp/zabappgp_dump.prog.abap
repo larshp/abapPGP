@@ -75,6 +75,7 @@ FORM init_2000.
       parent = go_splitter->top_left_container.
   go_left->set_toolbar_mode( ).
   go_left->set_font_fixed( ).
+  go_left->set_statusbar_mode( cl_gui_textedit=>false ).
 
   CREATE OBJECT go_right
     EXPORTING
@@ -82,6 +83,7 @@ FORM init_2000.
   go_right->set_toolbar_mode( ).
   go_right->set_readonly_mode( ).
   go_right->set_font_fixed( ).
+  go_right->set_statusbar_mode( cl_gui_textedit=>false ).
 
 ENDFORM.
 

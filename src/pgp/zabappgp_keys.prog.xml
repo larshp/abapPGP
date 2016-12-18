@@ -914,6 +914,21 @@
       <SFW_SHOWHIDE/>
      </RSMPE_FUNT>
      <RSMPE_FUNT>
+      <CODE>DELETE</CODE>
+      <TEXTNO>001</TEXTNO>
+      <TYPE/>
+      <MODIF/>
+      <TEXT_TYPE>S</TEXT_TYPE>
+      <TEXT_NAME>ICON_DELETE</TEXT_NAME>
+      <ICON_ID>@11@</ICON_ID>
+      <FUN_TEXT>Delete</FUN_TEXT>
+      <ICON_TEXT>Delete</ICON_TEXT>
+      <INFO_TEXT/>
+      <PATH/>
+      <SFW_SWITCHID/>
+      <SFW_SHOWHIDE/>
+     </RSMPE_FUNT>
+     <RSMPE_FUNT>
       <CODE>DISPLAY</CODE>
       <TEXTNO>001</TEXTNO>
       <TYPE/>
@@ -1008,6 +1023,12 @@
       <NO>05</NO>
       <PFNO>18</PFNO>
      </RSMPE_BUT>
+     <RSMPE_BUT>
+      <PFK_CODE>000001</PFK_CODE>
+      <CODE>0001</CODE>
+      <NO>06</NO>
+      <PFNO>20</PFNO>
+     </RSMPE_BUT>
     </BUT>
     <PFK>
      <RSMPE_PFK>
@@ -1047,6 +1068,12 @@
       <FUNNO>001</FUNNO>
      </RSMPE_PFK>
      <RSMPE_PFK>
+      <CODE>000001</CODE>
+      <PFNO>20</PFNO>
+      <FUNCODE>DELETE</FUNCODE>
+      <FUNNO>001</FUNNO>
+     </RSMPE_PFK>
+     <RSMPE_PFK>
       <CODE>000002</CODE>
       <PFNO>03</PFNO>
       <FUNCODE>BACK</FUNCODE>
@@ -1071,6 +1098,10 @@
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
       <FUNCTION>CREATE</FUNCTION>
+     </RSMPE_STAF>
+     <RSMPE_STAF>
+      <STATUS>STATUS_2000</STATUS>
+      <FUNCTION>DELETE</FUNCTION>
      </RSMPE_STAF>
      <RSMPE_STAF>
       <STATUS>STATUS_2000</STATUS>
