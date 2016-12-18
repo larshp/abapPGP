@@ -1,29 +1,29 @@
-class ZCL_ABAPPGP_PACKET_18 definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_18 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_PACKET .
+    INTERFACES zif_abappgp_packet .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_PACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_PACKET~GET_NAME .
-  aliases GET_TAG
-    for ZIF_ABAPPGP_PACKET~GET_TAG .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_PACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_packet~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_packet~get_name .
+    ALIASES get_tag
+      FOR zif_abappgp_packet~get_tag .
+    ALIASES to_stream
+      FOR zif_abappgp_packet~to_stream .
 
-  methods CONSTRUCTOR
-    importing
-      !IV_VERSION type XSEQUENCE
-      !IV_DATA type XSTRING .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !iv_version TYPE xsequence
+        !iv_data    TYPE xstring .
+  PROTECTED SECTION.
 
-  data MV_VERSION type XSTRING .
-  data MV_DATA type XSTRING .
-private section.
+    DATA mv_version TYPE xstring .
+    DATA mv_data TYPE xstring .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

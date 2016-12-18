@@ -10,11 +10,11 @@ FORM run.
 
   DATA: lv_tested TYPE i,
         lo_one    TYPE REF TO zcl_abappgp_integer,
-        lo_two    TYPE REF TO zcl_abappgp_integer.
-
-  DATA: lv_t1      TYPE timestamp,
-        lv_t2      TYPE timestamp,
-        lv_secs    TYPE i.
+        lo_two    TYPE REF TO zcl_abappgp_integer,
+        ls_primes TYPE zabappgp_primes,
+        lv_t1     TYPE timestamp,
+        lv_t2     TYPE timestamp,
+        lv_secs   TYPE i.
 
 
   CREATE OBJECT lo_one
@@ -63,7 +63,6 @@ FORM run.
                                        tstmp2 = lv_t1 ).
     WRITE: / 'Runtime: ', lv_secs, 'seconds'.
 
-    DATA: ls_primes TYPE zabappgp_primes.
     CLEAR ls_primes.
     ls_primes-pdate   = sy-datum.
     ls_primes-ptime   = sy-uzeit.

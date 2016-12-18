@@ -1,6 +1,4 @@
-CLASS zcl_abappgp_armor DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+CLASS zcl_abappgp_armor DEFINITION PUBLIC CREATE PUBLIC.
 
   PUBLIC SECTION.
 
@@ -52,13 +50,13 @@ CLASS zcl_abappgp_armor DEFINITION
     METHODS to_string
       RETURNING
         VALUE(rv_armor) TYPE string .
-protected section.
+  PROTECTED SECTION.
 
-  data MV_ARMOR_HEADER type STRING .
-  data MT_HEADERS type STRING_TABLE .
-  data MV_DATA type XSTRING .
-  data MV_ARMOR_TAIL type STRING .
-private section.
+    DATA mv_armor_header TYPE string .
+    DATA mt_headers TYPE string_table .
+    DATA mv_data TYPE xstring .
+    DATA mv_armor_tail TYPE string .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

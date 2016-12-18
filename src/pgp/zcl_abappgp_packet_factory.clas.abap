@@ -1,17 +1,17 @@
-class ZCL_ABAPPGP_PACKET_FACTORY definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_factory DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CREATE
-    importing
-      !IO_DATA type ref to ZCL_ABAPPGP_STREAM
-      !IV_TAG type ZIF_ABAPPGP_CONSTANTS=>TY_TAG
-    returning
-      value(RI_PKT) type ref to ZIF_ABAPPGP_PACKET .
-protected section.
-private section.
+    CLASS-METHODS create
+      IMPORTING
+        !io_data      TYPE REF TO zcl_abappgp_stream
+        !iv_tag       TYPE zif_abappgp_constants=>ty_tag
+      RETURNING
+        VALUE(ri_pkt) TYPE REF TO zif_abappgp_packet .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 

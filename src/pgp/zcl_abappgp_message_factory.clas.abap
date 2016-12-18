@@ -1,16 +1,16 @@
-class ZCL_ABAPPGP_MESSAGE_FACTORY definition
-  public
-  create public .
+CLASS zcl_abappgp_message_factory DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CREATE
-    importing
-      !IV_ARMOR type STRING
-    returning
-      value(RI_MESSAGE) type ref to ZIF_ABAPPGP_MESSAGE .
-protected section.
-private section.
+    CLASS-METHODS create
+      IMPORTING
+        !iv_armor         TYPE string
+      RETURNING
+        VALUE(ri_message) TYPE REF TO zif_abappgp_message .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 

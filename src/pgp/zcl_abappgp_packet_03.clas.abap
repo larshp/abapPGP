@@ -1,21 +1,21 @@
-class ZCL_ABAPPGP_PACKET_03 definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_03 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_PACKET .
+    INTERFACES zif_abappgp_packet .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_PACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_PACKET~GET_NAME .
-  aliases GET_TAG
-    for ZIF_ABAPPGP_PACKET~GET_TAG .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_PACKET~TO_STREAM .
-protected section.
-private section.
+    ALIASES from_stream
+      FOR zif_abappgp_packet~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_packet~get_name .
+    ALIASES get_tag
+      FOR zif_abappgp_packet~get_tag .
+    ALIASES to_stream
+      FOR zif_abappgp_packet~to_stream .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
 ENDCLASS.
 
 

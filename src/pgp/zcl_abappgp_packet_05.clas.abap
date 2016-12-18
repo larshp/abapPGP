@@ -1,59 +1,59 @@
-class ZCL_ABAPPGP_PACKET_05 definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_05 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_PACKET .
+    INTERFACES zif_abappgp_packet .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_PACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_PACKET~GET_NAME .
-  aliases GET_TAG
-    for ZIF_ABAPPGP_PACKET~GET_TAG .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_PACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_packet~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_packet~get_name .
+    ALIASES get_tag
+      FOR zif_abappgp_packet~get_tag .
+    ALIASES to_stream
+      FOR zif_abappgp_packet~to_stream .
 
-  methods DECRYPT
-    importing
-      !IV_KEY type STRING
-    returning
-      value(RO_PRIVATE) type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    raising
-      ZCX_ABAPPGP_INVALID_KEY .
-  methods CONSTRUCTOR
-    importing
-      !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
-      !IV_TIME type I
-      !IV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
-      !IO_N type ref to ZCL_ABAPPGP_INTEGER
-      !IO_E type ref to ZCL_ABAPPGP_INTEGER
-      !IV_SYM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_SYM
-      !IO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY
-      !IV_IVECTOR type XSTRING
-      !IV_ENCRYPTED type XSTRING .
-  methods GET_IVECTOR
-    returning
-      value(RV_IVECTOR) type XSTRING .
-  methods GET_ENCRYPTED
-    returning
-      value(RV_ENCRYPTED) type XSTRING .
-  methods GET_S2K
-    returning
-      value(RO_S2K) type ref to ZCL_ABAPPGP_STRING_TO_KEY .
-protected section.
+    METHODS decrypt
+      IMPORTING
+        !iv_key           TYPE string
+      RETURNING
+        VALUE(ro_private) TYPE REF TO zcl_abappgp_rsa_private_key
+      RAISING
+        zcx_abappgp_invalid_key .
+    METHODS constructor
+      IMPORTING
+        !iv_version   TYPE zif_abappgp_constants=>ty_version
+        !iv_time      TYPE i
+        !iv_algorithm TYPE zif_abappgp_constants=>ty_algorithm_pub
+        !io_n         TYPE REF TO zcl_abappgp_integer
+        !io_e         TYPE REF TO zcl_abappgp_integer
+        !iv_sym       TYPE zif_abappgp_constants=>ty_algorithm_sym
+        !io_s2k       TYPE REF TO zcl_abappgp_string_to_key
+        !iv_ivector   TYPE xstring
+        !iv_encrypted TYPE xstring .
+    METHODS get_ivector
+      RETURNING
+        VALUE(rv_ivector) TYPE xstring .
+    METHODS get_encrypted
+      RETURNING
+        VALUE(rv_encrypted) TYPE xstring .
+    METHODS get_s2k
+      RETURNING
+        VALUE(ro_s2k) TYPE REF TO zcl_abappgp_string_to_key .
+  PROTECTED SECTION.
 
-  data MO_E type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_N type ref to ZCL_ABAPPGP_INTEGER .
-  data MV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB .
-  data MV_TIME type I .
-  data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
-  data MV_SYM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_SYM .
-  data MO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY .
-  data MV_IVECTOR type XSTRING .
-  data MV_ENCRYPTED type XSTRING .
-private section.
+    DATA mo_e TYPE REF TO zcl_abappgp_integer .
+    DATA mo_n TYPE REF TO zcl_abappgp_integer .
+    DATA mv_algorithm TYPE zif_abappgp_constants=>ty_algorithm_pub .
+    DATA mv_time TYPE i .
+    DATA mv_version TYPE zif_abappgp_constants=>ty_version .
+    DATA mv_sym TYPE zif_abappgp_constants=>ty_algorithm_sym .
+    DATA mo_s2k TYPE REF TO zcl_abappgp_string_to_key .
+    DATA mv_ivector TYPE xstring .
+    DATA mv_encrypted TYPE xstring .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

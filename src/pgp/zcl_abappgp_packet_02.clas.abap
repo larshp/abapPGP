@@ -1,65 +1,65 @@
-class ZCL_ABAPPGP_PACKET_02 definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_02 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_PACKET .
+    INTERFACES zif_abappgp_packet .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_PACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_PACKET~GET_NAME .
-  aliases GET_TAG
-    for ZIF_ABAPPGP_PACKET~GET_TAG .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_PACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_packet~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_packet~get_name .
+    ALIASES get_tag
+      FOR zif_abappgp_packet~get_tag .
+    ALIASES to_stream
+      FOR zif_abappgp_packet~to_stream .
 
-  types:
-    TY_SUBPACKETS type standard table of ref to zif_abappgp_subpacket with default key .
-  types:
-    TY_integers type standard table of ref to zcl_abappgp_integer with default key .
+    TYPES:
+      ty_subpackets TYPE STANDARD TABLE OF REF TO zif_abappgp_subpacket WITH DEFAULT KEY .
+    TYPES:
+      ty_integers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
-  class-methods SIGN
-    importing
-      !IV_DATA type XSTRING
-      !IV_TIME type I optional
-      !IV_ISSUER type XSTRING
-      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    returning
-      value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_PACKET_02 .
-  methods CONSTRUCTOR
-    importing
-      !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
-      !IV_SIGNATURE type ZIF_ABAPPGP_CONSTANTS=>TY_SIGNATURE
-      !IV_PK_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
-      !IV_HASH_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH
-      !IT_HASHED type TY_SUBPACKETS
-      !IT_UNHASHED type TY_SUBPACKETS optional
-      !IV_LEFT type XSEQUENCE
-      !IT_INTEGERS type TY_INTEGERS .
-protected section.
+    CLASS-METHODS sign
+      IMPORTING
+        !iv_data            TYPE xstring
+        !iv_time            TYPE i OPTIONAL
+        !iv_issuer          TYPE xstring
+        !io_private         TYPE REF TO zcl_abappgp_rsa_private_key
+      RETURNING
+        VALUE(ro_signature) TYPE REF TO zcl_abappgp_packet_02 .
+    METHODS constructor
+      IMPORTING
+        !iv_version   TYPE zif_abappgp_constants=>ty_version
+        !iv_signature TYPE zif_abappgp_constants=>ty_signature
+        !iv_pk_algo   TYPE zif_abappgp_constants=>ty_algorithm_pub
+        !iv_hash_algo TYPE zif_abappgp_constants=>ty_algorithm_hash
+        !it_hashed    TYPE ty_subpackets
+        !it_unhashed  TYPE ty_subpackets OPTIONAL
+        !iv_left      TYPE xsequence
+        !it_integers  TYPE ty_integers .
+  PROTECTED SECTION.
 
-  data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
-  data MV_SIGNATURE type ZIF_ABAPPGP_CONSTANTS=>TY_SIGNATURE .
-  data MV_PK_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB .
-  data MV_HASH_ALGO type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH .
-  data MT_HASHED type TY_SUBPACKETS .
-  data MT_UNHASHED type TY_SUBPACKETS .
-  data:
-    mv_left      TYPE x LENGTH 2 .
-  data MT_INTEGERS type TY_INTEGERS .
+    DATA mv_version TYPE zif_abappgp_constants=>ty_version .
+    DATA mv_signature TYPE zif_abappgp_constants=>ty_signature .
+    DATA mv_pk_algo TYPE zif_abappgp_constants=>ty_algorithm_pub .
+    DATA mv_hash_algo TYPE zif_abappgp_constants=>ty_algorithm_hash .
+    DATA mt_hashed TYPE ty_subpackets .
+    DATA mt_unhashed TYPE ty_subpackets .
+    DATA:
+      mv_left      TYPE x LENGTH 2 .
+    DATA mt_integers TYPE ty_integers .
 
-  class-methods WRITE_SUBPACKETS
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-      !IT_PACKETS type TY_SUBPACKETS .
-  class-methods EAT_SUBPACKETS
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RT_SUBPACKETS) type TY_SUBPACKETS .
-private section.
+    CLASS-METHODS write_subpackets
+      IMPORTING
+        !io_stream  TYPE REF TO zcl_abappgp_stream
+        !it_packets TYPE ty_subpackets .
+    CLASS-METHODS eat_subpackets
+      IMPORTING
+        !io_stream           TYPE REF TO zcl_abappgp_stream
+      RETURNING
+        VALUE(rt_subpackets) TYPE ty_subpackets .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

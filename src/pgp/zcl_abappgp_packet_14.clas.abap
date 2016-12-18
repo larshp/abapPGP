@@ -1,35 +1,35 @@
-class ZCL_ABAPPGP_PACKET_14 definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_14 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_PACKET .
+    INTERFACES zif_abappgp_packet .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_PACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_PACKET~GET_NAME .
-  aliases GET_TAG
-    for ZIF_ABAPPGP_PACKET~GET_TAG .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_PACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_packet~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_packet~get_name .
+    ALIASES get_tag
+      FOR zif_abappgp_packet~get_tag .
+    ALIASES to_stream
+      FOR zif_abappgp_packet~to_stream .
 
-  methods CONSTRUCTOR
-    importing
-      !IV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION
-      !IV_TIME type I
-      !IV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB
-      !IO_N type ref to ZCL_ABAPPGP_INTEGER
-      !IO_E type ref to ZCL_ABAPPGP_INTEGER .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !iv_version   TYPE zif_abappgp_constants=>ty_version
+        !iv_time      TYPE i
+        !iv_algorithm TYPE zif_abappgp_constants=>ty_algorithm_pub
+        !io_n         TYPE REF TO zcl_abappgp_integer
+        !io_e         TYPE REF TO zcl_abappgp_integer .
+  PROTECTED SECTION.
 
-  data MO_E type ref to ZCL_ABAPPGP_INTEGER .
-  data MO_N type ref to ZCL_ABAPPGP_INTEGER .
-  data MV_ALGORITHM type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_PUB .
-  data MV_TIME type I .
-  data MV_VERSION type ZIF_ABAPPGP_CONSTANTS=>TY_VERSION .
-private section.
+    DATA mo_e TYPE REF TO zcl_abappgp_integer .
+    DATA mo_n TYPE REF TO zcl_abappgp_integer .
+    DATA mv_algorithm TYPE zif_abappgp_constants=>ty_algorithm_pub .
+    DATA mv_time TYPE i .
+    DATA mv_version TYPE zif_abappgp_constants=>ty_version .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

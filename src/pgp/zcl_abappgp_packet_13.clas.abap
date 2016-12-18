@@ -1,27 +1,27 @@
-class ZCL_ABAPPGP_PACKET_13 definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_13 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_PACKET .
+    INTERFACES zif_abappgp_packet .
 
-  aliases FROM_STREAM
-    for ZIF_ABAPPGP_PACKET~FROM_STREAM .
-  aliases GET_NAME
-    for ZIF_ABAPPGP_PACKET~GET_NAME .
-  aliases GET_TAG
-    for ZIF_ABAPPGP_PACKET~GET_TAG .
-  aliases TO_STREAM
-    for ZIF_ABAPPGP_PACKET~TO_STREAM .
+    ALIASES from_stream
+      FOR zif_abappgp_packet~from_stream .
+    ALIASES get_name
+      FOR zif_abappgp_packet~get_name .
+    ALIASES get_tag
+      FOR zif_abappgp_packet~get_tag .
+    ALIASES to_stream
+      FOR zif_abappgp_packet~to_stream .
 
-  methods CONSTRUCTOR
-    importing
-      !IV_USER type STRING .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !iv_user TYPE string .
+  PROTECTED SECTION.
 
-  data MV_USER type STRING .
-private section.
+    DATA mv_user TYPE string .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

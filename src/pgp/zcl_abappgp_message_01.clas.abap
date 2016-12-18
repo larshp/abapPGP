@@ -1,23 +1,23 @@
-class ZCL_ABAPPGP_MESSAGE_01 definition
-  public
-  create public .
+CLASS zcl_abappgp_message_01 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_MESSAGE .
+    INTERFACES zif_abappgp_message .
 
-  aliases FROM_ARMOR
-    for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
+    ALIASES from_armor
+      FOR zif_abappgp_message~from_armor .
 
-  methods CONSTRUCTOR
-    importing
-      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST
-      !IT_HEADERS type STRING_TABLE optional .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !it_packet_list TYPE zif_abappgp_constants=>ty_packet_list
+        !it_headers     TYPE string_table OPTIONAL .
+  PROTECTED SECTION.
 
-  data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
-  data MT_HEADERS type STRING_TABLE .
-private section.
+    DATA mt_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
+    DATA mt_headers TYPE string_table .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

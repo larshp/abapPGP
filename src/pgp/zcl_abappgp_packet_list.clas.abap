@@ -1,55 +1,55 @@
-class ZCL_ABAPPGP_PACKET_LIST definition
-  public
-  create public .
+CLASS zcl_abappgp_packet_list DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods FROM_STREAM
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RT_PACKETS) type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
-  class-methods TO_STREAM
-    importing
-      !IT_PACKETS type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST
-    returning
-      value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
-protected section.
+    CLASS-METHODS from_stream
+      IMPORTING
+        !io_stream        TYPE REF TO zcl_abappgp_stream
+      RETURNING
+        VALUE(rt_packets) TYPE zif_abappgp_constants=>ty_packet_list .
+    CLASS-METHODS to_stream
+      IMPORTING
+        !it_packets      TYPE zif_abappgp_constants=>ty_packet_list
+      RETURNING
+        VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream .
+  PROTECTED SECTION.
 
-  types:
-    BEGIN OF ty_map,
-           binary TYPE string,
-           tag    TYPE i,
-         END OF ty_map .
-  types:
-    ty_map_tt TYPE STANDARD TABLE OF ty_map WITH DEFAULT KEY .
+    TYPES:
+      BEGIN OF ty_map,
+        binary TYPE string,
+        tag    TYPE i,
+      END OF ty_map .
+    TYPES:
+      ty_map_tt TYPE STANDARD TABLE OF ty_map WITH DEFAULT KEY .
 
-  constants C_NEW_PACKET_FORMAT type STRING value '11' ##NO_TEXT.
+    CONSTANTS c_new_packet_format TYPE string VALUE '11' ##NO_TEXT.
 
-  class-methods BUILD_PACKET_HEADER
-    importing
-      !IV_TAG type ZIF_ABAPPGP_CONSTANTS=>TY_TAG
-    returning
-      value(RV_HEADER) type XSTRING .
-  class-methods GET_TAG_MAPPING
-    returning
-      value(RT_MAP) type TY_MAP_TT .
-  class-methods TAG_TO_BINARY
-    importing
-      !IV_TAG type I
-    returning
-      value(RV_STRING) type STRING .
-  class-methods BINARY_TO_TAG
-    importing
-      !IV_STRING type STRING
-    returning
-      value(RV_TAG) type I .
-  class-methods READ_PACKET_HEADER
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RV_TAG) type ZIF_ABAPPGP_CONSTANTS=>TY_TAG .
-private section.
+    CLASS-METHODS build_packet_header
+      IMPORTING
+        !iv_tag          TYPE zif_abappgp_constants=>ty_tag
+      RETURNING
+        VALUE(rv_header) TYPE xstring .
+    CLASS-METHODS get_tag_mapping
+      RETURNING
+        VALUE(rt_map) TYPE ty_map_tt .
+    CLASS-METHODS tag_to_binary
+      IMPORTING
+        !iv_tag          TYPE i
+      RETURNING
+        VALUE(rv_string) TYPE string .
+    CLASS-METHODS binary_to_tag
+      IMPORTING
+        !iv_string    TYPE string
+      RETURNING
+        VALUE(rv_tag) TYPE i .
+    CLASS-METHODS read_packet_header
+      IMPORTING
+        !io_stream    TYPE REF TO zcl_abappgp_stream
+      RETURNING
+        VALUE(rv_tag) TYPE zif_abappgp_constants=>ty_tag .
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -191,7 +191,7 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
 
     lv_bits = zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ).
-    ASSERT lv_bits(2) = C_NEW_PACKET_FORMAT. " no support for old packet format
+    ASSERT lv_bits(2) = c_new_packet_format. " no support for old packet format
     lv_bits = lv_bits+2.
     rv_tag = binary_to_tag( lv_bits ).
 

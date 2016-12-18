@@ -1,29 +1,29 @@
-class ZCL_ABAPPGP_MESSAGE_06 definition
-  public
-  create public .
+CLASS zcl_abappgp_message_06 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_MESSAGE .
+    INTERFACES zif_abappgp_message .
 
-  aliases FROM_ARMOR
-    for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
+    ALIASES from_armor
+      FOR zif_abappgp_message~from_armor .
 
-  methods CONSTRUCTOR
-    importing
-      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
-  class-methods SIGN
-    importing
-      !IV_DATA type XSTRING
-      !IV_TIME type I
-      !IV_ISSUER type XSTRING
-      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    returning
-      value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_MESSAGE_06 .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !it_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
+    CLASS-METHODS sign
+      IMPORTING
+        !iv_data            TYPE xstring
+        !iv_time            TYPE i
+        !iv_issuer          TYPE xstring
+        !io_private         TYPE REF TO zcl_abappgp_rsa_private_key
+      RETURNING
+        VALUE(ro_signature) TYPE REF TO zcl_abappgp_message_06 .
+  PROTECTED SECTION.
 
-  data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
-private section.
+    DATA mt_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

@@ -27,7 +27,8 @@ ENDFORM.
 
 FORM run3.
 
-  DATA: lv_op1    TYPE i,
+  DATA: lv_total  TYPE i VALUE 5000,
+        lv_op1    TYPE i,
         lv_op2    TYPE i,
         lv_tmp    TYPE i,
         lv_result TYPE i.
@@ -41,8 +42,6 @@ FORM run3.
     io_low = zcl_abappgp_integer=>from_string( '1111' )
     io_high = zcl_abappgp_integer=>from_string( '9999' ) ).
 
-
-  DATA: lv_total TYPE i VALUE 5000.
   DO lv_total TIMES.
     cl_progress_indicator=>progress_indicate(
       i_text               = 'Running'

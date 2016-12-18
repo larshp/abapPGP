@@ -110,7 +110,7 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
           lo_public  TYPE REF TO zcl_abappgp_rsa_public_key.
 
 
-    ASSERT io_p->is_lt( io_q ).
+    ASSERT io_p->is_lt( io_q ) = abap_true.
 
     CREATE OBJECT lo_one
       EXPORTING

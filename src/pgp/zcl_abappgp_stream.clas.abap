@@ -1,69 +1,69 @@
-class ZCL_ABAPPGP_STREAM definition
-  public
-  final
-  create public .
+CLASS zcl_abappgp_stream DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  methods CONSTRUCTOR
-    importing
-      !IV_DATA type XSTRING optional .
-  methods EAT_LENGTH
-    returning
-      value(RV_LENGTH) type I .
-  methods EAT_MPI
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods EAT_OCTET
-    returning
-      value(RV_OCTET) type XSTRING .
-  methods EAT_OCTETS
-    importing
-      !IV_COUNT type I
-    returning
-      value(RV_OCTETS) type XSTRING .
-  methods EAT_S2K
-    returning
-      value(RO_S2K) type ref to ZCL_ABAPPGP_STRING_TO_KEY .
-  methods EAT_STREAM
-    importing
-      !IV_OCTETS type I
-    returning
-      value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
-  methods EAT_TIME
-    returning
-      value(RV_TIME) type I .
-  methods GET_DATA
-    returning
-      value(RV_DATA) type XSTRING .
-  methods GET_LENGTH
-    returning
-      value(RV_LENGTH) type I .
-  methods WRITE_LENGTH
-    importing
-      !IV_LENGTH type I .
-  methods WRITE_MPI
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER .
-  methods WRITE_OCTET
-    importing
-      !IV_OCTET type XSEQUENCE .
-  methods WRITE_OCTETS
-    importing
-      !IV_OCTETS type XSEQUENCE .
-  methods WRITE_S2K
-    importing
-      !IO_S2K type ref to ZCL_ABAPPGP_STRING_TO_KEY .
-  methods WRITE_STREAM
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM .
-  methods WRITE_TIME
-    importing
-      !IV_TIME type I .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !iv_data TYPE xstring OPTIONAL .
+    METHODS eat_length
+      RETURNING
+        VALUE(rv_length) TYPE i .
+    METHODS eat_mpi
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS eat_octet
+      RETURNING
+        VALUE(rv_octet) TYPE xstring .
+    METHODS eat_octets
+      IMPORTING
+        !iv_count        TYPE i
+      RETURNING
+        VALUE(rv_octets) TYPE xstring .
+    METHODS eat_s2k
+      RETURNING
+        VALUE(ro_s2k) TYPE REF TO zcl_abappgp_string_to_key .
+    METHODS eat_stream
+      IMPORTING
+        !iv_octets       TYPE i
+      RETURNING
+        VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream .
+    METHODS eat_time
+      RETURNING
+        VALUE(rv_time) TYPE i .
+    METHODS get_data
+      RETURNING
+        VALUE(rv_data) TYPE xstring .
+    METHODS get_length
+      RETURNING
+        VALUE(rv_length) TYPE i .
+    METHODS write_length
+      IMPORTING
+        !iv_length TYPE i .
+    METHODS write_mpi
+      IMPORTING
+        !io_integer TYPE REF TO zcl_abappgp_integer .
+    METHODS write_octet
+      IMPORTING
+        !iv_octet TYPE xsequence .
+    METHODS write_octets
+      IMPORTING
+        !iv_octets TYPE xsequence .
+    METHODS write_s2k
+      IMPORTING
+        !io_s2k TYPE REF TO zcl_abappgp_string_to_key .
+    METHODS write_stream
+      IMPORTING
+        !io_stream TYPE REF TO zcl_abappgp_stream .
+    METHODS write_time
+      IMPORTING
+        !iv_time TYPE i .
+  PROTECTED SECTION.
 
-  data MV_DATA type XSTRING .
-private section.
+    DATA mv_data TYPE xstring .
+  PRIVATE SECTION.
 ENDCLASS.
 
 

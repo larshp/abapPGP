@@ -1,28 +1,28 @@
-class ZCL_ABAPPGP_MESSAGE_03 definition
-  public
-  create public .
+CLASS zcl_abappgp_message_03 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_MESSAGE .
+    INTERFACES zif_abappgp_message .
 
-  aliases FROM_ARMOR
-    for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
+    ALIASES from_armor
+      FOR zif_abappgp_message~from_armor .
 
-  methods CONSTRUCTOR
-    importing
-      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
-  methods DECRYPT
-    importing
-      !IV_KEY type STRING
-    returning
-      value(RO_PRIVATE) type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    raising
-      ZCX_ABAPPGP_INVALID_KEY .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !it_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
+    METHODS decrypt
+      IMPORTING
+        !iv_key           TYPE string
+      RETURNING
+        VALUE(ro_private) TYPE REF TO zcl_abappgp_rsa_private_key
+      RAISING
+        zcx_abappgp_invalid_key .
+  PROTECTED SECTION.
 
-  data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
-private section.
+    DATA mt_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
+  PRIVATE SECTION.
 ENDCLASS.
 
 
@@ -91,7 +91,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD ZIF_ABAPPGP_MESSAGE~TO_ARMOR.
+  METHOD zif_abappgp_message~to_armor.
 
 * todo
 
