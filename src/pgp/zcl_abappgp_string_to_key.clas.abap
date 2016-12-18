@@ -1,31 +1,31 @@
-CLASS zcl_abappgp_string_to_key DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+class ZCL_ABAPPGP_STRING_TO_KEY definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS from_stream
-      IMPORTING
-        !io_stream    TYPE REF TO zcl_abappgp_stream
-      RETURNING
-        VALUE(ro_s2k) TYPE REF TO zcl_abappgp_string_to_key .
-    METHODS constructor
-      IMPORTING
-        !iv_type  TYPE zif_abappgp_constants=>ty_s2k_type
-        !iv_hash  TYPE zif_abappgp_constants=>ty_algorithm_hash
-        !iv_salt  TYPE xsequence
-        !iv_count TYPE i .
-    METHODS dump
-      RETURNING
-        VALUE(rv_dump) TYPE string .
-    METHODS to_stream
-      RETURNING
-        VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream .
-    METHODS build_key
-      IMPORTING
-        !iv_password  TYPE string
-      RETURNING
-        VALUE(rv_key) TYPE xstring .
+  class-methods FROM_STREAM
+    importing
+      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
+    returning
+      value(RO_S2K) type ref to ZCL_ABAPPGP_STRING_TO_KEY .
+  methods CONSTRUCTOR
+    importing
+      !IV_TYPE type ZIF_ABAPPGP_CONSTANTS=>TY_S2K_TYPE
+      !IV_HASH type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH
+      !IV_SALT type XSEQUENCE
+      !IV_COUNT type I .
+  methods DUMP
+    returning
+      value(RV_DUMP) type STRING .
+  methods TO_STREAM
+    returning
+      value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
+  methods BUILD_KEY
+    importing
+      !IV_PASSWORD type CLIKE
+    returning
+      value(RV_KEY) type XSTRING .
   PROTECTED SECTION.
 
     DATA mv_type TYPE zif_abappgp_constants=>ty_s2k_type .
@@ -42,15 +42,17 @@ CLASS ZCL_ABAPPGP_STRING_TO_KEY IMPLEMENTATION.
 
   METHOD build_key.
 
-    DATA: lv_length TYPE i,
-          lv_pass   TYPE xstring,
-          lv_input  TYPE xstring.
+    DATA: lv_length   TYPE i,
+          lv_pass     TYPE xstring,
+          lv_password TYPE string,
+          lv_input    TYPE xstring.
 
 
     ASSERT mv_type = zif_abappgp_constants=>c_s2k_type-iterated_salted.
     ASSERT mv_hash = zif_abappgp_constants=>c_algorithm_hash-sha256.
 
-    lv_pass = zcl_abappgp_convert=>string_to_utf8( iv_password ).
+    lv_password = iv_password.
+    lv_pass = zcl_abappgp_convert=>string_to_utf8( lv_password ).
 
     CASE mv_count.
       WHEN '96'.

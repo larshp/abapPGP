@@ -1,24 +1,29 @@
-CLASS zcl_abappgp_message_03 DEFINITION
-  PUBLIC
-  CREATE PUBLIC .
+class ZCL_ABAPPGP_MESSAGE_03 definition
+  public
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    INTERFACES zif_abappgp_message .
+  interfaces ZIF_ABAPPGP_MESSAGE .
 
-    ALIASES from_armor
-      FOR zif_abappgp_message~from_armor .
+  aliases FROM_ARMOR
+    for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
 
-    METHODS constructor
-      IMPORTING
-        !it_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
-    METHODS decrypt
-      IMPORTING
-        !iv_key           TYPE string
-      RETURNING
-        VALUE(ro_private) TYPE REF TO zcl_abappgp_rsa_private_key
-      RAISING
-        zcx_abappgp_invalid_key .
+  methods CONSTRUCTOR
+    importing
+      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
+  methods DECRYPT
+    importing
+      !IV_PASSWORD type ZABAPPGP_PASSWORD
+    returning
+      value(RO_PRIVATE) type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
+    raising
+      ZCX_ABAPPGP_INVALID_KEY .
+  class-methods FROM_STORE
+    importing
+      !IV_KEY_ID type ZABAPPGP_KEY_ID
+    returning
+      value(RO_MESSAGE) type ref to ZCL_ABAPPGP_MESSAGE_03 .
   PROTECTED SECTION.
 
     DATA mt_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
@@ -51,7 +56,23 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
 
     lo_secret_key ?= li_packet.
 
-    ro_private = lo_secret_key->decrypt( iv_key ).
+    ro_private = lo_secret_key->decrypt( iv_password ).
+
+  ENDMETHOD.
+
+
+  METHOD from_store.
+
+    DATA: lv_key TYPE string.
+
+
+    SELECT SINGLE private_key
+      FROM zabappgp_keys
+      INTO lv_key
+      WHERE key_id = iv_key_id.
+    ASSERT sy-subrc = 0.
+
+    ro_message ?= zcl_abappgp_message_factory=>create( lv_key ).
 
   ENDMETHOD.
 

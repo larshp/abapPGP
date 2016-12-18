@@ -167,7 +167,7 @@ CLASS ZCL_ABAPPGP_UNIT_TEST IMPLEMENTATION.
 
   METHOD message_identity.
 
-    DATA: lv_result TYPE xstring.
+    DATA: lv_result TYPE string.
 
 
     ri_message = zcl_abappgp_message_factory=>create( iv_armor ).

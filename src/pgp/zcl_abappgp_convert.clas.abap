@@ -1,45 +1,45 @@
-CLASS zcl_abappgp_convert DEFINITION
-  PUBLIC
-  FINAL
-  CREATE PUBLIC .
+class ZCL_ABAPPGP_CONVERT definition
+  public
+  final
+  create public .
 
-  PUBLIC SECTION.
+public section.
 
-    CLASS-METHODS base64_decode
-      IMPORTING
-        !iv_encoded   TYPE string
-      RETURNING
-        VALUE(rv_bin) TYPE xstring .
-    CLASS-METHODS base64_encode
-      IMPORTING
-        !iv_bin           TYPE xstring
-      RETURNING
-        VALUE(rv_encoded) TYPE string .
-    CLASS-METHODS bits_to_big_integer
-      IMPORTING
-        !iv_bits          TYPE string
-      RETURNING
-        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
-    CLASS-METHODS bits_to_integer
-      IMPORTING
-        !iv_bits      TYPE string
-      RETURNING
-        VALUE(rv_int) TYPE i .
-    CLASS-METHODS string_to_utf8
-      IMPORTING
-        !iv_data       TYPE string
-      RETURNING
-        VALUE(rv_data) TYPE xstring .
-    CLASS-METHODS to_bits
-      IMPORTING
-        !iv_data       TYPE xsequence
-      RETURNING
-        VALUE(rv_bits) TYPE string .
-    CLASS-METHODS utf8_to_string
-      IMPORTING
-        !iv_data       TYPE xstring
-      RETURNING
-        VALUE(rv_data) TYPE string .
+  class-methods BASE64_DECODE
+    importing
+      !IV_ENCODED type STRING
+    returning
+      value(RV_BIN) type XSTRING .
+  class-methods BASE64_ENCODE
+    importing
+      !IV_BIN type XSTRING
+    returning
+      value(RV_ENCODED) type STRING .
+  class-methods BITS_TO_BIG_INTEGER
+    importing
+      !IV_BITS type STRING
+    returning
+      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
+  class-methods BITS_TO_INTEGER
+    importing
+      !IV_BITS type STRING
+    returning
+      value(RV_INT) type I .
+  class-methods STRING_TO_UTF8
+    importing
+      !IV_DATA type CLIKE
+    returning
+      value(RV_DATA) type XSTRING .
+  class-methods TO_BITS
+    importing
+      !IV_DATA type XSEQUENCE
+    returning
+      value(RV_BITS) type STRING .
+  class-methods UTF8_TO_STRING
+    importing
+      !IV_DATA type XSTRING
+    returning
+      value(RV_DATA) type STRING .
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
