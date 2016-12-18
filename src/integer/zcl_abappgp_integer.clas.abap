@@ -1,198 +1,198 @@
-class ZCL_ABAPPGP_INTEGER definition
-  public
-  create public
+CLASS zcl_abappgp_integer DEFINITION
+  PUBLIC
+  CREATE PUBLIC
 
-  global friends ZCL_ABAPPGP_BINARY_INTEGER .
+  GLOBAL FRIENDS zcl_abappgp_binary_integer .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods CLASS_CONSTRUCTOR .
-  class-methods EXTENDED_GCD
-    importing
-      !IO_A type ref to ZCL_ABAPPGP_INTEGER
-      !IO_B type ref to ZCL_ABAPPGP_INTEGER
-    exporting
-      !EO_COEFF1 type ref to ZCL_ABAPPGP_INTEGER
-      !EO_COEFF2 type ref to ZCL_ABAPPGP_INTEGER
-      !EO_GCD type ref to ZCL_ABAPPGP_INTEGER
-      !EO_QUO1 type ref to ZCL_ABAPPGP_INTEGER
-      !EO_QUO2 type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods FROM_HEX
-    importing
-      !IV_HEX type XSEQUENCE
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods FROM_HIGH_LENGTH
-    importing
-      !IV_COUNT type I
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods FROM_LOW_LENGTH
-    importing
-      !IV_COUNT type I
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  class-methods FROM_STRING
-    importing
-      !IV_INTEGER type CLIKE
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods ADD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods CLONE
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods CONSTRUCTOR
-    importing
-      !IV_INTEGER type I default 1 .
-  methods DIVIDE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods DIVIDE_BY_10
-    importing
-      !IV_TIMES type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods DIVIDE_BY_2
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods DIVIDE_BY_INT
-    importing
-      !IV_INTEGER type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods DIVIDE_KNUTH
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GCD
-    importing
-      !IO_INPUT type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods GET_BINARY_LENGTH
-    returning
-      value(RV_LENGTH) type I .
-  methods GET_STRING_LENGTH
-    returning
-      value(RV_LENGTH) type I .
-  methods IS_EQ
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_EVEN
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_GE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_GT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_LE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_LT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_NEGATIVE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ODD
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ONE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_POSITIVE
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_TWO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods IS_ZERO
-    returning
-      value(RV_BOOL) type ABAP_BOOL .
-  methods MOD
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MODULAR_POW
-    importing
-      !IO_EXPONENT type ref to ZCL_ABAPPGP_INTEGER
-      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MODULAR_POW_MONTGOMERY
-    importing
-      !IO_EXPONENT type ref to ZCL_ABAPPGP_INTEGER
-      !IO_MODULUS type ref to ZCL_ABAPPGP_INTEGER
-      !IV_SHOW_PROGRESS type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MOD_2
-    returning
-      value(RV_RESULT) type I .
-  methods MOD_INVERSE
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MULTIPLY
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MULTIPLY_10
-    importing
-      !IV_TIMES type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MULTIPLY_INT
-    importing
-      !IV_INTEGER type I
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods MULTIPLY_KARATSUBA
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_INTEGER) type ref to ZCL_ABAPPGP_INTEGER .
-  methods POWER
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods SUBTRACT
-    importing
-      !IO_INTEGER type ref to ZCL_ABAPPGP_INTEGER
-    returning
-      value(RO_RESULT) type ref to ZCL_ABAPPGP_INTEGER .
-  methods TO_HEX
-    returning
-      value(RV_HEX) type XSTRING .
-  methods TO_INTEGER
-    returning
-      value(RV_INTEGER) type I .
-  methods TO_STRING
-    returning
-      value(RV_INTEGER) type STRING .
+    CLASS-METHODS class_constructor .
+    CLASS-METHODS extended_gcd
+      IMPORTING
+        !io_a      TYPE REF TO zcl_abappgp_integer
+        !io_b      TYPE REF TO zcl_abappgp_integer
+      EXPORTING
+        !eo_coeff1 TYPE REF TO zcl_abappgp_integer
+        !eo_coeff2 TYPE REF TO zcl_abappgp_integer
+        !eo_gcd    TYPE REF TO zcl_abappgp_integer
+        !eo_quo1   TYPE REF TO zcl_abappgp_integer
+        !eo_quo2   TYPE REF TO zcl_abappgp_integer .
+    CLASS-METHODS from_hex
+      IMPORTING
+        !iv_hex           TYPE xsequence
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    CLASS-METHODS from_high_length
+      IMPORTING
+        !iv_count         TYPE i
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    CLASS-METHODS from_low_length
+      IMPORTING
+        !iv_count         TYPE i
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    CLASS-METHODS from_string
+      IMPORTING
+        !iv_integer       TYPE clike
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS add
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS clone
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS constructor
+      IMPORTING
+        !iv_integer TYPE i DEFAULT 1 .
+    METHODS divide
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS divide_by_10
+      IMPORTING
+        !iv_times        TYPE i
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS divide_by_2
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS divide_by_int
+      IMPORTING
+        !iv_integer      TYPE i
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS divide_knuth
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS gcd
+      IMPORTING
+        !io_input         TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS get_binary_length
+      RETURNING
+        VALUE(rv_length) TYPE i .
+    METHODS get_string_length
+      RETURNING
+        VALUE(rv_length) TYPE i .
+    METHODS is_eq
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_even
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_ge
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_gt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_le
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_lt
+      IMPORTING
+        !io_integer    TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_negative
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_odd
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_one
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_positive
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_two
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS is_zero
+      RETURNING
+        VALUE(rv_bool) TYPE abap_bool .
+    METHODS mod
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS modular_pow
+      IMPORTING
+        !io_exponent     TYPE REF TO zcl_abappgp_integer
+        !io_modulus      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS modular_pow_montgomery
+      IMPORTING
+        !io_exponent      TYPE REF TO zcl_abappgp_integer
+        !io_modulus       TYPE REF TO zcl_abappgp_integer
+        !iv_show_progress TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(ro_result)  TYPE REF TO zcl_abappgp_integer .
+    METHODS mod_2
+      RETURNING
+        VALUE(rv_result) TYPE i .
+    METHODS mod_inverse
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS multiply
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS multiply_10
+      IMPORTING
+        !iv_times        TYPE i
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS multiply_int
+      IMPORTING
+        !iv_integer      TYPE i
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS multiply_karatsuba
+      IMPORTING
+        !io_integer       TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_integer) TYPE REF TO zcl_abappgp_integer .
+    METHODS power
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS subtract
+      IMPORTING
+        !io_integer      TYPE REF TO zcl_abappgp_integer
+      RETURNING
+        VALUE(ro_result) TYPE REF TO zcl_abappgp_integer .
+    METHODS to_hex
+      RETURNING
+        VALUE(rv_hex) TYPE xstring .
+    METHODS to_integer
+      RETURNING
+        VALUE(rv_integer) TYPE i .
+    METHODS to_string
+      RETURNING
+        VALUE(rv_integer) TYPE string .
   PROTECTED SECTION.
 
     TYPES ty_split TYPE i .
@@ -1114,11 +1114,10 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     WHILE lo_exponent->is_zero( ) = abap_false.
       IF iv_show_progress = abap_true.
         cl_progress_indicator=>progress_indicate(
-          EXPORTING
-            i_text               = 'Calculating'
-            i_processed          = lv_total - lo_exponent->get_binary_length( )
-            i_total              = lv_total
-            i_output_immediately = abap_true ).
+          i_text               = 'Calculating'
+          i_processed          = lv_total - lo_exponent->get_binary_length( )
+          i_total              = lv_total
+          i_output_immediately = abap_true ).
       ENDIF.
 
       IF lo_exponent->mod_2( ) = 1.

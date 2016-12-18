@@ -1,32 +1,32 @@
-class ZCL_ABAPPGP_MESSAGE_06 definition
-  public
-  create public .
+CLASS zcl_abappgp_message_06 DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  interfaces ZIF_ABAPPGP_MESSAGE .
+    INTERFACES zif_abappgp_message .
 
-  aliases FROM_ARMOR
-    for ZIF_ABAPPGP_MESSAGE~FROM_ARMOR .
-  aliases TO_ARMOR
-    for ZIF_ABAPPGP_MESSAGE~TO_ARMOR .
+    ALIASES from_armor
+      FOR zif_abappgp_message~from_armor .
+    ALIASES to_armor
+      FOR zif_abappgp_message~to_armor .
 
-  methods CONSTRUCTOR
-    importing
-      !IT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST
-      !IT_HEADERS type STRING_TABLE .
-  class-methods SIGN
-    importing
-      !IV_DATA type XSTRING
-      !IV_TIME type I optional
-      !IV_ISSUER type XSEQUENCE
-      !IO_PRIVATE type ref to ZCL_ABAPPGP_RSA_PRIVATE_KEY
-    returning
-      value(RO_SIGNATURE) type ref to ZCL_ABAPPGP_MESSAGE_06 .
-protected section.
+    METHODS constructor
+      IMPORTING
+        !it_packet_list TYPE zif_abappgp_constants=>ty_packet_list
+        !it_headers     TYPE string_table .
+    CLASS-METHODS sign
+      IMPORTING
+        !iv_data            TYPE xstring
+        !iv_time            TYPE i OPTIONAL
+        !iv_issuer          TYPE xsequence
+        !io_private         TYPE REF TO zcl_abappgp_rsa_private_key
+      RETURNING
+        VALUE(ro_signature) TYPE REF TO zcl_abappgp_message_06 .
+  PROTECTED SECTION.
 
-  data MT_HEADERS type STRING_TABLE .
-  data MT_PACKET_LIST type ZIF_ABAPPGP_CONSTANTS=>TY_PACKET_LIST .
+    DATA mt_headers TYPE string_table .
+    DATA mt_packet_list TYPE zif_abappgp_constants=>ty_packet_list .
   PRIVATE SECTION.
 ENDCLASS.
 

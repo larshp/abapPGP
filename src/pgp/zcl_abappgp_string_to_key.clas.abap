@@ -1,31 +1,31 @@
-class ZCL_ABAPPGP_STRING_TO_KEY definition
-  public
-  create public .
+CLASS zcl_abappgp_string_to_key DEFINITION
+  PUBLIC
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  class-methods FROM_STREAM
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RO_S2K) type ref to ZCL_ABAPPGP_STRING_TO_KEY .
-  methods CONSTRUCTOR
-    importing
-      !IV_TYPE type ZIF_ABAPPGP_CONSTANTS=>TY_S2K_TYPE
-      !IV_HASH type ZIF_ABAPPGP_CONSTANTS=>TY_ALGORITHM_HASH
-      !IV_SALT type XSEQUENCE
-      !IV_COUNT type I .
-  methods DUMP
-    returning
-      value(RV_DUMP) type STRING .
-  methods TO_STREAM
-    returning
-      value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
-  methods BUILD_KEY
-    importing
-      !IV_PASSWORD type CLIKE
-    returning
-      value(RV_KEY) type XSTRING .
+    CLASS-METHODS from_stream
+      IMPORTING
+        !io_stream    TYPE REF TO zcl_abappgp_stream
+      RETURNING
+        VALUE(ro_s2k) TYPE REF TO zcl_abappgp_string_to_key .
+    METHODS constructor
+      IMPORTING
+        !iv_type  TYPE zif_abappgp_constants=>ty_s2k_type
+        !iv_hash  TYPE zif_abappgp_constants=>ty_algorithm_hash
+        !iv_salt  TYPE xsequence
+        !iv_count TYPE i .
+    METHODS dump
+      RETURNING
+        VALUE(rv_dump) TYPE string .
+    METHODS to_stream
+      RETURNING
+        VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream .
+    METHODS build_key
+      IMPORTING
+        !iv_password  TYPE clike
+      RETURNING
+        VALUE(rv_key) TYPE xstring .
   PROTECTED SECTION.
 
     DATA mv_type TYPE zif_abappgp_constants=>ty_s2k_type .
