@@ -452,8 +452,8 @@
     <item>
      <ID>R</ID>
      <KEY/>
-     <ENTRY>Dump PGP message</ENTRY>
-     <LENGTH>16</LENGTH>
+     <ENTRY>abapPGP - Dump PGP message</ENTRY>
+     <LENGTH>26</LENGTH>
      <SPLIT/>
     </item>
    </TPOOL>
