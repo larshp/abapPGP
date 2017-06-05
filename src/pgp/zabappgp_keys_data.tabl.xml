@@ -63,10 +63,6 @@
      <CHECKTABLE>USR02</CHECKTABLE>
     </DD08V>
    </DD08V_TABLE>
-   <DD12V/>
-   <DD17V/>
-   <DD35V_TALE/>
-   <DD36M/>
   </asx:values>
  </asx:abap>
 </abapGit>

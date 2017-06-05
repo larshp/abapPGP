@@ -109,7 +109,6 @@
        <HEIGHT>041</HEIGHT>
        <C_RESIZE_V>X</C_RESIZE_V>
        <C_LINE_MIN>005</C_LINE_MIN>
-       <C_COLN_MIN>001</C_COLN_MIN>
       </RPY_DYCATT>
       <RPY_DYCATT>
        <TYPE>CUST_CTRL</TYPE>
@@ -121,7 +120,6 @@
        <HEIGHT>041</HEIGHT>
        <C_RESIZE_V>X</C_RESIZE_V>
        <C_LINE_MIN>005</C_LINE_MIN>
-       <C_COLN_MIN>001</C_COLN_MIN>
       </RPY_DYCATT>
      </CONTAINERS>
      <FIELDS>
@@ -190,6 +188,8 @@
        <FORMAT>CHAR</FORMAT>
        <FROM_DICT>X</FROM_DICT>
        <PARAM_ID>XUS</PARAM_ID>
+       <SET_PARAM>X</SET_PARAM>
+       <GET_PARAM>X</GET_PARAM>
        <FOREIGNKEY>X</FOREIGNKEY>
        <INPUT_FLD>X</INPUT_FLD>
        <OUTPUT_FLD>X</OUTPUT_FLD>
