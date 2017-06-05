@@ -3,6 +3,9 @@
 # abapPGP
 ABAP implementation of OpenPGP
 
+# Requirements
+https://github.com/Sumu-Ning/AES
+
 # Work in progresss
 
 Current scope is signing, see https://github.com/larshp/abapGit/issues/358
