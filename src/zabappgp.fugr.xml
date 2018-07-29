@@ -10,7 +10,6 @@
    <FUNCTIONS>
     <item>
      <FUNCNAME>Z_ABAPPGP_CHECK_PRIME</FUNCNAME>
-     <INCLUDE>LZABAPPGPU01</INCLUDE>
      <REMOTE_CALL>R</REMOTE_CALL>
      <SHORT_TEXT>Check if integer is prime or not</SHORT_TEXT>
      <IMPORT>
