@@ -1,22 +1,21 @@
-interface ZIF_ABAPPGP_SUBPACKET
-  public .
+INTERFACE zif_abappgp_subpacket PUBLIC.
 
 
-  class-methods FROM_STREAM
-    importing
-      !IO_STREAM type ref to ZCL_ABAPPGP_STREAM
-    returning
-      value(RI_PACKET) type ref to ZIF_ABAPPGP_SUBPACKET .
-  methods DUMP
-    returning
-      value(RV_DUMP) type STRING .
-  methods GET_NAME
-    returning
-      value(RV_NAME) type STRING .
-  methods GET_TYPE
-    returning
-      value(RV_TYPE) type ZIF_ABAPPGP_CONSTANTS=>TY_SUB_TYPE .
-  methods TO_STREAM
-    returning
-      value(RO_STREAM) type ref to ZCL_ABAPPGP_STREAM .
-endinterface.
+  CLASS-METHODS from_stream
+    IMPORTING
+      !io_stream       TYPE REF TO zcl_abappgp_stream
+    RETURNING
+      VALUE(ri_packet) TYPE REF TO zif_abappgp_subpacket .
+  METHODS dump
+    RETURNING
+      VALUE(rv_dump) TYPE string .
+  METHODS get_name
+    RETURNING
+      VALUE(rv_name) TYPE string .
+  METHODS get_type
+    RETURNING
+      VALUE(rv_type) TYPE zif_abappgp_constants=>ty_sub_type .
+  METHODS to_stream
+    RETURNING
+      VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream .
+ENDINTERFACE.

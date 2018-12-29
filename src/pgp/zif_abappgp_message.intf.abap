@@ -1,16 +1,15 @@
-interface ZIF_ABAPPGP_MESSAGE
-  public .
+INTERFACE zif_abappgp_message PUBLIC.
 
 
-  class-methods FROM_ARMOR
-    importing
-      !IO_ARMOR type ref to ZCL_ABAPPGP_ARMOR
-    returning
-      value(RI_MESSAGE) type ref to ZIF_ABAPPGP_MESSAGE .
-  methods DUMP
-    returning
-      value(RV_DUMP) type STRING .
-  methods TO_ARMOR
-    returning
-      value(RO_ARMOR) type ref to ZCL_ABAPPGP_ARMOR .
-endinterface.
+  CLASS-METHODS from_armor
+    IMPORTING
+      !io_armor         TYPE REF TO zcl_abappgp_armor
+    RETURNING
+      VALUE(ri_message) TYPE REF TO zif_abappgp_message .
+  METHODS dump
+    RETURNING
+      VALUE(rv_dump) TYPE string .
+  METHODS to_armor
+    RETURNING
+      VALUE(ro_armor) TYPE REF TO zcl_abappgp_armor .
+ENDINTERFACE.
