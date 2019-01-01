@@ -8,7 +8,7 @@
   "rules": {
     "7bit_ascii": {
       "enabled": true,
-      "exclude": []
+      "exclude": ["\\/types\\/[\\w\\.]+$"]
     },
     "breakpoint": {
       "enabled": false,
@@ -16,7 +16,7 @@
     },
     "class_attribute_names": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "ignoreExceptions": true,
       "statics": "^G._.*$",
       "instance": "^M._.*$"
@@ -27,7 +27,7 @@
     },
     "definitions_top": {
       "enabled": true,
-      "exclude": []
+      "exclude": ["\\/types\\/[\\w\\.]+$"]
     },
     "empty_statement": {
       "enabled": true,
@@ -43,17 +43,17 @@
     },
     "functional_writing": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "ignoreExceptions": true
     },
     "keywords_upper": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "ignoreExceptions": true
     },
     "line_length": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "length": 120
     },
     "check_variables": {
@@ -62,7 +62,7 @@
     },
     "line_only_punc": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "ignoreExceptions": true
     },
     "local_class_naming": {
@@ -73,7 +73,7 @@
     },
     "local_variable_names": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "expectedData": "^L._.*$",
       "expectedConstant": "^LC_.*$",
       "expectedFS": "^<L._.*>$"
@@ -84,12 +84,12 @@
     },
     "method_length": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "statements": 200
     },
     "method_parameter_names": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "ignoreExceptions": true,
       "importing": "^I._.*$",
       "returning": "^R._.*$",
@@ -110,12 +110,12 @@
     },
     "indentation": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "ignoreExceptions": true
     },
     "obsolete_statement": {
       "enabled": true,
-      "exclude": [],
+      "exclude": ["\\/types\\/[\\w\\.]+$"],
       "refresh": true,
       "compute": true,
       "add": true,
@@ -156,7 +156,7 @@
     },
     "start_at_tab": {
       "enabled": true,
-      "exclude": []
+      "exclude": ["\\/types\\/[\\w\\.]+$"]
     },
     "whitespace_end": {
       "enabled": true,
