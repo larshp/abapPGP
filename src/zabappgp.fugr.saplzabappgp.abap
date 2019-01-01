@@ -1,8 +1,8 @@
 *******************************************************************
 *   System-defined Include-files.                                 *
 *******************************************************************
-  INCLUDE LZABAPPGPTOP.                      " Global Data
-  INCLUDE LZABAPPGPUXX.                      " Function Modules
+INCLUDE lzabappgptop.                      " Global Data
+INCLUDE lzabappgpuxx.                      " Function Modules
 
 *******************************************************************
 *   User-defined Include-files (if necessary).                    *

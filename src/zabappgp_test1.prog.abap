@@ -25,7 +25,7 @@ FORM run.
       cant_init_different_pbt_groups = 6
       OTHERS                         = 7.
   IF sy-subrc <> 0.
-    BREAK-POINT.
+    WRITE: 'Error', sy-subrc.
   ENDIF.
 
 *CALL FUNCTION 'ZFOOBAR' STARTING NEW TASK TASKNAME

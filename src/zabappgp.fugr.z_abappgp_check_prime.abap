@@ -7,8 +7,8 @@ FUNCTION z_abappgp_check_prime.
 *"     VALUE(EV_PRIME) TYPE  FLAG
 *"----------------------------------------------------------------------
 
+* todo?
 
-
-
+  RETURN.
 
 ENDFUNCTION.

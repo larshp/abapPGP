@@ -38,7 +38,7 @@ CLASS ZCL_ABAPPGP_TIME IMPLEMENTATION.
 
   METHOD get_unix.
 
-    CONSTANTS: c_epoch TYPE datum VALUE '19700101'.
+    CONSTANTS: lc_epoch TYPE datum VALUE '19700101'.
 
     DATA: lv_i       TYPE i,
           lv_tz      TYPE tznzone,
@@ -46,7 +46,7 @@ CLASS ZCL_ABAPPGP_TIME IMPLEMENTATION.
           lv_utcsign TYPE tznutcsign.
 
 
-    lv_i = sy-datum - c_epoch.
+    lv_i = sy-datum - lc_epoch.
     lv_i = lv_i * 86400.
     lv_i = lv_i + sy-uzeit.
 
