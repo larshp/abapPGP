@@ -1,4 +1,4 @@
-[![abaplint](https://abaplint.org/badges/larshp/abapPGP)](http://abaplint.org/project/larshp/abapPGP)
+[![abaplint](https://app.abaplint.org/badges/larshp/abapPGP)](http://app.abaplint.org/project/larshp/abapPGP)
 
 # abapPGP
 ABAP implementation of OpenPGP
