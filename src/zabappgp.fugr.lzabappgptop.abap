@@ -1,3 +1,3 @@
-FUNCTION-POOL ZABAPPGP.                     "MESSAGE-ID ..
+FUNCTION-POOL zabappgp.                     "MESSAGE-ID ..
 
 * INCLUDE LZABAPPGPD...                      " Local class definition

@@ -89,7 +89,7 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
       rv_length = ( rv_length - 192 ) * 256 + eat_octet( ) + 192.
     ELSEIF rv_length = 255.
       ASSERT eat_octet( ) = '00'. " will overflow in ABAP integer, as it is signed
-      rv_length = eat_octet( ) * 65536 + eat_octet( ) * 256 +  eat_octet( ).
+      rv_length = eat_octet( ) * 65536 + eat_octet( ) * 256 + eat_octet( ).
     ELSE.
       ASSERT 0 = 1.
     ENDIF.

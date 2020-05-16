@@ -52,7 +52,7 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
 
     ASSERT xstrlen( iv_data ) > 0.
 
-    lt_table = zcl_abappgp_hash=>crc24_init( ).
+    lt_table = crc24_init( ).
 
     rv_hash = lc_init.
 

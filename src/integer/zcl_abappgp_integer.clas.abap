@@ -1,7 +1,6 @@
 CLASS zcl_abappgp_integer DEFINITION
   PUBLIC
   CREATE PUBLIC
-
   GLOBAL FRIENDS zcl_abappgp_binary_integer .
 
   PUBLIC SECTION.
@@ -611,7 +610,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDIF.
 
 * D5 - Test remainder
-      lo_tmp = zcl_abappgp_integer=>from_string( |{ lv_q_hat }| ).
+      lo_tmp = from_string( |{ lv_q_hat }| ).
       lo_q = lo_q->add( lo_tmp->multiply_10( lv_shift * 4 ) ).
 
 * D7 - Loop on j
@@ -1324,7 +1323,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     lv_str = iv_integer.
     CONDENSE lv_str.
 
-    ro_result = multiply( zcl_abappgp_integer=>from_string( lv_str ) ).
+    ro_result = multiply( from_string( lv_str ) ).
 
   ENDMETHOD.
 
