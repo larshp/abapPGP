@@ -15,8 +15,7 @@ CLASS ltcl_from_hex IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lv_hex TYPE xstring,
-          lo_int TYPE REF TO zcl_abappgp_integer.
+    DATA: lo_int TYPE REF TO zcl_abappgp_integer.
 
 
     lo_int = zcl_abappgp_integer=>from_hex( iv_hex ).

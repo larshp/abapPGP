@@ -10,8 +10,7 @@ CLASS ltcl_sign IMPLEMENTATION.
 
   METHOD sign01.
 
-    DATA: lo_private     TYPE REF TO zcl_abappgp_rsa_private_key,
-          lv_text        TYPE string,
+    DATA: lv_text        TYPE string,
           lv_actual      TYPE xstring,
           lv_expected    TYPE xstring,
           lo_stream      TYPE REF TO zcl_abappgp_stream,

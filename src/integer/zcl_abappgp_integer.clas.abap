@@ -1584,7 +1584,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
     DATA: lo_this TYPE REF TO zcl_abappgp_integer,
           lo_max  TYPE REF TO zcl_abappgp_integer,
-          lo_tmp  TYPE REF TO zcl_abappgp_integer,
           lv_hex  TYPE x LENGTH 1.
 
 
