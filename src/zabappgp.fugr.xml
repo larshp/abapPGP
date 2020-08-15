@@ -28,13 +28,11 @@
       <RSFDO>
        <PARAMETER>IV_INTEGER</PARAMETER>
        <KIND>P</KIND>
-       <INDEX> 001</INDEX>
       </RSFDO>
       <RSFDO>
        <PARAMETER>EV_PRIME</PARAMETER>
        <KIND>P</KIND>
        <STEXT>General Flag</STEXT>
-       <INDEX> 002</INDEX>
       </RSFDO>
      </DOCUMENTATION>
     </item>
