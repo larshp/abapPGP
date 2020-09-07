@@ -90,7 +90,6 @@ CLASS lcl_screen_2000 IMPLEMENTATION.
 
     DATA: lv_message   TYPE string,
           lv_result    TYPE string,
-          lo_message   TYPE REF TO zcl_abappgp_rsa_private_key,
           lo_private   TYPE REF TO zcl_abappgp_rsa_private_key,
           lo_signature TYPE REF TO zcl_abappgp_message_06.
 

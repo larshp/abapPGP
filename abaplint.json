@@ -162,12 +162,7 @@
     "main_file_contents": true,
     "max_one_statement": true,
     "message_exists": true,
-    "method_length": {
-      "statements": 100,
-      "errorWhenEmpty": false,
-      "ignoreTestClasses": false,
-      "exclude": ["integer"]
-    },
+    "method_length": false,
     "method_parameter_names": {
       "patternKind": "required",
       "ignoreNames": [],
@@ -216,6 +211,7 @@
       "compute": true,
       "add": true,
       "withHeaderLine": true,
+      "fieldSymbolStructure": true,
       "subtract": true,
       "multiply": true,
       "move": true,
