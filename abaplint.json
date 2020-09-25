@@ -24,6 +24,16 @@
     "globalMacros": []
   },
   "rules": {
+    "check_subrc": false,
+    "cyclomatic_complexity": true,
+    "forbidden_pseudo_and_pragma": false,
+    "identical_conditions": true,
+    "line_break_style": false,
+    "many_parenthesis": true,
+    "prefer_is_not": false,
+    "unused_types": true,
+    "use_bool_expression": false,
+    "use_line_exists": false,
     "begin_single_include": true,
     "downport": false,
     "forbidden_void_type": false,

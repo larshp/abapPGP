@@ -8,7 +8,6 @@ INTERFACE zif_abappgp_constants PUBLIC.
   TYPES ty_version TYPE x LENGTH 1.
   TYPES ty_tag TYPE i .
   TYPES ty_sub_type TYPE i .
-  TYPES ty_message_type TYPE i .
 
   TYPES ty_packet_list TYPE STANDARD TABLE OF REF TO zif_abappgp_packet WITH DEFAULT KEY .
   TYPES ty_algorithms TYPE STANDARD TABLE OF ty_algorithm_pub WITH DEFAULT KEY.
