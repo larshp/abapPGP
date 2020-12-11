@@ -4,7 +4,6 @@ CLASS zcl_abappgp_integer2 DEFINITION
 
   PUBLIC SECTION.
 
-    TYPE-POOLS abap .
     METHODS is_gt
       IMPORTING
         !io_integer    TYPE REF TO zcl_abappgp_integer2
