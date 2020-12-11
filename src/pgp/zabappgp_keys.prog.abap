@@ -157,7 +157,7 @@ CLASS lcl_overview IMPLEMENTATION.
     CASE gv_ok_code.
       WHEN 'CREATE'.
         CLEAR gv_ok_code.
-        lcl_key=>call( iv_mode = c_mode-create ).
+        lcl_key=>call( c_mode-create ).
         refresh( ).
       WHEN 'GENERATE'.
         CLEAR gv_ok_code.
