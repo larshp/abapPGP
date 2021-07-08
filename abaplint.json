@@ -263,6 +263,7 @@
       "omitMeInstanceCalls": true
     },
     "release_idoc": true,
+    "unused_ddic": true,
     "remove_descriptions": false,
     "rfc_error_handling": true,
     "selection_screen_naming": {
