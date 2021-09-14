@@ -42,7 +42,7 @@
     "forbidden_pseudo_and_pragma": false,
     "identical_conditions": true,
     "line_break_style": false,
-    "many_parenthesis": true,
+    "many_parentheses": true,
     "prefer_is_not": false,
     "unused_types": true,
     "use_bool_expression": false,
@@ -64,13 +64,8 @@
     "ambiguous_statement": false,
     "avoid_use": {
       "define": false,
-      "endselect": true,
-      "execSQL": true,
-      "kernelCall": true,
       "describeLines": true,
-      "communication": true,
       "statics": true,
-      "systemCall": true,
       "defaultKey": false,
       "break": false
     },
@@ -139,12 +134,14 @@
     "if_in_if": true,
     "implement_methods": true,
     "in_statement_indentation": {
+      "blockStatements": 0,
       "ignoreExceptions": true
     },
     "indentation": {
       "ignoreExceptions": true,
       "alignTryCatch": false,
       "globalClassSkipFirst": false,
+      "selectionScreenBlockIndentation": true,
       "ignoreGlobalClassDefinition": false,
       "ignoreGlobalInterface": false
     },
@@ -234,6 +231,15 @@
       "refresh": true,
       "compute": true,
       "add": true,
+      "callTransformation": true,
+      "communication": true,
+      "exitFromSQL": true,
+      "freeMemory": true,
+      "pack": true,
+      "parameter": true,
+      "ranges": true,
+      "selectWithoutInto": true,
+      "sortByFS": true,
       "withHeaderLine": true,
       "fieldSymbolStructure": true,
       "typePools": true,
