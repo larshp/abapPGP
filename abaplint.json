@@ -63,7 +63,7 @@
     },
     "ambiguous_statement": false,
     "avoid_use": {
-      "define": false,
+      "define": true,
       "describeLines": true,
       "statics": true,
       "defaultKey": false,
