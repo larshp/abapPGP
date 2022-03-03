@@ -19,7 +19,7 @@
   "homepage": "https://github.com/larshp/abapPGP#readme",
   "dependencies": {
     "@abaplint/cli": "^2.85.36",
-    "@abaplint/runtime": "^1.8.11",
-    "@abaplint/transpiler-cli": "^1.8.11"
+    "@abaplint/runtime": "^1.8.12",
+    "@abaplint/transpiler-cli": "^1.8.12"
   }
 }
