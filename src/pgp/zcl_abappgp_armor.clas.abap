@@ -61,7 +61,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
+CLASS zcl_abappgp_armor IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -79,10 +79,6 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
 
 
   METHOD from_string.
-
-    DEFINE _next_mode.
-      lv_mode = lv_mode + 1.
-    END-OF-DEFINITION.
 
     CONSTANTS: BEGIN OF c_mode,
                  armor_header TYPE i VALUE 1,
@@ -112,17 +108,17 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
       CASE lv_mode.
         WHEN c_mode-armor_header.
           lv_armor_header = lv_string.
-          _next_mode.
+          lv_mode = lv_mode + 1.
         WHEN c_mode-headers.
           IF lv_string IS INITIAL.
-            _next_mode.
+            lv_mode = lv_mode + 1.
           ELSE.
             APPEND lv_string TO lt_headers.
           ENDIF.
         WHEN c_mode-data.
           CONCATENATE lv_data lv_string INTO lv_data.
           IF sy-tabix = lines( lt_string ) - 2.
-            _next_mode.
+            lv_mode = lv_mode + 1.
           ENDIF.
         WHEN c_mode-checksum.
           ASSERT lv_string(1) = '='.
@@ -130,10 +126,10 @@ CLASS ZCL_ABAPPGP_ARMOR IMPLEMENTATION.
           lv_xdata = zcl_abappgp_convert=>base64_decode( lv_data ).
           lv_checksum = zcl_abappgp_convert=>base64_decode( lv_string ).
           ASSERT lv_checksum = zcl_abappgp_hash=>crc24( lv_xdata ).
-          _next_mode.
+          lv_mode = lv_mode + 1.
         WHEN c_mode-armor_tail.
           lv_armor_tail = lv_string.
-          _next_mode.
+          lv_mode = lv_mode + 1.
         WHEN OTHERS.
           ASSERT 0 = 1.
       ENDCASE.

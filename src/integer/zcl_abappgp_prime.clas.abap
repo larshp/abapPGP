@@ -33,7 +33,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
+CLASS zcl_abappgp_prime IMPLEMENTATION.
 
 
   METHOD check.
@@ -74,183 +74,186 @@ CLASS ZCL_ABAPPGP_PRIME IMPLEMENTATION.
 
   METHOD low_primes.
 
-    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA lt_integers TYPE STANDARD TABLE OF i WITH DEFAULT KEY.
+    DATA lv_integer LIKE LINE OF lt_integers.
 
-    DEFINE _add.
+
+    APPEND 2 TO lt_integers.
+    APPEND 3 TO lt_integers.
+    APPEND 5 TO lt_integers.
+    APPEND 7 TO lt_integers.
+    APPEND 11 TO lt_integers.
+    APPEND 13 TO lt_integers.
+    APPEND 17 TO lt_integers.
+    APPEND 19 TO lt_integers.
+    APPEND 23 TO lt_integers.
+    APPEND 29 TO lt_integers.
+    APPEND 31 TO lt_integers.
+    APPEND 37 TO lt_integers.
+    APPEND 41 TO lt_integers.
+    APPEND 43 TO lt_integers.
+    APPEND 47 TO lt_integers.
+    APPEND 53 TO lt_integers.
+    APPEND 59 TO lt_integers.
+    APPEND 61 TO lt_integers.
+    APPEND 67 TO lt_integers.
+    APPEND 71 TO lt_integers.
+    APPEND 73 TO lt_integers.
+    APPEND 79 TO lt_integers.
+    APPEND 83 TO lt_integers.
+    APPEND 89 TO lt_integers.
+    APPEND 97 TO lt_integers.
+    APPEND 101 TO lt_integers.
+    APPEND 103 TO lt_integers.
+    APPEND 107 TO lt_integers.
+    APPEND 109 TO lt_integers.
+    APPEND 113 TO lt_integers.
+    APPEND 127 TO lt_integers.
+    APPEND 131 TO lt_integers.
+    APPEND 137 TO lt_integers.
+    APPEND 139 TO lt_integers.
+    APPEND 149 TO lt_integers.
+    APPEND 151 TO lt_integers.
+    APPEND 157 TO lt_integers.
+    APPEND 163 TO lt_integers.
+    APPEND 167 TO lt_integers.
+    APPEND 173 TO lt_integers.
+    APPEND 179 TO lt_integers.
+    APPEND 181 TO lt_integers.
+    APPEND 191 TO lt_integers.
+    APPEND 193 TO lt_integers.
+    APPEND 197 TO lt_integers.
+    APPEND 199 TO lt_integers.
+    APPEND 211 TO lt_integers.
+    APPEND 223 TO lt_integers.
+    APPEND 227 TO lt_integers.
+    APPEND 229 TO lt_integers.
+    APPEND 233 TO lt_integers.
+    APPEND 239 TO lt_integers.
+    APPEND 241 TO lt_integers.
+    APPEND 251 TO lt_integers.
+    APPEND 257 TO lt_integers.
+    APPEND 263 TO lt_integers.
+    APPEND 269 TO lt_integers.
+    APPEND 271 TO lt_integers.
+    APPEND 277 TO lt_integers.
+    APPEND 281 TO lt_integers.
+    APPEND 283 TO lt_integers.
+    APPEND 293 TO lt_integers.
+    APPEND 307 TO lt_integers.
+    APPEND 311 TO lt_integers.
+    APPEND 313 TO lt_integers.
+    APPEND 317 TO lt_integers.
+    APPEND 331 TO lt_integers.
+    APPEND 337 TO lt_integers.
+    APPEND 347 TO lt_integers.
+    APPEND 349 TO lt_integers.
+    APPEND 353 TO lt_integers.
+    APPEND 359 TO lt_integers.
+    APPEND 367 TO lt_integers.
+    APPEND 373 TO lt_integers.
+    APPEND 379 TO lt_integers.
+    APPEND 383 TO lt_integers.
+    APPEND 389 TO lt_integers.
+    APPEND 397 TO lt_integers.
+    APPEND 401 TO lt_integers.
+    APPEND 409 TO lt_integers.
+    APPEND 419 TO lt_integers.
+    APPEND 421 TO lt_integers.
+    APPEND 431 TO lt_integers.
+    APPEND 433 TO lt_integers.
+    APPEND 439 TO lt_integers.
+    APPEND 443 TO lt_integers.
+    APPEND 449 TO lt_integers.
+    APPEND 457 TO lt_integers.
+    APPEND 461 TO lt_integers.
+    APPEND 463 TO lt_integers.
+    APPEND 467 TO lt_integers.
+    APPEND 479 TO lt_integers.
+    APPEND 487 TO lt_integers.
+    APPEND 491 TO lt_integers.
+    APPEND 499 TO lt_integers.
+    APPEND 503 TO lt_integers.
+    APPEND 509 TO lt_integers.
+    APPEND 521 TO lt_integers.
+    APPEND 523 TO lt_integers.
+    APPEND 541 TO lt_integers.
+    APPEND 547 TO lt_integers.
+    APPEND 557 TO lt_integers.
+    APPEND 563 TO lt_integers.
+    APPEND 569 TO lt_integers.
+    APPEND 571 TO lt_integers.
+    APPEND 577 TO lt_integers.
+    APPEND 587 TO lt_integers.
+    APPEND 593 TO lt_integers.
+    APPEND 599 TO lt_integers.
+    APPEND 601 TO lt_integers.
+    APPEND 607 TO lt_integers.
+    APPEND 613 TO lt_integers.
+    APPEND 617 TO lt_integers.
+    APPEND 619 TO lt_integers.
+    APPEND 631 TO lt_integers.
+    APPEND 641 TO lt_integers.
+    APPEND 643 TO lt_integers.
+    APPEND 647 TO lt_integers.
+    APPEND 653 TO lt_integers.
+    APPEND 659 TO lt_integers.
+    APPEND 661 TO lt_integers.
+    APPEND 673 TO lt_integers.
+    APPEND 677 TO lt_integers.
+    APPEND 683 TO lt_integers.
+    APPEND 691 TO lt_integers.
+    APPEND 701 TO lt_integers.
+    APPEND 709 TO lt_integers.
+    APPEND 719 TO lt_integers.
+    APPEND 727 TO lt_integers.
+    APPEND 733 TO lt_integers.
+    APPEND 739 TO lt_integers.
+    APPEND 743 TO lt_integers.
+    APPEND 751 TO lt_integers.
+    APPEND 757 TO lt_integers.
+    APPEND 761 TO lt_integers.
+    APPEND 769 TO lt_integers.
+    APPEND 773 TO lt_integers.
+    APPEND 787 TO lt_integers.
+    APPEND 797 TO lt_integers.
+    APPEND 809 TO lt_integers.
+    APPEND 811 TO lt_integers.
+    APPEND 821 TO lt_integers.
+    APPEND 823 TO lt_integers.
+    APPEND 827 TO lt_integers.
+    APPEND 829 TO lt_integers.
+    APPEND 839 TO lt_integers.
+    APPEND 853 TO lt_integers.
+    APPEND 857 TO lt_integers.
+    APPEND 859 TO lt_integers.
+    APPEND 863 TO lt_integers.
+    APPEND 877 TO lt_integers.
+    APPEND 881 TO lt_integers.
+    APPEND 883 TO lt_integers.
+    APPEND 887 TO lt_integers.
+    APPEND 907 TO lt_integers.
+    APPEND 911 TO lt_integers.
+    APPEND 919 TO lt_integers.
+    APPEND 929 TO lt_integers.
+    APPEND 937 TO lt_integers.
+    APPEND 941 TO lt_integers.
+    APPEND 947 TO lt_integers.
+    APPEND 953 TO lt_integers.
+    APPEND 967 TO lt_integers.
+    APPEND 971 TO lt_integers.
+    APPEND 977 TO lt_integers.
+    APPEND 983 TO lt_integers.
+    APPEND 991 TO lt_integers.
+    APPEND 997 TO lt_integers.
+
+    LOOP AT lt_integers INTO lv_integer.
       CREATE OBJECT lo_integer
         EXPORTING
-          iv_integer = &1.
+          iv_integer = lv_integer.
       APPEND lo_integer TO rt_low.
-    END-OF-DEFINITION.
-
-    _add 2.
-    _add 3.
-    _add 5.
-    _add 7.
-    _add 11.
-    _add 13.
-    _add 17.
-    _add 19.
-    _add 23.
-    _add 29.
-    _add 31.
-    _add 37.
-    _add 41.
-    _add 43.
-    _add 47.
-    _add 53.
-    _add 59.
-    _add 61.
-    _add 67.
-    _add 71.
-    _add 73.
-    _add 79.
-    _add 83.
-    _add 89.
-    _add 97.
-    _add 101.
-    _add 103.
-    _add 107.
-    _add 109.
-    _add 113.
-    _add 127.
-    _add 131.
-    _add 137.
-    _add 139.
-    _add 149.
-    _add 151.
-    _add 157.
-    _add 163.
-    _add 167.
-    _add 173.
-    _add 179.
-    _add 181.
-    _add 191.
-    _add 193.
-    _add 197.
-    _add 199.
-    _add 211.
-    _add 223.
-    _add 227.
-    _add 229.
-    _add 233.
-    _add 239.
-    _add 241.
-    _add 251.
-    _add 257.
-    _add 263.
-    _add 269.
-    _add 271.
-    _add 277.
-    _add 281.
-    _add 283.
-    _add 293.
-    _add 307.
-    _add 311.
-    _add 313.
-    _add 317.
-    _add 331.
-    _add 337.
-    _add 347.
-    _add 349.
-    _add 353.
-    _add 359.
-    _add 367.
-    _add 373.
-    _add 379.
-    _add 383.
-    _add 389.
-    _add 397.
-    _add 401.
-    _add 409.
-    _add 419.
-    _add 421.
-    _add 431.
-    _add 433.
-    _add 439.
-    _add 443.
-    _add 449.
-    _add 457.
-    _add 461.
-    _add 463.
-    _add 467.
-    _add 479.
-    _add 487.
-    _add 491.
-    _add 499.
-    _add 503.
-    _add 509.
-    _add 521.
-    _add 523.
-    _add 541.
-    _add 547.
-    _add 557.
-    _add 563.
-    _add 569.
-    _add 571.
-    _add 577.
-    _add 587.
-    _add 593.
-    _add 599.
-    _add 601.
-    _add 607.
-    _add 613.
-    _add 617.
-    _add 619.
-    _add 631.
-    _add 641.
-    _add 643.
-    _add 647.
-    _add 653.
-    _add 659.
-    _add 661.
-    _add 673.
-    _add 677.
-    _add 683.
-    _add 691.
-    _add 701.
-    _add 709.
-    _add 719.
-    _add 727.
-    _add 733.
-    _add 739.
-    _add 743.
-    _add 751.
-    _add 757.
-    _add 761.
-    _add 769.
-    _add 773.
-    _add 787.
-    _add 797.
-    _add 809.
-    _add 811.
-    _add 821.
-    _add 823.
-    _add 827.
-    _add 829.
-    _add 839.
-    _add 853.
-    _add 857.
-    _add 859.
-    _add 863.
-    _add 877.
-    _add 881.
-    _add 883.
-    _add 887.
-    _add 907.
-    _add 911.
-    _add 919.
-    _add 929.
-    _add 937.
-    _add 941.
-    _add 947.
-    _add 953.
-    _add 967.
-    _add 971.
-    _add 977.
-    _add 983.
-    _add 991.
-    _add 997.
+    ENDLOOP.
 
   ENDMETHOD.
 

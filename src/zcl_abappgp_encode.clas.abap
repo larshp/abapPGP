@@ -19,7 +19,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_ENCODE IMPLEMENTATION.
+CLASS zcl_abappgp_encode IMPLEMENTATION.
 
 
   METHOD hash_prefix.
@@ -88,7 +88,7 @@ CLASS ZCL_ABAPPGP_ENCODE IMPLEMENTATION.
 * 3. If emLen < tLen + 11, output "intended encoded message length
 *    too short" and stop.
     IF lv_emlen < lv_tlen + 11.
-      BREAK-POINT.
+      ASSERT 1 = 'todo'.
     ENDIF.
 
 * 4. Generate an octet string PS consisting of emLen - tLen - 3

@@ -55,7 +55,6 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEXT</TYPE>
        <NAME>ZABAPPGP_SIGN-KEY_ID</NAME>
-       <TEXT>Key_Id</TEXT>
        <LINE>001</LINE>
        <COLUMN>001</COLUMN>
        <LENGTH>006</LENGTH>
@@ -72,7 +71,6 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>ZABAPPGP_SIGN-KEY_ID</NAME>
-       <TEXT>________________</TEXT>
        <LINE>001</LINE>
        <COLUMN>022</COLUMN>
        <LENGTH>016</LENGTH>
@@ -106,7 +104,6 @@
        <CONT_NAME>SCREEN</CONT_NAME>
        <TYPE>TEMPLATE</TYPE>
        <NAME>ZABAPPGP_SIGN-PASSWORD</NAME>
-       <TEXT>__________________________________________________</TEXT>
        <LINE>002</LINE>
        <COLUMN>022</COLUMN>
        <LENGTH>050</LENGTH>

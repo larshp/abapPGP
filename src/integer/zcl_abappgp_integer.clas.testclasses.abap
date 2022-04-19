@@ -913,7 +913,7 @@ CLASS ltcl_eq IMPLEMENTATION.
 
   METHOD eq1.
 
-    DATA: lv_eq TYPE bool.
+    DATA: lv_eq TYPE abap_bool.
 
 
     lv_eq = test( iv_op1 = '7382888'
@@ -927,7 +927,7 @@ CLASS ltcl_eq IMPLEMENTATION.
 
   METHOD eq2.
 
-    DATA: lv_eq TYPE bool.
+    DATA: lv_eq TYPE abap_bool.
 
 
     lv_eq = test( iv_op1 = '1112888'
@@ -971,7 +971,7 @@ CLASS ltcl_ge IMPLEMENTATION.
 
   METHOD ge1.
 
-    DATA: lv_ge TYPE bool.
+    DATA: lv_ge TYPE abap_bool.
 
 
     lv_ge = test( iv_op1 = '7382888'
@@ -1023,7 +1023,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt1.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '0'
@@ -1037,7 +1037,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt2.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '1'
@@ -1051,7 +1051,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt3.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '10000'
@@ -1065,7 +1065,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt4.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '10000'
@@ -1079,7 +1079,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt5.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '30514335'
@@ -1093,7 +1093,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt6.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '-30514335'
@@ -1107,7 +1107,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt7.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '-44449'
@@ -1121,7 +1121,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt8.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '-30514335'
@@ -1135,7 +1135,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt9.
 
-    DATA: lv_gt TYPE bool.
+    DATA: lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '7382888'

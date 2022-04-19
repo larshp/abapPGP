@@ -1,0 +1,25 @@
+{
+  "name": "abappgp",
+  "version": "1.0.0",
+  "description": "ABAP implementation of OpenPGP",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx abaplint && npm run unit",
+    "unit": "rm -rf output && abap_transpile test/abap_transpile.json && echo RUNNING && node output/index.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larshp/abapPGP.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/larshp/abapPGP/issues"
+  },
+  "homepage": "https://github.com/larshp/abapPGP#readme",
+  "dependencies": {
+    "@abaplint/cli": "^2.89.0",
+    "@abaplint/runtime": "^2.0.9",
+    "@abaplint/transpiler-cli": "^2.0.9"
+  }
+}

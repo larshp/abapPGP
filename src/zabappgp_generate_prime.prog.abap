@@ -15,6 +15,9 @@ FORM run.
         lv_t1     TYPE timestamp,
         lv_t2     TYPE timestamp,
         lv_secs   TYPE i.
+  DATA lo_random TYPE REF TO zcl_abappgp_random.
+  DATA lo_value TYPE REF TO zcl_abappgp_integer.
+  DATA lv_prime TYPE abap_bool.
 
 
   CREATE OBJECT lo_one
@@ -28,8 +31,10 @@ FORM run.
   DO p_pnum TIMES.
     GET TIME STAMP FIELD lv_t1.
 
-    DATA(lo_random) = zcl_abappgp_random=>from_bits( p_bits ).
-    DATA(lo_value) = lo_random->random( ).
+
+    lo_random = zcl_abappgp_random=>from_bits( p_bits ).
+
+    lo_value = lo_random->random( ).
     IF lo_value->is_even( ) = abap_true.
       lo_value = lo_value->add( lo_one ).
     ENDIF.
@@ -45,7 +50,8 @@ FORM run.
         COMMIT WORK.
       ENDIF.
 
-      DATA(lv_prime) = zcl_abappgp_prime=>check(
+
+      lv_prime = zcl_abappgp_prime=>check(
         io_integer       = lo_value
         iv_show_progress = abap_true ).
       IF lv_prime = abap_true.

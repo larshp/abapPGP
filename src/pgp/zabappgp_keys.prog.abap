@@ -161,8 +161,7 @@ CLASS lcl_overview IMPLEMENTATION.
         refresh( ).
       WHEN 'GENERATE'.
         CLEAR gv_ok_code.
-* todo
-        BREAK-POINT.
+        ASSERT 1 = 'todo'.
       WHEN 'DISPLAY'.
         CLEAR gv_ok_code.
         call_display( ).

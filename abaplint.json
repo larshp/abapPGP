@@ -7,7 +7,7 @@
   },
   "dependencies": [
     {
-      "url": "https://github.com/abaplint/deps",
+      "url": "https://github.com/open-abap/open-abap",
       "folder": "/deps1",
       "files": "/src/**/*.*"
     },
@@ -18,7 +18,7 @@
     }
   ],
   "syntax": {
-    "version": "v754",
+    "version": "v702",
     "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)",
     "globalConstants": [],
     "globalMacros": []
@@ -75,7 +75,6 @@
     "check_comments": false,
     "check_ddic": true,
     "check_include": true,
-    "check_no_handler_pragma": true,
     "check_syntax": true,
     "check_text_elements": true,
     "check_transformation_exists": true,
@@ -110,6 +109,7 @@
     "empty_structure": {
       "loop": true,
       "if": true,
+      "when": false,
       "try": true,
       "while": true,
       "case": true,
@@ -171,7 +171,6 @@
       "exception": "^LCX_.+$",
       "test": "^LTCL_.+$"
     },
-    "local_testclass_location": true,
     "local_variable_names": {
       "patternKind": "required",
       "ignoreNames": [],
@@ -231,6 +230,8 @@
       "refresh": true,
       "compute": true,
       "add": true,
+      "regex": true,
+      "occurences": true,
       "callTransformation": true,
       "communication": true,
       "exitFromSQL": true,
