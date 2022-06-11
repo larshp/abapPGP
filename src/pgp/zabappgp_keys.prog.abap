@@ -71,7 +71,7 @@ CLASS lcl_overview IMPLEMENTATION.
   METHOD refresh.
 
     CLEAR gt_keys.
-    SELECT * FROM zabappgp_keys INTO TABLE gt_keys.
+    SELECT * FROM zabappgp_keys INTO TABLE gt_keys ORDER BY PRIMARY KEY.
 
     IF go_alv IS BOUND.
       go_alv->refresh( ).
