@@ -12,7 +12,6 @@ CLASS zcl_abappgp_binary_integer DEFINITION
     METHODS to_string
       RETURNING
         VALUE(rv_string) TYPE string .
-    CLASS-METHODS class_constructor .
     METHODS and
       IMPORTING
         !io_binary       TYPE REF TO zcl_abappgp_binary_integer
@@ -55,7 +54,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
+CLASS zcl_abappgp_binary_integer IMPLEMENTATION.
 
 
   METHOD and.
@@ -96,28 +95,23 @@ CLASS ZCL_ABAPPGP_BINARY_INTEGER IMPLEMENTATION.
 
   ENDMETHOD.
 
-
-  METHOD class_constructor.
-
-    CREATE OBJECT go_two
-      EXPORTING
-        iv_integer = 1.
-
-    APPEND go_two TO gt_powers.
-
-    CREATE OBJECT go_two
-      EXPORTING
-        iv_integer = 2.
-
-    APPEND go_two TO gt_powers.
-
-  ENDMETHOD.
-
-
   METHOD constructor.
 
     DATA: lo_int TYPE REF TO zcl_abappgp_integer.
 
+    IF go_two IS INITIAL.
+      CREATE OBJECT go_two
+        EXPORTING
+          iv_integer = 1.
+
+      APPEND go_two TO gt_powers.
+
+      CREATE OBJECT go_two
+        EXPORTING
+          iv_integer = 2.
+
+      APPEND go_two TO gt_powers.
+    ENDIF.
 
     ASSERT io_integer->is_positive( ) = abap_true.
 
