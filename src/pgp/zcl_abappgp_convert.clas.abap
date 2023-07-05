@@ -58,7 +58,7 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
 
   METHOD base64_encode.
 
-    rv_encoded = cl_http_utility=>if_http_utility~encode_x_base64( iv_bin ).
+    rv_encoded = cl_http_utility=>encode_x_base64( iv_bin ).
 
   ENDMETHOD.
 
