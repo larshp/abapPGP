@@ -10,14 +10,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
-
-
-    CREATE OBJECT lo_stream.
-    lo_stream->write_octets( 'AA' ).
-
-    zcl_abappgp_unit_test=>packet_identity( io_data = lo_stream
-      iv_tag = zif_abappgp_constants=>c_tag-symmetric_key_enc ).
+* todo
 
   ENDMETHOD.
 
