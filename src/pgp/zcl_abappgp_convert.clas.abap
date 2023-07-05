@@ -51,42 +51,14 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
 
   METHOD base64_decode.
 
-    CALL FUNCTION 'SSFC_BASE64_DECODE'
-      EXPORTING
-        b64data                  = iv_encoded
-      IMPORTING
-        bindata                  = rv_bin
-      EXCEPTIONS
-        ssf_krn_error            = 1
-        ssf_krn_noop             = 2
-        ssf_krn_nomemory         = 3
-        ssf_krn_opinv            = 4
-        ssf_krn_input_data_error = 5
-        ssf_krn_invalid_par      = 6
-        ssf_krn_invalid_parlen   = 7
-        OTHERS                   = 8.
-    ASSERT sy-subrc = 0.
+    rv_bin = cl_http_utility=>decode_x_base64( iv_encoded ).
 
   ENDMETHOD.
 
 
   METHOD base64_encode.
 
-    CALL FUNCTION 'SSFC_BASE64_ENCODE'
-      EXPORTING
-        bindata                  = iv_bin
-      IMPORTING
-        b64data                  = rv_encoded
-      EXCEPTIONS
-        ssf_krn_error            = 1
-        ssf_krn_noop             = 2
-        ssf_krn_nomemory         = 3
-        ssf_krn_opinv            = 4
-        ssf_krn_input_data_error = 5
-        ssf_krn_invalid_par      = 6
-        ssf_krn_invalid_parlen   = 7
-        OTHERS                   = 8.
-    ASSERT sy-subrc = 0.
+    rv_encoded = cl_http_utility=>if_http_utility~encode_x_base64( iv_bin ).
 
   ENDMETHOD.
 
