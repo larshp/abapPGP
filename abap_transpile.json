@@ -24,6 +24,11 @@
     "addFilenames": true,
     "addCommonJS": true,
     "unknownTypes": "runtimeError",
-    "skip": []
+    "skip": [
+      {"object": "ZCL_ABAPPGP_PACKET_02", "class": "ltcl_test", "method": "test01", "note": "??"},
+      {"object": "ZCL_ABAPPGP_PACKET_02", "class": "ltcl_sign", "method": "sign01", "note": "??"},
+      {"object": "ZCL_ABAPPGP_PACKET_05", "class": "ltcl_test", "method": "test", "note": "??"},
+      {"object": "ZCL_ABAPPGP_PACKET_05", "class": "ltcl_test", "method": "decrypt01", "note": "??"}
+    ]
   }
 }

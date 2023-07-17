@@ -7,14 +7,14 @@ CLASS ltcl_length DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
           iv_hex TYPE xstring
           iv_exp TYPE i.
 
-    METHODS:
-      length01 FOR TESTING,
-      length02 FOR TESTING,
-      length03 FOR TESTING,
-      length04 FOR TESTING,
-      length05 FOR TESTING.
+    METHODS length01 FOR TESTING RAISING cx_static_check.
+    METHODS length02 FOR TESTING RAISING cx_static_check.
+    METHODS length03 FOR TESTING RAISING cx_static_check.
+    METHODS length04 FOR TESTING RAISING cx_static_check.
+    METHODS length05 FOR TESTING RAISING cx_static_check.
+    METHODS length06 FOR TESTING RAISING cx_static_check.
 
-ENDCLASS.       "ltcl_Test
+ENDCLASS.
 
 CLASS ltcl_length IMPLEMENTATION.
 
@@ -65,6 +65,11 @@ CLASS ltcl_length IMPLEMENTATION.
   METHOD length05.
     test( iv_exp = 8383
           iv_hex = 'DFFF' ).
+  ENDMETHOD.
+
+  METHOD length06.
+    test( iv_exp = 242
+          iv_hex = 'C032' ).
   ENDMETHOD.
 
 ENDCLASS.

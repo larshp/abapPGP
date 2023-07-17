@@ -28,6 +28,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_01 IMPLEMENTATION.
   METHOD constructor.
 
     mt_packet_list = it_packet_list.
+    mt_headers = it_headers.
 
   ENDMETHOD.
 
