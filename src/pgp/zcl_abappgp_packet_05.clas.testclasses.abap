@@ -45,7 +45,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD decrypt01.
 
-    DATA: lo_packet05  TYPE REF TO zcl_abappgp_packet_05.
+    DATA lo_packet05 TYPE REF TO zcl_abappgp_packet_05.
 
 
     lo_packet05 ?= zcl_abappgp_packet_05=>from_stream( get_stream( ) ).
@@ -55,7 +55,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD decrypt02.
 
-    DATA: lo_packet05  TYPE REF TO zcl_abappgp_packet_05.
+    DATA lo_packet05 TYPE REF TO zcl_abappgp_packet_05.
 
 
     lo_packet05 ?= zcl_abappgp_packet_05=>from_stream( get_stream( ) ).
@@ -69,13 +69,14 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     lo_stream = get_stream( ).
 
-    zcl_abappgp_unit_test=>packet_identity( io_data = lo_stream
-      iv_tag = zif_abappgp_constants=>c_tag-secret_key ).
+    zcl_abappgp_unit_test=>packet_identity(
+      io_data = lo_stream
+      iv_tag  = zif_abappgp_constants=>c_tag-secret_key ).
 
   ENDMETHOD.
 
