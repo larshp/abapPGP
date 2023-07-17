@@ -1,13 +1,15 @@
 CLASS ltcl_test DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
-      get_stream RETURNING VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream,
-      decrypt01 FOR TESTING RAISING zcx_abappgp_invalid_key,
-      decrypt02 FOR TESTING,
-      test FOR TESTING.
+    METHODS get_stream
+      RETURNING
+        VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream.
 
-ENDCLASS.       "ltcl_Test
+    METHODS decrypt01 FOR TESTING RAISING cx_static_check.
+    METHODS decrypt02 FOR TESTING RAISING cx_static_check.
+    METHODS test FOR TESTING RAISING cx_static_check.
+
+ENDCLASS.
 
 CLASS ltcl_test IMPLEMENTATION.
 
