@@ -155,22 +155,16 @@ CLASS ZCL_ABAPPGP_HASH IMPLEMENTATION.
 
   METHOD sha1.
 
-    DATA lv_hash TYPE c LENGTH 40.
-
-
-    CALL FUNCTION 'CALCULATE_HASH_FOR_RAW'
-      EXPORTING
-        data           = iv_data
-      IMPORTING
-        hash           = lv_hash
-      EXCEPTIONS
-        unknown_alg    = 1
-        param_error    = 2
-        internal_error = 3
-        OTHERS         = 4.
-    ASSERT sy-subrc = 0.
-
-    rv_hash = lv_hash.
+    TRY.
+        cl_abap_message_digest=>calculate_hash_for_raw(
+          EXPORTING
+            if_algorithm   = 'SHA1'
+            if_data        = iv_data
+          IMPORTING
+            ef_hashxstring = rv_hash ).
+      CATCH cx_abap_message_digest.
+        ASSERT 0 = 1.
+    ENDTRY.
 
   ENDMETHOD.
 
