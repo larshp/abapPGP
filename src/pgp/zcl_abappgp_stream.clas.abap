@@ -68,7 +68,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
+CLASS zcl_abappgp_stream IMPLEMENTATION.
 
 
   METHOD constructor.
@@ -217,9 +217,13 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
 
   METHOD write_octet.
 
+    DATA lv_hex TYPE x LENGTH 1.
+
     ASSERT xstrlen( iv_octet ) >= 1.
 
-    CONCATENATE mv_data iv_octet(1) INTO mv_data IN BYTE MODE.
+    lv_hex = iv_octet.
+
+    CONCATENATE mv_data lv_hex INTO mv_data IN BYTE MODE.
 
   ENDMETHOD.
 
