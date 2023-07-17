@@ -176,6 +176,7 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
 
 
   METHOD write_length.
+* https://tools.ietf.org/html/rfc4880#section-4.2.2
 
     DATA: lv_octet  TYPE x LENGTH 1,
           lv_octet4 TYPE x LENGTH 4.
@@ -187,7 +188,7 @@ CLASS ZCL_ABAPPGP_STREAM IMPLEMENTATION.
       lv_octet = iv_length.
       write_octet( lv_octet ).
     ELSEIF iv_length <= 8383.
-      lv_octet = ( iv_length DIV 256 ) + 192 - 1.
+      lv_octet = ( ( iv_length - 192 ) DIV 256 ) + 192.
       write_octet( lv_octet ).
       lv_octet = ( iv_length - 192 ) MOD 256.
       write_octet( lv_octet ).
