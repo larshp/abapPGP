@@ -1,13 +1,15 @@
 CLASS ltcl_test DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
-      get_stream RETURNING VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream,
-      decrypt01 FOR TESTING RAISING zcx_abappgp_invalid_key,
-      decrypt02 FOR TESTING,
-      test FOR TESTING.
+    METHODS get_stream
+      RETURNING
+        VALUE(ro_stream) TYPE REF TO zcl_abappgp_stream.
 
-ENDCLASS.       "ltcl_Test
+    METHODS decrypt01 FOR TESTING RAISING cx_static_check.
+    METHODS decrypt02 FOR TESTING RAISING cx_static_check.
+    METHODS test FOR TESTING RAISING cx_static_check.
+
+ENDCLASS.
 
 CLASS ltcl_test IMPLEMENTATION.
 
@@ -45,7 +47,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD decrypt01.
 
-    DATA: lo_packet05  TYPE REF TO zcl_abappgp_packet_05.
+    DATA lo_packet05 TYPE REF TO zcl_abappgp_packet_05.
 
 
     lo_packet05 ?= zcl_abappgp_packet_05=>from_stream( get_stream( ) ).
@@ -55,7 +57,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD decrypt02.
 
-    DATA: lo_packet05  TYPE REF TO zcl_abappgp_packet_05.
+    DATA lo_packet05 TYPE REF TO zcl_abappgp_packet_05.
 
 
     lo_packet05 ?= zcl_abappgp_packet_05=>from_stream( get_stream( ) ).
@@ -69,13 +71,14 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     lo_stream = get_stream( ).
 
-    zcl_abappgp_unit_test=>packet_identity( io_data = lo_stream
-      iv_tag = zif_abappgp_constants=>c_tag-secret_key ).
+    zcl_abappgp_unit_test=>packet_identity(
+      io_data = lo_stream
+      iv_tag  = zif_abappgp_constants=>c_tag-secret_key ).
 
   ENDMETHOD.
 
