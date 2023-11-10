@@ -1,9 +1,9 @@
 CLASS ltcl_from_hex DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
-      test01 FOR TESTING,
-      test02 FOR TESTING.
+    METHODS test01 FOR TESTING RAISING cx_static_check.
+    METHODS test02 FOR TESTING RAISING cx_static_check.
+    METHODS test03 FOR TESTING RAISING cx_static_check.
 
     METHODS:
       test IMPORTING iv_exp TYPE string
@@ -15,8 +15,7 @@ CLASS ltcl_from_hex IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_int TYPE REF TO zcl_abappgp_integer.
-
+    DATA lo_int TYPE REF TO zcl_abappgp_integer.
 
     lo_int = zcl_abappgp_integer=>from_hex( iv_hex ).
 
@@ -37,6 +36,13 @@ CLASS ltcl_from_hex IMPLEMENTATION.
 
     test( iv_exp = '8070450532247928831'
           iv_hex = '6FFFFFFFFFFFFFFF' ).
+
+  ENDMETHOD.
+
+  METHOD test03.
+
+    test( iv_exp = '396992896738003290535327319290443027790821873613212614626092228588339162169213544050'
+          iv_hex = '3450919247926583022845503194970590862368693188410950793551695395696672' ).
 
   ENDMETHOD.
 
