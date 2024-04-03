@@ -7,13 +7,18 @@
   },
   "dependencies": [
     {
-      "url": "https://github.com/open-abap/open-abap",
+      "url": "https://github.com/open-abap/open-abap-core",
       "folder": "/deps1",
       "files": "/src/**/*.*"
     },
     {
-      "url": "https://github.com/Sumu-Ning/AES",
+      "url": "https://github.com/open-abap/open-abap-gui",
       "folder": "/deps2",
+      "files": "/src/**/*.*"
+    },
+    {
+      "url": "https://github.com/Sumu-Ning/AES",
+      "folder": "/deps3",
       "files": "/src/**/*.*"
     }
   ],
