@@ -1,9 +1,6 @@
 {
   "global": {
-    "files": "/src/**/*.*",
-    "skipGeneratedGatewayClasses": true,
-    "skipGeneratedPersistentClasses": true,
-    "skipGeneratedFunctionGroups": true
+    "files": "/src/**/*.*"
   },
   "dependencies": [
     {
@@ -24,9 +21,7 @@
   ],
   "syntax": {
     "version": "v702",
-    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)",
-    "globalConstants": [],
-    "globalMacros": []
+    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)"
   },
   "rules": {
     "align_parameters": false,
