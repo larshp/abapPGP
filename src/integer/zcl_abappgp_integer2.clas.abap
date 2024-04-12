@@ -550,8 +550,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 * z0 = karatsuba(low1,low2)
     lo_z0 = lo_low1->clone( )->multiply_karatsuba( lo_low2 ).
 * z1 = karatsuba((low1+high1),(low2+high2))
-    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba(
-      lo_low2->add( lo_high2 ) ).
+    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba( lo_low2->add( lo_high2 ) ).
 * z2 = karatsuba(high1,high2)
     lo_z2 = lo_high1->multiply_karatsuba( lo_high2 ).
 

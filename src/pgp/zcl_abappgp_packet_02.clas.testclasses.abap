@@ -22,8 +22,7 @@ CLASS ltcl_sign IMPLEMENTATION.
 
     lv_text = zcl_abappgp_unit_test=>get_private_key( ).
 
-    lo_msg_private ?= zcl_abappgp_message_03=>from_armor(
-      zcl_abappgp_armor=>from_string( lv_text ) ).
+    lo_msg_private ?= zcl_abappgp_message_03=>from_armor( zcl_abappgp_armor=>from_string( lv_text ) ).
 
     lo_private_key = lo_msg_private->decrypt( 'testtest' ).
 

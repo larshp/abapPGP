@@ -47,7 +47,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
+CLASS zcl_abappgp_rsa IMPLEMENTATION.
 
 
   METHOD decrypt.
@@ -118,8 +118,7 @@ CLASS ZCL_ABAPPGP_RSA IMPLEMENTATION.
 
     lo_n = io_p->clone( )->multiply( io_q ).
 * totient:
-    lo_m = io_p->clone( )->subtract( lo_one )->multiply(
-      io_q->clone( )->subtract( lo_one ) ).
+    lo_m = io_p->clone( )->subtract( lo_one )->multiply( io_q->clone( )->subtract( lo_one ) ).
 
     lo_e = find_coprime( lo_m ).
 

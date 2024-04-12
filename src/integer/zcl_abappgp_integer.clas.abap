@@ -599,8 +599,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       ENDWHILE.
 
 * D4 - Multiply and subtract
-      lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat
-        )->multiply_10( lv_shift * 4 ) ).
+      lo_u = lo_u->subtract( lo_v->clone( )->multiply_int( lv_q_hat )->multiply_10( lv_shift * 4 ) ).
       IF lo_u->is_negative( ) = abap_true AND lv_shift >= 0.
 * D6 - Add back
         lv_q_hat = lv_q_hat - 1.
@@ -1368,8 +1367,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 * z0 = karatsuba(low1,low2)
     lo_z0 = lo_low1->clone( )->multiply_karatsuba( lo_low2 ).
 * z1 = karatsuba((low1+high1),(low2+high2))
-    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba(
-      lo_low2->clone( )->add( lo_high2 ) ).
+    lo_z1 = lo_low1->add( lo_high1 )->multiply_karatsuba( lo_low2->clone( )->add( lo_high2 ) ).
 * z2 = karatsuba(high1,high2)
     lo_z2 = lo_high1->multiply_karatsuba( lo_high2 ).
 

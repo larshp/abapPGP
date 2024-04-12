@@ -21,8 +21,7 @@ CLASS ltcl_shift_left IMPLEMENTATION.
     DATA: lv_result TYPE string.
 
 
-    lv_result = zcl_abappgp_integer2=>from_string( iv_str
-      )->shift_left( iv_times )->to_string( ).
+    lv_result = zcl_abappgp_integer2=>from_string( iv_str )->shift_left( iv_times )->to_string( ).
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
@@ -72,8 +71,7 @@ CLASS ltcl_shift_right IMPLEMENTATION.
     DATA: lv_result TYPE string.
 
 
-    lv_result = zcl_abappgp_integer2=>from_string( iv_str
-      )->shift_right( iv_times )->to_string( ).
+    lv_result = zcl_abappgp_integer2=>from_string( iv_str )->shift_right( iv_times )->to_string( ).
 
     cl_abap_unit_assert=>assert_equals(
       act = lv_result
