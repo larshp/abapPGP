@@ -260,7 +260,7 @@ CLASS lcl_key IMPLEMENTATION.
 
   METHOD init.
 
-    IF NOT go_cprivate IS BOUND.
+    IF go_cprivate IS NOT BOUND.
       CREATE OBJECT go_cprivate
         EXPORTING
           container_name = 'CUSTOM_PRIVATE'.

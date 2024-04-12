@@ -34,7 +34,7 @@ CLASS ltcl_aes256 IMPLEMENTATION.
       iv_ivector = c_ivector
       iv_resync  = iv_resync ).
 
-    IF NOT iv_exp IS INITIAL.
+    IF iv_exp IS NOT INITIAL.
       cl_abap_unit_assert=>assert_equals(
         act = lv_enc
         exp = iv_exp ).

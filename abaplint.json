@@ -78,7 +78,7 @@
     "identical_conditions": true,
     "line_break_style": false,
     "many_parentheses": true,
-    "prefer_is_not": false,
+    "prefer_is_not": true,
     "unused_types": true,
     "use_bool_expression": false,
     "use_line_exists": false,
