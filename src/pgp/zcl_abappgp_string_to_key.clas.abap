@@ -154,7 +154,7 @@ CLASS ZCL_ABAPPGP_STRING_TO_KEY IMPLEMENTATION.
 
   METHOD to_stream.
 
-    DATA: lv_octet TYPE x LENGTH 1.
+    DATA lv_octet TYPE x LENGTH 1.
 
 
     CREATE OBJECT ro_stream.

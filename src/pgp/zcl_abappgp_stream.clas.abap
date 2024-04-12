@@ -142,7 +142,7 @@ CLASS zcl_abappgp_stream IMPLEMENTATION.
 
   METHOD eat_stream.
 
-    DATA: lv_data TYPE xstring.
+    DATA lv_data TYPE xstring.
 
 
     lv_data = eat_octets( iv_octets ).
@@ -251,7 +251,7 @@ CLASS zcl_abappgp_stream IMPLEMENTATION.
 
   METHOD write_time.
 
-    DATA: lv_hex TYPE x LENGTH 4.
+    DATA lv_hex TYPE x LENGTH 4.
 
     lv_hex = iv_time.
 

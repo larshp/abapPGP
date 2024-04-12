@@ -97,7 +97,7 @@ CLASS zcl_abappgp_binary_integer IMPLEMENTATION.
 
   METHOD constructor.
 
-    DATA: lo_int TYPE REF TO zcl_abappgp_integer.
+    DATA lo_int TYPE REF TO zcl_abappgp_integer.
 
     IF go_two IS INITIAL.
       CREATE OBJECT go_two
@@ -131,7 +131,7 @@ CLASS zcl_abappgp_binary_integer IMPLEMENTATION.
 
   METHOD from_string.
 
-    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA lo_integer TYPE REF TO zcl_abappgp_integer.
 
 
     lo_integer = zcl_abappgp_integer=>from_string( iv_string ).
@@ -159,7 +159,7 @@ CLASS zcl_abappgp_binary_integer IMPLEMENTATION.
 
   METHOD mod_2.
 
-    DATA: lv_length TYPE i.
+    DATA lv_length TYPE i.
 
     lv_length = strlen( mv_data ) - 1.
 
@@ -187,7 +187,7 @@ CLASS zcl_abappgp_binary_integer IMPLEMENTATION.
 
   METHOD shift_right.
 
-    DATA: lv_length TYPE i.
+    DATA lv_length TYPE i.
 
     ASSERT iv_times >= 1.
 

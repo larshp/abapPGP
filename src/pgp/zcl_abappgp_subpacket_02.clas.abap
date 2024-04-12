@@ -47,7 +47,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~from_stream.
 
-    DATA: lv_time TYPE i.
+    DATA lv_time TYPE i.
 
 
     lv_time = io_stream->eat_time( ).

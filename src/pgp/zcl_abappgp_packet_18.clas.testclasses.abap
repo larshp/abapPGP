@@ -1,7 +1,7 @@
 CLASS ltcl_test DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       test FOR TESTING.
 
 ENDCLASS.       "ltcl_Test
@@ -10,7 +10,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     CREATE OBJECT lo_stream.

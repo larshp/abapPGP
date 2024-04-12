@@ -9,7 +9,7 @@ CLASS ltcl_and DEFINITION FOR TESTING
       and2 FOR TESTING,
       and3 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1           TYPE string
                      iv_op2           TYPE string
            RETURNING VALUE(rv_result) TYPE string.
@@ -33,7 +33,7 @@ CLASS ltcl_and IMPLEMENTATION.
 
   METHOD and1.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_op1 = '16'
                       iv_op2 = '16' ).
@@ -46,7 +46,7 @@ CLASS ltcl_and IMPLEMENTATION.
 
   METHOD and2.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_op1 = '32'
                       iv_op2 = '16' ).
@@ -59,7 +59,7 @@ CLASS ltcl_and IMPLEMENTATION.
 
   METHOD and3.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_op1 = '48'
                       iv_op2 = '16' ).
@@ -79,10 +79,10 @@ CLASS ltcl_mod DEFINITION FOR TESTING
     FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       mod1 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_str           TYPE string
            RETURNING VALUE(rv_result) TYPE i.
 
@@ -92,7 +92,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
+    DATA lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
 
 
     lo_binary = zcl_abappgp_binary_integer=>from_string( iv_str ).
@@ -102,7 +102,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod1.
 
-    DATA: lv_result TYPE i.
+    DATA lv_result TYPE i.
 
     lv_result = test( '3' ).
 
@@ -121,10 +121,10 @@ CLASS ltcl_shift_right DEFINITION FOR TESTING
     FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       shift1 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_str        TYPE string
            RETURNING VALUE(rv_str) TYPE string.
 
@@ -134,7 +134,7 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary TYPE REF TO zcl_abappgp_binary_integer.
+    DATA lo_binary TYPE REF TO zcl_abappgp_binary_integer.
 
 
     lo_binary = zcl_abappgp_binary_integer=>from_string( iv_str ).
@@ -145,7 +145,7 @@ CLASS ltcl_shift_right IMPLEMENTATION.
 
   METHOD shift1.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( '16' ).
 
@@ -169,7 +169,7 @@ CLASS ltcl_identity DEFINITION FOR TESTING
       identity3 FOR TESTING,
       identity4 FOR TESTING.
 
-    METHODS: test IMPORTING iv_input TYPE string.
+    METHODS test IMPORTING iv_input TYPE string.
 
 ENDCLASS.       "ltcl_Get
 
@@ -177,7 +177,7 @@ CLASS ltcl_identity IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
+    DATA lo_binary  TYPE REF TO zcl_abappgp_binary_integer.
 
 
     lo_binary = zcl_abappgp_binary_integer=>from_string( iv_input ).
@@ -222,7 +222,7 @@ CLASS ltcl_to_binary_string DEFINITION FOR TESTING
       get7 FOR TESTING,
       get8 FOR TESTING.
 
-    METHODS: test IMPORTING iv_str           TYPE string
+    METHODS test IMPORTING iv_str           TYPE string
                   RETURNING VALUE(rv_binary) TYPE string.
 
 ENDCLASS.       "ltcl_Get
@@ -231,7 +231,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_binary TYPE REF TO zcl_abappgp_binary_integer.
+    DATA lo_binary TYPE REF TO zcl_abappgp_binary_integer.
 
 
     lo_binary = zcl_abappgp_binary_integer=>from_string( iv_str ).
@@ -241,7 +241,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get1.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '16' ).
 
@@ -253,7 +253,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get2.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '1234' ).
 
@@ -265,7 +265,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get3.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '1' ).
 
@@ -277,7 +277,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get4.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '8191' ).
 
@@ -289,7 +289,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get5.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '8192' ).
 
@@ -301,7 +301,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get6.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '8193' ).
 
@@ -313,7 +313,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get7.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '9000' ).
 
@@ -325,7 +325,7 @@ CLASS ltcl_to_binary_string IMPLEMENTATION.
 
   METHOD get8.
 
-    DATA: lv_binary TYPE string.
+    DATA lv_binary TYPE string.
 
     lv_binary = test( '10000' ).
 

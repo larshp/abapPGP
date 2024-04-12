@@ -1,7 +1,7 @@
 CLASS ltcl_sign DEFINITION FOR TESTING DURATION MEDIUM RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       sign01 FOR TESTING RAISING zcx_abappgp_invalid_key.
 
 ENDCLASS.       "ltcl_Test
@@ -66,7 +66,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test01.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     CREATE OBJECT lo_stream.
@@ -87,7 +87,7 @@ CLASS ltcl_test IMPLEMENTATION.
 
   METHOD test02.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     CREATE OBJECT lo_stream.

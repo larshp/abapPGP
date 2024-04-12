@@ -195,7 +195,7 @@ CLASS zcl_abappgp_integer DEFINITION
   PROTECTED SECTION.
 
     TYPES ty_split TYPE i .
-    TYPES:
+    TYPES
       ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
     DATA mv_negative TYPE abap_bool .
@@ -413,7 +413,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD divide_by_10.
 
-    DATA: lv_int TYPE i.
+    DATA lv_int TYPE i.
 
 
     DO iv_times DIV gv_length TIMES.
@@ -716,7 +716,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD from_high_length.
 
-    DATA: lv_str TYPE string.
+    DATA lv_str TYPE string.
 
 
     ASSERT iv_count >= 1.
@@ -732,7 +732,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD from_low_length.
 
-    DATA: lv_str TYPE string.
+    DATA lv_str TYPE string.
 
 
     ASSERT iv_count >= 1.
@@ -750,7 +750,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD from_string.
 
-    DATA: lv_str TYPE string.
+    DATA lv_str TYPE string.
 
 
     lv_str = iv_integer.
@@ -810,7 +810,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_eq.
 
-    DATA: lv_index TYPE i.
+    DATA lv_index TYPE i.
 
     FIELD-SYMBOLS: <lv_op1> LIKE LINE OF mt_split,
                    <lv_op2> LIKE LINE OF mt_split.
@@ -945,7 +945,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_one.
 
-    DATA: lv_value LIKE LINE OF mt_split.
+    DATA lv_value LIKE LINE OF mt_split.
 
 
     IF lines( mt_split ) <> 1 OR mv_negative = abap_true.
@@ -970,7 +970,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_two.
 
-    FIELD-SYMBOLS: <lv_value> LIKE LINE OF mt_split.
+    FIELD-SYMBOLS <lv_value> LIKE LINE OF mt_split.
 
 
     IF lines( mt_split ) <> 1 OR mv_negative = abap_true.
@@ -986,7 +986,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD is_zero.
 
-    DATA: lv_value TYPE ty_split.
+    DATA lv_value TYPE ty_split.
 
 
     IF lines( mt_split ) <> 1.
@@ -1135,7 +1135,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD mod_2.
 
-    DATA: lv_value TYPE ty_split.
+    DATA lv_value TYPE ty_split.
 
 * only the first digit is relevant for calculating MOD2
     READ TABLE mt_split INDEX 1 INTO lv_value.            "#EC CI_SUBRC
@@ -1280,7 +1280,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD multiply_10.
 
-    DATA: lv_int TYPE i.
+    DATA lv_int TYPE i.
 
 
     ro_result = me.
@@ -1314,7 +1314,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD multiply_int.
 
-    DATA: lv_str TYPE string.
+    DATA lv_str TYPE string.
 
 
     ASSERT iv_integer >= 0.
@@ -1484,7 +1484,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD split_at.
 
-    DATA: lv_split TYPE ty_split.
+    DATA lv_split TYPE ty_split.
 
 
     CREATE OBJECT eo_low.
@@ -1613,7 +1613,7 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
 
   METHOD to_string.
 
-    DATA: lv_int TYPE string.
+    DATA lv_int TYPE string.
 
     LOOP AT mt_split INTO lv_int.
       CONDENSE lv_int.

@@ -78,7 +78,7 @@ CLASS ZCL_ABAPPGP_PACKET_05 IMPLEMENTATION.
 
   METHOD decrypt.
 
-    CONSTANTS: lc_hash_length TYPE i VALUE 20.
+    CONSTANTS lc_hash_length TYPE i VALUE 20.
 
     DATA: lv_key    TYPE xstring,
           lv_hash   TYPE xstring,

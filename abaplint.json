@@ -55,7 +55,7 @@
     "slow_parameter_passing": true,
     "static_call_via_instance": true,
     "superfluous_value": true,
-    "unnecessary_chaining": false,
+    "unnecessary_chaining": true,
     "unnecessary_pragma": true,
     "unsecure_fae": true,
     "use_class_based_exceptions": true,

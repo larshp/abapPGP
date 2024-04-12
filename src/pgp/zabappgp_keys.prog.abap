@@ -9,7 +9,7 @@ CONSTANTS: BEGIN OF c_mode,
              display TYPE i VALUE 3,
            END OF c_mode.
 
-DATA: gv_ok_code LIKE sy-ucomm.
+DATA gv_ok_code LIKE sy-ucomm.
 
 
 START-OF-SELECTION.
@@ -28,7 +28,7 @@ CLASS lcl_key DEFINITION.
       status.
 
   PRIVATE SECTION.
-    CLASS-METHODS:
+    CLASS-METHODS
       save.
 
     CLASS-DATA:
@@ -93,7 +93,7 @@ CLASS lcl_overview IMPLEMENTATION.
 
   METHOD delete.
 
-    DATA: ls_key  LIKE LINE OF gt_keys.
+    DATA ls_key  LIKE LINE OF gt_keys.
 
 
     ls_key = get_selected( ).
@@ -129,7 +129,7 @@ CLASS lcl_overview IMPLEMENTATION.
 
   METHOD call_key_screen.
 
-    DATA: ls_key  LIKE LINE OF gt_keys.
+    DATA ls_key  LIKE LINE OF gt_keys.
 
 
     ls_key = get_selected( ).
@@ -226,7 +226,7 @@ CLASS lcl_key IMPLEMENTATION.
 
   METHOD save.
 
-    DATA: ls_key TYPE zabappgp_keys.
+    DATA ls_key TYPE zabappgp_keys.
 
 
     MOVE-CORRESPONDING zabappgp_keys_key TO ls_key.
@@ -311,7 +311,7 @@ CLASS lcl_key IMPLEMENTATION.
 
   METHOD status.
 
-    DATA: lt_excluding TYPE TABLE OF sy-ucomm.
+    DATA lt_excluding TYPE TABLE OF sy-ucomm.
 
 
     IF gv_mode = c_mode-display.

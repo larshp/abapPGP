@@ -1,8 +1,8 @@
 REPORT zabappgp_sign.
 
-TABLES: zabappgp_sign.
+TABLES zabappgp_sign.
 
-DATA: gv_ok_code LIKE sy-ucomm.
+DATA gv_ok_code LIKE sy-ucomm.
 
 CLASS lcl_screen_2000 DEFINITION.
 
@@ -19,7 +19,7 @@ CLASS lcl_screen_2000 DEFINITION.
       go_result     TYPE REF TO cl_gui_textedit,
       go_message    TYPE REF TO cl_gui_textedit.
 
-    CLASS-METHODS:
+    CLASS-METHODS
       call_sign
         RAISING
           zcx_abappgp_invalid_key.
@@ -69,7 +69,7 @@ CLASS lcl_screen_2000 IMPLEMENTATION.
 
   METHOD user_command.
 
-    DATA: lx_error TYPE REF TO zcx_abappgp_invalid_key.
+    DATA lx_error TYPE REF TO zcx_abappgp_invalid_key.
 
     CASE gv_ok_code.
       WHEN 'BACK'.

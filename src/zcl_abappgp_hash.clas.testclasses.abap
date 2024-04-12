@@ -24,11 +24,11 @@ ENDCLASS.
 CLASS ltcl_sha256 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS: test
+    METHODS test
       IMPORTING iv_input    TYPE string
                 iv_expected TYPE xstring.
 
-    METHODS: test01 FOR TESTING.
+    METHODS test01 FOR TESTING.
 
 ENDCLASS.       "ltcl_Sha256
 
@@ -36,7 +36,7 @@ CLASS ltcl_sha256 IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lv_hash TYPE xstring.
+    DATA lv_hash TYPE xstring.
 
 
     lv_hash = zcl_abappgp_hash=>sha256( zcl_abappgp_convert=>string_to_utf8( iv_input ) ).
@@ -59,7 +59,7 @@ ENDCLASS.
 CLASS ltcl_crc24 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS: test
+    METHODS test
       IMPORTING iv_input    TYPE xstring
                 iv_expected TYPE xstring.
 
@@ -73,7 +73,7 @@ CLASS ltcl_crc24 IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lv_hash TYPE xstring.
+    DATA lv_hash TYPE xstring.
 
 
     lv_hash = zcl_abappgp_hash=>crc24( iv_input ).
@@ -93,7 +93,7 @@ CLASS ltcl_crc24 IMPLEMENTATION.
 
   METHOD test02.
 
-    DATA: lo_stream TYPE REF TO zcl_abappgp_stream.
+    DATA lo_stream TYPE REF TO zcl_abappgp_stream.
 
 
     CREATE OBJECT lo_stream.

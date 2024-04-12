@@ -176,7 +176,7 @@ CLASS zcl_abappgp_armor IMPLEMENTATION.
 
   METHOD to_string.
 
-    CONSTANTS: lc_length TYPE i VALUE 60.
+    CONSTANTS lc_length TYPE i VALUE 60.
 
     DATA: lv_header LIKE LINE OF mt_headers,
           lv_data   TYPE string.

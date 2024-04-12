@@ -119,7 +119,7 @@ CLASS ZCL_ABAPPGP_CONVERT IMPLEMENTATION.
 
   METHOD string_to_utf8.
 
-    DATA: lo_obj TYPE REF TO cl_abap_conv_out_ce.
+    DATA lo_obj TYPE REF TO cl_abap_conv_out_ce.
 
 
     TRY.

@@ -177,7 +177,7 @@ CLASS zcl_abappgp_rsa IMPLEMENTATION.
 
   METHOD verify.
 
-    DATA: lo_result TYPE REF TO zcl_abappgp_integer.
+    DATA lo_result TYPE REF TO zcl_abappgp_integer.
 
 
     lo_result = io_s->clone( )->modular_pow_montgomery(

@@ -88,14 +88,14 @@ CLASS zcl_abappgp_integer2 DEFINITION
   PROTECTED SECTION.
 
     TYPES ty_split TYPE i .
-    TYPES:
+    TYPES
       ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
     DATA mt_split TYPE ty_split_tt .
     CLASS-DATA gv_max TYPE i VALUE 8192.        "#EC NOTEXT .  .  . " .
     CLASS-DATA gv_bits TYPE i VALUE 13.         "#EC NOTEXT .  .  . " .
     CLASS-DATA go_max TYPE REF TO zcl_abappgp_integer .
-    CLASS-DATA:
+    CLASS-DATA
       gt_powers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
     CLASS-DATA go_two TYPE REF TO zcl_abappgp_integer2 .
 
@@ -424,7 +424,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD is_one.
 
-    DATA: lv_split LIKE LINE OF mt_split.
+    DATA lv_split LIKE LINE OF mt_split.
 
 
     rv_bool = abap_false.
@@ -439,7 +439,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD is_zero.
 
-    DATA: lv_split LIKE LINE OF mt_split.
+    DATA lv_split LIKE LINE OF mt_split.
 
 
     rv_bool = abap_false.
@@ -639,7 +639,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
 
   METHOD split_at.
 
-    DATA: lv_split TYPE ty_split.
+    DATA lv_split TYPE ty_split.
 
 
     CREATE OBJECT eo_low.

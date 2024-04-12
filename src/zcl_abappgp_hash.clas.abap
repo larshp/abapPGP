@@ -21,7 +21,7 @@ CLASS zcl_abappgp_hash DEFINITION
         VALUE(rv_hash) TYPE xstring .
   PROTECTED SECTION.
 
-    TYPES:
+    TYPES
       ty_table_tt TYPE STANDARD TABLE OF xstring WITH DEFAULT KEY .
 
     CLASS-METHODS crc24_init

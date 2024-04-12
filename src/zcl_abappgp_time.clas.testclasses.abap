@@ -3,7 +3,7 @@ CLASS ltcl_format_unix DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
 
   PRIVATE SECTION.
 
-    METHODS: format_unix FOR TESTING.
+    METHODS format_unix FOR TESTING.
 
 ENDCLASS.       "ltcl_Format_Unix
 
@@ -12,7 +12,7 @@ CLASS ltcl_format_unix IMPLEMENTATION.
 
   METHOD format_unix.
 
-    DATA: lv_formatted TYPE string.
+    DATA lv_formatted TYPE string.
 
 
     lv_formatted = zcl_abappgp_time=>format_unix( 1479483416 ).
