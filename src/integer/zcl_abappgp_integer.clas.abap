@@ -222,7 +222,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
+CLASS zcl_abappgp_integer IMPLEMENTATION.
 
 
   METHOD add.
@@ -291,8 +291,8 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     gv_length = 4.
 
 * TY_SPLIT = p LENGTH 16 DECIMALS 0
-*    gv_max = 1000000000000000.
-*    gv_length = 15.
+*    gv_max = 1000000000000000
+*    gv_length = 15
 
   ENDMETHOD.
 
@@ -370,11 +370,9 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
     ENDIF.
 
     DO.
-*      WRITE: / .
       lv_iterations = lv_iterations + 1.
 
       lo_middle = lo_high_guess->clone( )->subtract( lo_low_guess )->divide_by_2( ).
-*      WRITE: / 'middle', lo_middle->to_string( ).
 
       IF lo_middle->is_zero( ) = abap_true.
         lo_tmp = lo_high_guess->clone( )->multiply( io_integer ).
@@ -392,8 +390,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_guess = lo_high_guess->clone( )->subtract( lo_middle ).
       lo_tmp = lo_guess->clone( )->multiply( io_integer ).
       IF lo_tmp->is_ge( me ) = abap_true.
-*        WRITE: / 'tmp', lo_tmp->to_string( ), 'guess', lo_guess->to_string( ).
-*        WRITE: / 'move high to', lo_guess->to_string( ).
         lo_high_guess = lo_guess.
         CONTINUE.
       ENDIF.
@@ -402,7 +398,6 @@ CLASS ZCL_ABAPPGP_INTEGER IMPLEMENTATION.
       lo_guess = lo_low_guess->clone( )->add( lo_middle ).
       lo_tmp = lo_guess->clone( )->multiply( io_integer ).
       IF lo_tmp->is_le( me ) = abap_true.
-*        WRITE: / 'move low to', lo_guess->to_string( ).
         lo_low_guess = lo_guess.
       ENDIF.
 

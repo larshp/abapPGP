@@ -54,7 +54,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
+CLASS zcl_abappgp_packet_list IMPLEMENTATION.
 
 
   METHOD binary_to_tag.
@@ -110,7 +110,7 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 *        rv_tag = zif_abappgp_constants=>c_tag-modification_detection.
 *      WHEN OTHERS.
 *        ASSERT 0 = 1.
-*    ENDCASE.
+*    ENDCASE
 
   ENDMETHOD.
 

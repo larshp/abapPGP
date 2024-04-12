@@ -75,7 +75,7 @@ CLASS zcl_abappgp_encode IMPLEMENTATION.
 *    H = Hash(M).
 *
 *    If the hash function outputs "message too long," output "message
-*    too long" and stop.
+*    too long" and stop
     lv_h = zcl_abappgp_hash=>sha256( iv_m ).
 
 * 2. Using the list in Section 5.2.2, produce an ASN.1 DER value for

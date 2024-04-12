@@ -37,7 +37,7 @@ ENDCLASS.
 
 
 
-CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
+CLASS zcl_abappgp_montgomery IMPLEMENTATION.
 
 
   METHOD build.
@@ -112,22 +112,17 @@ CLASS ZCL_ABAPPGP_MONTGOMERY IMPLEMENTATION.
           lo_tmp     TYPE REF TO zcl_abappgp_integer2.
 
 
-*    ASSERT NOT io_x->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
-*    ASSERT NOT io_y->get_integer( )->is_gt( mo_modulus2 ) = abap_true.
-
     lo_product = io_x->get_integer( )->clone( )->multiply_karatsuba( io_y->get_integer( ) ).
 
     lo_tmp = lo_product->clone( )->and( mo_mask )->multiply_karatsuba( mo_factor )->and( mo_mask ).
 
     lo_tmp->multiply_karatsuba( mo_modulus2 ).
 
-* ->clone( )
     lo_reduced = lo_product->add( lo_tmp )->shift_right( mv_bits ).
 
     IF lo_reduced->is_gt( mo_modulus2 ) = abap_true.
       lo_reduced->subtract( mo_modulus2 ).
     ENDIF.
-*    ASSERT NOT lo_reduced->is_gt( mo_modulus2 ) = abap_true.
 
     CREATE OBJECT ro_result
       EXPORTING
