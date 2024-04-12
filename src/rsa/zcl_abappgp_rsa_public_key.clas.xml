@@ -11,18 +11,6 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CMPNAME>MO_E</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Big Integer, stored base 10</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>MO_N</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Big Integer, stored base 10</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

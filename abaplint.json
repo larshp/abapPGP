@@ -285,23 +285,13 @@
     },
     "parser_error": true,
     "prefer_returning_to_exporting": true,
-    "preferred_compare_operator": {
-      "badOperators": [
-        "EQ",
-        "><",
-        "NE",
-        "GE",
-        "GT",
-        "LT",
-        "LE"
-      ]
-    },
+    "preferred_compare_operator": true,
     "prefix_is_current_class": {
       "omitMeInstanceCalls": true
     },
     "release_idoc": true,
     "unused_ddic": true,
-    "remove_descriptions": false,
+    "remove_descriptions": true,
     "rfc_error_handling": true,
     "selection_screen_naming": true,
     "sequential_blank": {

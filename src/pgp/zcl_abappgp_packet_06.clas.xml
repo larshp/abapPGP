@@ -20,13 +20,6 @@
      <LENGTH>27</LENGTH>
     </item>
    </TPOOL>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CMPNAME>MO_KEY</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Public key</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>
