@@ -302,7 +302,7 @@ CLASS ZCL_ABAPPGP_INTEGER2 IMPLEMENTATION.
       lo_int->divide_by_2( ).
     ENDWHILE.
 
-    IF NOT lv_hex IS INITIAL.
+    IF lv_hex IS NOT INITIAL.
       lv_int = lv_hex.
       APPEND lv_int TO ro_integer->mt_split.
     ENDIF.

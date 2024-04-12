@@ -36,7 +36,7 @@ CLASS lcl_screen_2000 IMPLEMENTATION.
     SET PF-STATUS 'STATUS_2000'.
     SET TITLEBAR 'TITLE_2000'.
 
-    IF NOT go_container1 IS BOUND.
+    IF go_container1 IS NOT BOUND.
       CREATE OBJECT go_container1
         EXPORTING
           container_name = 'CUSTOM_INPUT'.

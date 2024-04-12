@@ -752,7 +752,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
 
     ASSERT lv_str CO '-1234567890'.
     IF strlen( lv_str ) > 1.
-      ASSERT NOT lv_str(1) = '0'.
+      ASSERT lv_str(1) <> '0'.
     ENDIF.
 
     CREATE OBJECT ro_integer.
@@ -1001,7 +1001,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
           lo_mult TYPE REF TO zcl_abappgp_integer.
 
 
-    ASSERT NOT io_integer->mv_negative = abap_true.
+    ASSERT io_integer->mv_negative <> abap_true.
 
 * todo, new protected divide method that returns both quotient and remainder
     lo_div = clone( )->divide_knuth( io_integer ).
@@ -1022,7 +1022,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
           lo_exponent TYPE REF TO zcl_abappgp_binary_integer.
 
 
-    ASSERT NOT io_modulus->mv_negative = abap_true.
+    ASSERT io_modulus->mv_negative <> abap_true.
 
     IF io_modulus->is_one( ) = abap_true.
       split( '0' ).
@@ -1072,7 +1072,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
           lo_basem    TYPE REF TO zcl_abappgp_montgomery_integer.
 
 
-    ASSERT NOT io_modulus->mv_negative = abap_true.
+    ASSERT io_modulus->mv_negative <> abap_true.
 
     IF io_modulus->is_one( ) = abap_true.
       split( '0' ).
@@ -1384,7 +1384,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
           lo_original TYPE REF TO zcl_abappgp_integer.
 
 
-    ASSERT NOT io_integer->mv_negative = abap_true.
+    ASSERT io_integer->mv_negative <> abap_true.
 
     IF io_integer->is_zero( ) = abap_true.
       split( '1' ).

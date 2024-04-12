@@ -66,9 +66,9 @@ CLASS zcl_abappgp_armor IMPLEMENTATION.
 
   METHOD constructor.
 
-    ASSERT NOT iv_armor_header IS INITIAL.
-    ASSERT NOT iv_data IS INITIAL.
-    ASSERT NOT iv_armor_tail IS INITIAL.
+    ASSERT iv_armor_header IS NOT INITIAL.
+    ASSERT iv_data IS NOT INITIAL.
+    ASSERT iv_armor_tail IS NOT INITIAL.
 
     mv_armor_header = iv_armor_header.
     mt_headers      = it_headers.
