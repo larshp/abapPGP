@@ -75,10 +75,10 @@ CLASS ltcl_aes256 IMPLEMENTATION.
 
   METHOD encrypt01.
 
-    CONSTANTS:
+    CONSTANTS
       lc_exp TYPE xstring VALUE '1462EE073B051AA7212254B7333BBAA65723C3FCFE414E'.
 
-    DATA: lv_plain TYPE xstring.
+    DATA lv_plain TYPE xstring.
 
 
     lv_plain = zcl_abappgp_convert=>string_to_utf8( 'hello' ).
@@ -91,11 +91,11 @@ CLASS ltcl_aes256 IMPLEMENTATION.
 
   METHOD encrypt02.
 
-    CONSTANTS:
+    CONSTANTS
       lc_exp TYPE xstring VALUE
         '1462EE073B051AA7212254B7333BBAA65723C3FCFE414E0EA7F6929EC7662A432B1E61461565'.
 
-    DATA: lv_plain TYPE xstring.
+    DATA lv_plain TYPE xstring.
 
 
     lv_plain = zcl_abappgp_convert=>string_to_utf8( 'hellohellohellohello' ).
@@ -112,7 +112,7 @@ CLASS ltcl_aes256 IMPLEMENTATION.
       lc_empty TYPE xstring VALUE '',
       lc_hex   TYPE x LENGTH 1 VALUE 'AA'.
 
-    DATA: lv_plain TYPE xstring.
+    DATA lv_plain TYPE xstring.
 
 
     DO 304 TIMES.
@@ -127,10 +127,10 @@ CLASS ltcl_aes256 IMPLEMENTATION.
 
   METHOD encrypt04.
 
-    CONSTANTS:
+    CONSTANTS
       lc_exp TYPE xstring VALUE '1462EE073B051AA7212254B7333BBAA65723F9D0E3FED2'.
 
-    DATA: lv_plain TYPE xstring.
+    DATA lv_plain TYPE xstring.
 
 
     lv_plain = zcl_abappgp_convert=>string_to_utf8( 'hello' ).
@@ -143,11 +143,11 @@ CLASS ltcl_aes256 IMPLEMENTATION.
 
   METHOD encrypt05.
 
-    CONSTANTS:
+    CONSTANTS
       lc_exp TYPE xstring VALUE
         '1462EE073B051AA7212254B7333BBAA65723F9D0E3FED2D9E27B93A69213806C50C7DD969B3F'.
 
-    DATA: lv_plain TYPE xstring.
+    DATA lv_plain TYPE xstring.
 
 
     lv_plain = zcl_abappgp_convert=>string_to_utf8( 'hellohellohellohello' ).

@@ -83,16 +83,16 @@ ENDFORM.
 
 FORM output_integer USING io_value TYPE REF TO zcl_abappgp_integer.
 
-  CONSTANTS: lc_output TYPE i VALUE 200.
+  CONSTANTS lc_output TYPE i VALUE 200.
 
-  DATA: lv_str TYPE string.
+  DATA lv_str TYPE string.
 
 
   lv_str = io_value->to_string( ).
   WHILE strlen( lv_str ) > lc_output.
-    WRITE: / lv_str(lc_output).
+    WRITE / lv_str(lc_output).
     lv_str = lv_str+lc_output.
   ENDWHILE.
-  WRITE: / lv_str.
+  WRITE / lv_str.
 
 ENDFORM.

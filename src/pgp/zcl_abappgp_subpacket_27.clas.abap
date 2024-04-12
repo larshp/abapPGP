@@ -112,7 +112,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_27 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~to_stream.
 
-    DATA: lv_octet TYPE x LENGTH 1.
+    DATA lv_octet TYPE x LENGTH 1.
 
 
     IF mv_certify_other = abap_true.

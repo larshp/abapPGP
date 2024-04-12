@@ -4,7 +4,7 @@ CLASS ltcl_multiply DEFINITION FOR TESTING
     RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       test IMPORTING iv_x             TYPE string
                      iv_y             TYPE string
                      iv_mod           TYPE string
@@ -50,7 +50,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
 
   METHOD multiply1.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_x   = '124'
                       iv_y   = '154'
@@ -64,7 +64,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
 
   METHOD multiply2.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_x   = '1334'
                       iv_y   = '1234'
@@ -78,7 +78,7 @@ CLASS ltcl_multiply IMPLEMENTATION.
 
   METHOD multiply3.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_x   = '45454545'
                       iv_y   = '3232323'

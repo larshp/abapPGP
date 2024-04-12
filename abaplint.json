@@ -1,9 +1,6 @@
 {
   "global": {
-    "files": "/src/**/*.*",
-    "skipGeneratedGatewayClasses": true,
-    "skipGeneratedPersistentClasses": true,
-    "skipGeneratedFunctionGroups": true
+    "files": "/src/**/*.*"
   },
   "dependencies": [
     {
@@ -24,9 +21,7 @@
   ],
   "syntax": {
     "version": "v702",
-    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)",
-    "globalConstants": [],
-    "globalMacros": []
+    "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)"
   },
   "rules": {
     "align_parameters": false,
@@ -60,7 +55,7 @@
     "slow_parameter_passing": true,
     "static_call_via_instance": true,
     "superfluous_value": true,
-    "unnecessary_chaining": false,
+    "unnecessary_chaining": true,
     "unnecessary_pragma": true,
     "unsecure_fae": true,
     "use_class_based_exceptions": true,
@@ -189,20 +184,9 @@
       "ignoreGlobalInterface": false
     },
     "inline_data_old_versions": true,
-    "keep_single_parameter_on_one_line": false,
-    "keyword_case": {
-      "style": "upper",
-      "ignoreExceptions": true,
-      "ignoreLowerClassImplmentationStatement": true,
-      "ignoreGlobalClassBoundaries": false,
-      "ignoreGlobalClassDefinition": false,
-      "ignoreGlobalInterface": false,
-      "ignoreFunctionModuleName": false,
-      "ignoreKeywords": []
-    },
-    "line_length": {
-      "length": 120
-    },
+    "keep_single_parameter_on_one_line": true,
+    "keyword_case": true,
+    "line_length": true,
     "line_only_punc": {
       "ignoreExceptions": true
     },
@@ -301,23 +285,13 @@
     },
     "parser_error": true,
     "prefer_returning_to_exporting": true,
-    "preferred_compare_operator": {
-      "badOperators": [
-        "EQ",
-        "><",
-        "NE",
-        "GE",
-        "GT",
-        "LT",
-        "LE"
-      ]
-    },
+    "preferred_compare_operator": true,
     "prefix_is_current_class": {
       "omitMeInstanceCalls": true
     },
     "release_idoc": true,
     "unused_ddic": true,
-    "remove_descriptions": false,
+    "remove_descriptions": true,
     "rfc_error_handling": true,
     "selection_screen_naming": true,
     "sequential_blank": {

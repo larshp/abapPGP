@@ -13,7 +13,7 @@ CLASS zcl_abappgp_prime DEFINITION
         VALUE(rv_bool)    TYPE abap_bool .
   PROTECTED SECTION.
 
-    TYPES:
+    TYPES
       ty_integer_tt TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
     CLASS-DATA gt_low TYPE ty_integer_tt.

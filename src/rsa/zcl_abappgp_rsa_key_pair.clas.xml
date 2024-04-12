@@ -11,18 +11,6 @@
     <FIXPT>X</FIXPT>
     <UNICODE>X</UNICODE>
    </VSEOCLASS>
-   <DESCRIPTIONS>
-    <SEOCOMPOTX>
-     <CMPNAME>MO_PRIVATE</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Private key</DESCRIPT>
-    </SEOCOMPOTX>
-    <SEOCOMPOTX>
-     <CMPNAME>MO_PUBLIC</CMPNAME>
-     <LANGU>E</LANGU>
-     <DESCRIPT>Public key</DESCRIPT>
-    </SEOCOMPOTX>
-   </DESCRIPTIONS>
   </asx:values>
  </asx:abap>
 </abapGit>

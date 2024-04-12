@@ -1,6 +1,6 @@
 REPORT zabappgp_test1.
 
-PARAMETERS: p_gname TYPE rfcgr MATCHCODE OBJECT serv_group DEFAULT 'parallel_generators'.
+PARAMETERS p_gname TYPE rfcgr MATCHCODE OBJECT serv_group DEFAULT 'parallel_generators'.
 
 START-OF-SELECTION.
   PERFORM run.
@@ -33,6 +33,6 @@ FORM run.
 
   WRITE: / lv_max, lv_free.
 
-  WRITE: / 'Done'.
+  WRITE / 'Done'.
 
 ENDFORM.

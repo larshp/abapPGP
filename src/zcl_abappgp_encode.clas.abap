@@ -24,7 +24,7 @@ CLASS zcl_abappgp_encode IMPLEMENTATION.
 
   METHOD hash_prefix.
 
-    DATA: lv_hex TYPE x LENGTH 1.
+    DATA lv_hex TYPE x LENGTH 1.
 
     DEFINE _add.
       lv_hex = &1.

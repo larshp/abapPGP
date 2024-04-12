@@ -5,7 +5,7 @@ CLASS ltcl_from_hex DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
     METHODS test02 FOR TESTING RAISING cx_static_check.
     METHODS test03 FOR TESTING RAISING cx_static_check.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_exp TYPE string
                      iv_hex TYPE xstring.
 
@@ -55,7 +55,7 @@ CLASS ltcl_to_hex DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       test01 FOR TESTING,
       test02 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_int TYPE string
                      iv_exp TYPE xstring.
 
@@ -101,7 +101,7 @@ CLASS ltcl_extended_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLES
       test1 FOR TESTING,
       test2 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_a      TYPE string
                      iv_b      TYPE string
                      iv_coeff1 TYPE string
@@ -192,7 +192,7 @@ CLASS ltcl_gcd DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       gcd3 FOR TESTING,
       gcd4 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_a   TYPE string
                      iv_b   TYPE string
                      iv_exp TYPE string.
@@ -253,7 +253,7 @@ CLASS ltcl_mod_inverse DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
       mod_inverse2 FOR TESTING,
       mod_inverse3 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_value         TYPE string
                      iv_mod           TYPE string
            RETURNING VALUE(rv_result) TYPE string.
@@ -277,7 +277,7 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
 
   METHOD mod_inverse1.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_value = '42'
                       iv_mod   = '2017' ).
@@ -290,7 +290,7 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
 
   METHOD mod_inverse2.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_value = '40'
                       iv_mod   = '1' ).
@@ -303,7 +303,7 @@ CLASS ltcl_mod_inverse IMPLEMENTATION.
 
   METHOD mod_inverse3.
 
-    DATA: lv_result TYPE string.
+    DATA lv_result TYPE string.
 
     lv_result = test( iv_value = '256'
                       iv_mod   = '25' ).
@@ -325,7 +325,7 @@ CLASS ltcl_divide_by_2 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
       divide3 FOR TESTING,
       divide4 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_value      TYPE string
            RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
 
@@ -342,7 +342,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
 
   METHOD divide1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( '1' ).
@@ -355,7 +355,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
 
   METHOD divide2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( '2' ).
@@ -368,7 +368,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
 
   METHOD divide3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( '22' ).
@@ -381,7 +381,7 @@ CLASS ltcl_divide_by_2 IMPLEMENTATION.
 
   METHOD divide4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( '111222333' ).
@@ -403,7 +403,7 @@ CLASS ltcl_modular_pow DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
       modular_pow3 FOR TESTING,
       modular_pow4 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_base       TYPE string
                      iv_exp        TYPE string
                      iv_mod        TYPE string
@@ -444,7 +444,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
 
   METHOD modular_pow1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_base = '1'
@@ -459,7 +459,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
 
   METHOD modular_pow2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_base = '4'
@@ -474,7 +474,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
 
   METHOD modular_pow3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_base = '3'
@@ -489,7 +489,7 @@ CLASS ltcl_modular_pow IMPLEMENTATION.
 
   METHOD modular_pow4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_base = '4578'
@@ -515,7 +515,7 @@ CLASS ltcl_mod DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       mod5 FOR TESTING,
       mod6 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1        TYPE string
                      iv_op2        TYPE string
            RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
@@ -526,7 +526,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
+    DATA lo_var2 TYPE REF TO zcl_abappgp_integer.
 
 
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
@@ -538,7 +538,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -552,7 +552,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5'
@@ -566,7 +566,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '9999'
@@ -580,7 +580,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '10009'
@@ -594,7 +594,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod5.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '10'
@@ -608,7 +608,7 @@ CLASS ltcl_mod IMPLEMENTATION.
 
   METHOD mod6.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '30558784'
@@ -642,7 +642,7 @@ CLASS ltcl_divide DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINA
       divide14 FOR TESTING,
       divide_generic FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1        TYPE string
                      iv_op2        TYPE string
            RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
@@ -653,7 +653,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
+    DATA lo_var2 TYPE REF TO zcl_abappgp_integer.
 
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
     lo_var2 = zcl_abappgp_integer=>from_string( iv_op2 ).
@@ -664,7 +664,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -678,7 +678,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '123456'
@@ -692,7 +692,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5'
@@ -706,7 +706,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '555555'
@@ -720,7 +720,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide5.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5'
@@ -734,7 +734,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide6.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -748,7 +748,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide7.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '30558784'
@@ -762,7 +762,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide8.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '30558784'
@@ -776,7 +776,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide9.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1000'
@@ -790,7 +790,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide10.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5827800983498960781124740512078744256512'
@@ -804,7 +804,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide11.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '7382888'
@@ -818,7 +818,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide12.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '91'
@@ -832,7 +832,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide13.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1000'
@@ -846,7 +846,7 @@ CLASS ltcl_divide IMPLEMENTATION.
 
   METHOD divide14.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1000000'
@@ -895,7 +895,7 @@ CLASS ltcl_eq DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       eq1 FOR TESTING,
       eq2 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1         TYPE string
                      iv_op2         TYPE string
            RETURNING VALUE(rv_bool) TYPE abap_bool.
@@ -919,7 +919,7 @@ CLASS ltcl_eq IMPLEMENTATION.
 
   METHOD eq1.
 
-    DATA: lv_eq TYPE abap_bool.
+    DATA lv_eq TYPE abap_bool.
 
 
     lv_eq = test( iv_op1 = '7382888'
@@ -933,7 +933,7 @@ CLASS ltcl_eq IMPLEMENTATION.
 
   METHOD eq2.
 
-    DATA: lv_eq TYPE abap_bool.
+    DATA lv_eq TYPE abap_bool.
 
 
     lv_eq = test( iv_op1 = '1112888'
@@ -950,10 +950,10 @@ ENDCLASS.
 CLASS ltcl_ge DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       ge1 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1         TYPE string
                      iv_op2         TYPE string
            RETURNING VALUE(rv_bool) TYPE abap_bool.
@@ -977,7 +977,7 @@ CLASS ltcl_ge IMPLEMENTATION.
 
   METHOD ge1.
 
-    DATA: lv_ge TYPE abap_bool.
+    DATA lv_ge TYPE abap_bool.
 
 
     lv_ge = test( iv_op1 = '7382888'
@@ -1005,7 +1005,7 @@ CLASS ltcl_gt DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       gt8 FOR TESTING,
       gt9 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1         TYPE string
                      iv_op2         TYPE string
            RETURNING VALUE(rv_bool) TYPE abap_bool.
@@ -1029,7 +1029,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt1.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '0'
@@ -1043,7 +1043,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt2.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '1'
@@ -1057,7 +1057,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt3.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '10000'
@@ -1071,7 +1071,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt4.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '10000'
@@ -1085,7 +1085,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt5.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '30514335'
@@ -1099,7 +1099,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt6.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '-30514335'
@@ -1113,7 +1113,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt7.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '-44449'
@@ -1127,7 +1127,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt8.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '-30514335'
@@ -1141,7 +1141,7 @@ CLASS ltcl_gt IMPLEMENTATION.
 
   METHOD gt9.
 
-    DATA: lv_gt TYPE abap_bool.
+    DATA lv_gt TYPE abap_bool.
 
 
     lv_gt = test( iv_op1 = '7382888'
@@ -1166,7 +1166,7 @@ CLASS ltcl_power DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL
       power5 FOR TESTING,
       power6 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1        TYPE string
                      iv_op2        TYPE string
            RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
@@ -1177,7 +1177,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
+    DATA lo_var2 TYPE REF TO zcl_abappgp_integer.
 
 
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
@@ -1189,7 +1189,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD power1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '0'
@@ -1203,7 +1203,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD power2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -1217,7 +1217,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD power3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '100'
@@ -1231,7 +1231,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD power4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '100'
@@ -1245,7 +1245,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD power5.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '99'
@@ -1259,7 +1259,7 @@ CLASS ltcl_power IMPLEMENTATION.
 
   METHOD power6.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '99'
@@ -1281,7 +1281,7 @@ CLASS ltcl_multiply_10 DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS
       multiply_10_2 FOR TESTING,
       multiply_10_3 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1 TYPE string
                      iv_op2 TYPE i
                      iv_exp TYPE string.
@@ -1292,7 +1292,7 @@ CLASS ltcl_multiply_10 IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var1 TYPE REF TO zcl_abappgp_integer.
+    DATA lo_var1 TYPE REF TO zcl_abappgp_integer.
 
 
     lo_var1 = zcl_abappgp_integer=>from_string( iv_op1 ).
@@ -1343,7 +1343,7 @@ CLASS ltcl_divide_knuth DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLES
       knuth14 FOR TESTING,
       knuth15 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1 TYPE string
                      iv_op2 TYPE string
                      iv_exp TYPE string.
@@ -1473,7 +1473,7 @@ CLASS ltcl_multiply_karatsuba DEFINITION FOR TESTING
       karatsuba7 FOR TESTING,
       karatsuba8 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1 TYPE string
                      iv_op2 TYPE string
                      iv_exp TYPE string.
@@ -1568,7 +1568,7 @@ CLASS ltcl_multiply DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       multiply14 FOR TESTING,
       multiply15 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1 TYPE string
                      iv_op2 TYPE string
                      iv_exp TYPE string.
@@ -1711,7 +1711,7 @@ CLASS ltcl_subtract DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       subtract11 FOR TESTING,
       subtract12 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1        TYPE string
                      iv_op2        TYPE string
            RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
@@ -1722,7 +1722,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
+    DATA lo_var2 TYPE REF TO zcl_abappgp_integer.
 
 
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
@@ -1734,7 +1734,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -1748,7 +1748,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '0'
@@ -1762,7 +1762,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '10'
@@ -1776,7 +1776,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '10000'
@@ -1790,7 +1790,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract5.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '10000'
@@ -1804,7 +1804,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract6.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5'
@@ -1818,7 +1818,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract7.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '-5'
@@ -1832,7 +1832,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract8.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5'
@@ -1846,7 +1846,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract9.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '-5'
@@ -1860,7 +1860,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract10.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '5'
@@ -1874,7 +1874,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract11.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '-3'
@@ -1888,7 +1888,7 @@ CLASS ltcl_subtract IMPLEMENTATION.
 
   METHOD subtract12.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '3'
@@ -1917,7 +1917,7 @@ CLASS ltcl_add DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FINAL.
       add9 FOR TESTING,
       add10 FOR TESTING.
 
-    METHODS:
+    METHODS
       test IMPORTING iv_op1        TYPE string
                      iv_op2        TYPE string
            RETURNING VALUE(ro_int) TYPE REF TO zcl_abappgp_integer.
@@ -1928,7 +1928,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD test.
 
-    DATA: lo_var2 TYPE REF TO zcl_abappgp_integer.
+    DATA lo_var2 TYPE REF TO zcl_abappgp_integer.
 
 
     ro_int = zcl_abappgp_integer=>from_string( iv_op1 ).
@@ -1940,7 +1940,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add1.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -1954,7 +1954,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add2.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -1968,7 +1968,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add3.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1111'
@@ -1982,7 +1982,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add4.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '111111'
@@ -1996,7 +1996,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add5.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1111'
@@ -2010,7 +2010,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add6.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '1'
@@ -2024,7 +2024,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add7.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '99980001'
@@ -2038,7 +2038,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add8.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '-5'
@@ -2052,7 +2052,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add9.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '-5'
@@ -2066,7 +2066,7 @@ CLASS ltcl_add IMPLEMENTATION.
 
   METHOD add10.
 
-    DATA: lo_res TYPE REF TO zcl_abappgp_integer.
+    DATA lo_res TYPE REF TO zcl_abappgp_integer.
 
 
     lo_res = test( iv_op1 = '10'
@@ -2093,7 +2093,7 @@ CLASS ltcl_identity DEFINITION FOR TESTING DURATION SHORT RISK LEVEL HARMLESS FI
       id6 FOR TESTING,
       id7 FOR TESTING.
 
-    METHODS: test IMPORTING iv_string TYPE string.
+    METHODS test IMPORTING iv_string TYPE string.
 
 ENDCLASS.       "ltcl_Add
 

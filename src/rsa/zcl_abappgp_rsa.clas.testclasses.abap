@@ -8,7 +8,7 @@ CLASS ltcl_find_coprime DEFINITION FOR TESTING
 
   PRIVATE SECTION.
 
-    METHODS: test01 FOR TESTING.
+    METHODS test01 FOR TESTING.
 ENDCLASS.       "ltcl_Generate_Keys
 
 
@@ -44,7 +44,7 @@ CLASS ltcl_generate_keys DEFINITION FOR TESTING
 
   PRIVATE SECTION.
 
-    METHODS:
+    METHODS
       run
         IMPORTING iv_p TYPE string
                   iv_q TYPE string
@@ -62,7 +62,7 @@ CLASS ltcl_generate_keys IMPLEMENTATION.
 
   METHOD run.
 
-    DATA: lo_pair TYPE REF TO zcl_abappgp_rsa_key_pair.
+    DATA lo_pair TYPE REF TO zcl_abappgp_rsa_key_pair.
 
 
     lo_pair = zcl_abappgp_rsa=>generate_key_pair(
@@ -149,7 +149,7 @@ CLASS ltcl_sign DEFINITION FOR TESTING
     RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       test01 FOR TESTING.
 
 ENDCLASS.
@@ -205,7 +205,7 @@ CLASS ltcl_encrypt DEFINITION FOR TESTING
     RISK LEVEL HARMLESS FINAL.
 
   PRIVATE SECTION.
-    METHODS:
+    METHODS
       test01 FOR TESTING.
 
 ENDCLASS.

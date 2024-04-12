@@ -21,7 +21,7 @@ CLASS zcl_abappgp_packet_list DEFINITION
         binary TYPE string,
         tag    TYPE i,
       END OF ty_map .
-    TYPES:
+    TYPES
       ty_map_tt TYPE STANDARD TABLE OF ty_map WITH DEFAULT KEY .
 
     CONSTANTS c_new_packet_format TYPE string VALUE '11' ##NO_TEXT.
@@ -59,9 +59,9 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
   METHOD binary_to_tag.
 
-    DATA: lt_map TYPE ty_map_tt.
+    DATA lt_map TYPE ty_map_tt.
 
-    FIELD-SYMBOLS: <ls_map> LIKE LINE OF lt_map.
+    FIELD-SYMBOLS <ls_map> LIKE LINE OF lt_map.
 
 
     ASSERT strlen( iv_string ) = 6.
@@ -161,7 +161,7 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
       <ls_map>-tag = &2.
     END-OF-DEFINITION.
 
-    FIELD-SYMBOLS: <ls_map> LIKE LINE OF rt_map.
+    FIELD-SYMBOLS <ls_map> LIKE LINE OF rt_map.
 
 
     _append '000001' zif_abappgp_constants=>c_tag-public_key_enc.
@@ -187,7 +187,7 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
   METHOD read_packet_header.
 
-    DATA: lv_bits TYPE string.
+    DATA lv_bits TYPE string.
 
 
     lv_bits = zcl_abappgp_convert=>to_bits( io_stream->eat_octet( ) ).
@@ -200,9 +200,9 @@ CLASS ZCL_ABAPPGP_PACKET_LIST IMPLEMENTATION.
 
   METHOD tag_to_binary.
 
-    DATA: lt_map TYPE ty_map_tt.
+    DATA lt_map TYPE ty_map_tt.
 
-    FIELD-SYMBOLS: <ls_map> LIKE LINE OF lt_map.
+    FIELD-SYMBOLS <ls_map> LIKE LINE OF lt_map.
 
 
     lt_map = get_tag_mapping( ).

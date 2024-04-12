@@ -38,7 +38,7 @@ CLASS ZCL_ABAPPGP_TIME IMPLEMENTATION.
 
   METHOD get_unix.
 
-    CONSTANTS: lc_epoch TYPE datum VALUE '19700101'.
+    CONSTANTS lc_epoch TYPE datum VALUE '19700101'.
 
     DATA: lv_i       TYPE i,
           lv_tz      TYPE tznzone,

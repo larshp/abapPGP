@@ -46,7 +46,7 @@ CLASS ZCL_ABAPPGP_PACKET_13 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~from_stream.
 
-    DATA: lv_user TYPE string.
+    DATA lv_user TYPE string.
 
 
     lv_user = zcl_abappgp_convert=>utf8_to_string( io_stream->get_data( ) ).

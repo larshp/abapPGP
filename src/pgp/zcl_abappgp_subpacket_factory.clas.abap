@@ -21,7 +21,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_FACTORY IMPLEMENTATION.
 
   METHOD create.
 
-    DATA: lo_data TYPE REF TO zcl_abappgp_stream.
+    DATA lo_data TYPE REF TO zcl_abappgp_stream.
 
 
     ASSERT xstrlen( iv_data ) > 0.

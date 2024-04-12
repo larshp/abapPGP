@@ -105,7 +105,7 @@ ENDFORM.
 
 FORM sample01.
 
-  DATA: lv_text TYPE string.
+  DATA lv_text TYPE string.
 
 
   CONCATENATE
@@ -139,7 +139,7 @@ ENDFORM.
 
 FORM sample02.
 
-  DATA: lv_text TYPE string.
+  DATA lv_text TYPE string.
 
   CONCATENATE
     '-----BEGIN PGP PRIVATE KEY BLOCK-----'
@@ -189,7 +189,7 @@ ENDFORM.
 
 FORM sample03.
 
-  DATA: lv_text TYPE string.
+  DATA lv_text TYPE string.
 
   CONCATENATE
     '-----BEGIN PGP MESSAGE-----'
@@ -216,7 +216,7 @@ ENDFORM.
 
 FORM sample04.
 
-  DATA: lv_text TYPE string.
+  DATA lv_text TYPE string.
 
   CONCATENATE
     '-----BEGIN PGP SIGNATURE-----'

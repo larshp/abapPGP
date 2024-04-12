@@ -63,7 +63,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
 
   METHOD from_store.
 
-    DATA: lv_key TYPE string.
+    DATA lv_key TYPE string.
 
 
     SELECT SINGLE private_key
@@ -79,7 +79,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_03 IMPLEMENTATION.
 
   METHOD zif_abappgp_message~dump.
 
-    DATA: li_packet LIKE LINE OF mt_packet_list.
+    DATA li_packet LIKE LINE OF mt_packet_list.
 
 
     LOOP AT mt_packet_list INTO li_packet.

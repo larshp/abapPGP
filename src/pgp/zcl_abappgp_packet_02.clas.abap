@@ -15,9 +15,9 @@ CLASS zcl_abappgp_packet_02 DEFINITION
     ALIASES to_stream
       FOR zif_abappgp_packet~to_stream .
 
-    TYPES:
+    TYPES
       ty_subpackets TYPE STANDARD TABLE OF REF TO zif_abappgp_subpacket WITH DEFAULT KEY .
-    TYPES:
+    TYPES
       ty_integers TYPE STANDARD TABLE OF REF TO zcl_abappgp_integer WITH DEFAULT KEY .
 
     CLASS-METHODS sign
@@ -46,7 +46,7 @@ CLASS zcl_abappgp_packet_02 DEFINITION
     DATA mv_hash_algo TYPE zif_abappgp_constants=>ty_algorithm_hash .
     DATA mt_hashed TYPE ty_subpackets .
     DATA mt_unhashed TYPE ty_subpackets .
-    DATA:
+    DATA
       mv_left      TYPE x LENGTH 2 .
     DATA mt_integers TYPE ty_integers .
 
@@ -300,7 +300,7 @@ CLASS ZCL_ABAPPGP_PACKET_02 IMPLEMENTATION.
 
   METHOD zif_abappgp_packet~to_stream.
 
-    DATA: lo_integer TYPE REF TO zcl_abappgp_integer.
+    DATA lo_integer TYPE REF TO zcl_abappgp_integer.
 
 
     CREATE OBJECT ro_stream.

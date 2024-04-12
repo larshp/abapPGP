@@ -38,7 +38,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_11 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~dump.
 
-    DATA: lv_algorithm LIKE LINE OF mt_algorithms.
+    DATA lv_algorithm LIKE LINE OF mt_algorithms.
 
 
     rv_dump = |\tSub - { get_name( ) }(sub { get_type( ) })({ to_stream( )->get_length( ) } bytes)\n|.
@@ -52,7 +52,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_11 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~from_stream.
 
-    DATA: lt_algorithms TYPE zif_abappgp_constants=>ty_algorithms.
+    DATA lt_algorithms TYPE zif_abappgp_constants=>ty_algorithms.
 
 
     WHILE io_stream->get_length( ) > 0.
@@ -85,7 +85,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_11 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~to_stream.
 
-    DATA: lv_algorithm LIKE LINE OF mt_algorithms.
+    DATA lv_algorithm LIKE LINE OF mt_algorithms.
 
 
     CREATE OBJECT ro_stream.

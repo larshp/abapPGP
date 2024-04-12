@@ -47,7 +47,7 @@ CLASS ZCL_ABAPPGP_SUBPACKET_30 IMPLEMENTATION.
 
   METHOD zif_abappgp_subpacket~from_stream.
 
-    DATA: lv_flag TYPE abap_bool.
+    DATA lv_flag TYPE abap_bool.
 
 
     IF io_stream->eat_octet( ) = '01'.

@@ -79,7 +79,7 @@ CLASS ZCL_ABAPPGP_RANDOM IMPLEMENTATION.
 
   METHOD random.
 
-    DATA: lv_str TYPE string.
+    DATA lv_str TYPE string.
 
 
     DO 100 TIMES.

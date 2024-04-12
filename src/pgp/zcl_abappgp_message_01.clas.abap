@@ -35,7 +35,7 @@ CLASS ZCL_ABAPPGP_MESSAGE_01 IMPLEMENTATION.
 
   METHOD zif_abappgp_message~dump.
 
-    DATA: li_packet LIKE LINE OF mt_packet_list.
+    DATA li_packet LIKE LINE OF mt_packet_list.
 
 
     LOOP AT mt_packet_list INTO li_packet.
