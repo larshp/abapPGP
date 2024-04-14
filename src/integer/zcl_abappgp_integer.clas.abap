@@ -1064,7 +1064,6 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
 
     DATA: lv_total    TYPE i,
           lo_base     TYPE REF TO zcl_abappgp_integer,
-          lo_tmp      TYPE REF TO zcl_abappgp_integer,
           lo_one      TYPE REF TO zcl_abappgp_integer,
           lo_exponent TYPE REF TO zcl_abappgp_binary_integer,
           lo_mont     TYPE REF TO zcl_abappgp_montgomery,
@@ -1079,8 +1078,6 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
       ro_result = me.
       RETURN.
     ENDIF.
-
-    CREATE OBJECT lo_tmp.
 
     lo_base = clone( ).
 
