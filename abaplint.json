@@ -20,7 +20,7 @@
     }
   ],
   "syntax": {
-    "version": "v702",
+    "version": "v750",
     "errorNamespace": "^(Z|Y|LCL_|TY_|LIF_)"
   },
   "rules": {
@@ -48,7 +48,7 @@
     "nrob_consistency": true,
     "omit_preceding_zeros": true,
     "pragma_style": true,
-    "prefer_corresponding": true,
+    "prefer_corresponding": false,
     "prefer_raise_exception_new": true,
     "select_add_order_by": true,
     "select_performance": true,
