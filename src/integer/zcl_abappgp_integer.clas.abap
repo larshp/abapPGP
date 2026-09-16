@@ -5,7 +5,6 @@ CLASS zcl_abappgp_integer DEFINITION
 
   PUBLIC SECTION.
 
-    CLASS-METHODS class_constructor .
     CLASS-METHODS extended_gcd
       IMPORTING
         !io_a      TYPE REF TO zcl_abappgp_integer
@@ -198,10 +197,13 @@ CLASS zcl_abappgp_integer DEFINITION
     TYPES
       ty_split_tt TYPE STANDARD TABLE OF ty_split WITH DEFAULT KEY .
 
+* values for TY_SPLIT = i, for TY_SPLIT = p LENGTH 16 DECIMALS 0
+* use max = 1000000000000000 and length = 15
+    CONSTANTS gc_max TYPE ty_split VALUE 10000 .
+    CONSTANTS gc_length TYPE i VALUE 4 .
+
     DATA mv_negative TYPE abap_bool .
-    CLASS-DATA gv_max TYPE ty_split .
     DATA mt_split TYPE ty_split_tt .
-    CLASS-DATA gv_length TYPE i .
 
     CLASS-METHODS split_at
       IMPORTING
@@ -264,8 +266,8 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
 
       lv_op1 = lv_op1 + lv_op2 + lv_carry.
 
-      lv_carry = lv_op1 DIV gv_max.
-      lv_op1 = lv_op1 - lv_carry * gv_max.
+      lv_carry = lv_op1 DIV gc_max.
+      lv_op1 = lv_op1 - lv_carry * gc_max.
 
       MODIFY mt_split INDEX lv_index FROM lv_op1.
       IF sy-subrc <> 0.
@@ -284,19 +286,6 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD class_constructor.
-
-* TY_SPLIT = i
-    gv_max = 10000.
-    gv_length = 4.
-
-* TY_SPLIT = p LENGTH 16 DECIMALS 0
-*    gv_max = 1000000000000000
-*    gv_length = 15
-
-  ENDMETHOD.
-
-
   METHOD clone.
 
     CREATE OBJECT ro_integer.
@@ -309,7 +298,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
   METHOD constructor.
 
     ASSERT iv_integer >= 0.
-    ASSERT iv_integer < gv_max.
+    ASSERT iv_integer < gc_max.
 
     APPEND iv_integer TO mt_split.
 
@@ -411,13 +400,13 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
     DATA lv_int TYPE i.
 
 
-    DO iv_times DIV gv_length TIMES.
+    DO iv_times DIV gc_length TIMES.
       DELETE mt_split INDEX 1.
     ENDDO.
 
     ASSERT lines( mt_split ) > 0.
 
-    CASE iv_times MOD gv_length.
+    CASE iv_times MOD gc_length.
       WHEN 3.
         lv_int = 1000.
       WHEN 2.
@@ -449,7 +438,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
 
       READ TABLE mt_split INDEX lv_index INTO lv_value.   "#EC CI_SUBRC
 
-      lv_value = lv_value + lv_carry * gv_max.
+      lv_value = lv_value + lv_carry * gc_max.
       lv_carry = lv_value MOD 2.
       lv_value = lv_value DIV 2.
 
@@ -475,7 +464,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
 
 
     ASSERT iv_integer > 0.
-    ASSERT iv_integer < gv_max.
+    ASSERT iv_integer < gc_max.
 
     ro_result = me.
 
@@ -490,7 +479,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
 
       READ TABLE mt_split INDEX lv_index INTO lv_value.   "#EC CI_SUBRC
 
-      lv_value = lv_value + lv_carry * gv_max.
+      lv_value = lv_value + lv_carry * gc_max.
       lv_carry = lv_value MOD iv_integer.
       lv_value = lv_value DIV iv_integer.
 
@@ -549,7 +538,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
       EXPORTING
         iv_integer = 0.
 
-    lv_b = gv_max.
+    lv_b = gc_max.
 
 * D1 - Normalize
     READ TABLE io_integer->mt_split INDEX lines( io_integer->mt_split ) INTO lv_v1. "#EC CI_SUBRC
@@ -1238,11 +1227,11 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
         ENDIF.
 
         lv_op = <lv_op1> * <lv_op2>.
-        lv_add = lv_op MOD gv_max.
+        lv_add = lv_op MOD gc_max.
         <lv_result> = <lv_result> + lv_add.
 
-        lv_carry = <lv_result> DIV gv_max + lv_op DIV gv_max.
-        <lv_result> = <lv_result> MOD gv_max.
+        lv_carry = <lv_result> DIV gc_max + lv_op DIV gc_max.
+        <lv_result> = <lv_result> MOD gc_max.
 
         WHILE lv_carry <> 0.
           lv_index = lv_index + 1.
@@ -1252,8 +1241,8 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
           ENDIF.
 * carry might trigger the next carry
           <lv_result> = <lv_result> + lv_carry.
-          lv_carry    = <lv_result> DIV gv_max.
-          <lv_result> = <lv_result> MOD gv_max.
+          lv_carry    = <lv_result> DIV gc_max.
+          <lv_result> = <lv_result> MOD gc_max.
         ENDWHILE.
 
       ENDLOOP.
@@ -1284,7 +1273,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    CASE iv_times MOD gv_length.
+    CASE iv_times MOD gc_length.
       WHEN 3.
         lv_int = 1000.
       WHEN 2.
@@ -1297,7 +1286,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
       multiply_int( lv_int ).
     ENDIF.
 
-    DO iv_times DIV gv_length TIMES.
+    DO iv_times DIV gc_length TIMES.
       INSERT 0 INTO mt_split INDEX 1.
     ENDDO.
 
@@ -1448,18 +1437,18 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
       lv_integer = lv_integer+1.
     ENDIF.
 
-    lv_offset = strlen( lv_integer ) - gv_length.
+    lv_offset = strlen( lv_integer ) - gc_length.
 
     DO.
       IF lv_offset < 0.
         lv_offset = 0.
       ENDIF.
 
-      lv_length = gv_length.
+      lv_length = gc_length.
       IF lv_length > strlen( lv_integer ).
         lv_length = strlen( lv_integer ).
       ELSEIF lv_offset = 0.
-        lv_length = strlen( lv_integer ) - lines( mt_split ) * gv_length.
+        lv_length = strlen( lv_integer ) - lines( mt_split ) * gc_length.
       ENDIF.
 
       APPEND lv_integer+lv_offset(lv_length) TO mt_split.
@@ -1468,7 +1457,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
         EXIT. " current loop
       ENDIF.
 
-      lv_offset = lv_offset - gv_length.
+      lv_offset = lv_offset - gc_length.
     ENDDO.
 
   ENDMETHOD.
@@ -1542,7 +1531,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
       lv_carry = 0.
 
       IF lv_op1 < 0.
-        lv_op1 = lv_op1 + gv_max.
+        lv_op1 = lv_op1 + gc_max.
         lv_carry = 1.
       ENDIF.
 
@@ -1610,7 +1599,7 @@ CLASS zcl_abappgp_integer IMPLEMENTATION.
     LOOP AT mt_split INTO lv_int.
       CONDENSE lv_int.
       IF sy-tabix <> lines( mt_split ).
-        WHILE strlen( lv_int ) <> gv_length.
+        WHILE strlen( lv_int ) <> gc_length.
           CONCATENATE '0' lv_int INTO lv_int.
         ENDWHILE.
       ENDIF.
